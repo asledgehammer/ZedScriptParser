@@ -2,7 +2,7 @@
 
 import * as fs from 'fs';
 import { parseAST } from './ASTParser';
-import { scanDir } from './helper';
+import { scanDir } from './utils';
 
 const doFolder = (path: string, debug: boolean = false) => {
     const files: string[] = [];

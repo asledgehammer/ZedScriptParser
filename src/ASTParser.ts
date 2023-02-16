@@ -1,4 +1,4 @@
-import { EOF, tokenizeScript } from './helper';
+import { EOF, tokenizeScript } from './utils';
 import {
     AssignmentExpression,
     AssignmentOperator,
@@ -16,7 +16,7 @@ import {
     ObjectStatement,
     RecipeItemsExpression,
     Statement,
-} from './Script';
+} from './ast';
 
 export function parseAST(text: string, debug: boolean = false): Chunk {
     const tokens = tokenizeScript(text);
