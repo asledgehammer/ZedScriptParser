@@ -1,0 +1,40 @@
+{
+  "name": "luatotypescript",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/src/index.js",
+  "author": "",
+  "license": "MIT",
+  "scripts": {
+    "dev": "nodemon --watch src/**/*.ts --exec ts-node ./src/app.ts",
+    "build": "tsc",
+    "start": "node ./dist/app.js",
+    "lint": "eslint --fix --quiet src/**/*.ts",
+    "format": "prettier --loglevel silent --write src/**/*.ts",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage"
+  },
+  "devDependencies": {
+    "@microsoft/tsdoc": "^0.12.10",
+    "@types/jquery": "^3.3.30",
+    "@types/luaparse": "^0.2.8",
+    "@types/node": "^18.11.18",
+    "@types/prettier": "^2.6.4",
+    "@typescript-eslint/eslint-plugin": "^5.50.0",
+    "@typescript-eslint/parser": "^5.50.0",
+    "eslint": "^8.33.0",
+    "eslint-config-prettier": "^8.6.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "jquery": "^3.5.1",
+    "jquery-smooth-scroll": "^2.2.0",
+    "luaparse": "^0.3.1",
+    "nodejs": "^0.0.0",
+    "nodemon": "^2.0.20",
+    "prettier": "^2.8.3",
+    "rimraf": "^3.0.2",
+    "ts-node": "^10.9.1",
+    "typescript": "^4.9.5",
+    "typescript-eslint-parser": "^22.0.0"
+  }
+}

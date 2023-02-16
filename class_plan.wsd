@@ -1,0 +1,74 @@
+@startuml ltts_class
+allow_mixing
+!theme vibrant
+
+title [LTTS] Pseudo Class UML
+skinparam componentStyle uml2
+
+hide empty members
+
+package api {
+    abstract class ClassAdapter {
+        +{abstract} onScan(file: LuaFile): void
+        +{abstract} onRender(_class_: PseudoClass): string
+    }
+}
+
+package pseudo {
+
+    class PseudoClass {
+        -fields: {[name: string]: PseudoField}
+        -methods: {[name: string]: PseudoMethod}
+        -_constructor_: PseudoExecutable
+        -name: string
+        +getFields(): {[name: string]: PseudoField}
+        +addField(_field_: PseudoField): void
+        +getConstructor(): PseudoExecutable
+        +getMethods(): {[name: string]: PseudoMethod}
+        +addMethod(_method_: PseudoMethod): void
+        +getName(): string
+    }
+
+    class PseudoExecutable {
+        -_class_: PseudoClass   
+        -_parameters_: PseudoParameter[]
+        -body: Statement[]
+        +getBody(): Statement[]
+        +getParameterCount(): number
+        +getParameter(index: number): PseudoParameter
+        +getParameters(): PseudoParameter[]
+        +getClass(): PseudoClass
+    }
+
+    class PseudoField {
+        -_class_: PseudoClass
+        -_types_: string[]
+        -_static_: boolean
+        -name: string
+        +getClass(): PseudoClass
+        +getTypes(): string[]
+        +isStatic(): boolean
+        +getName(): string
+    }
+
+    class PseudoParameter {
+        -_executable_: PseudoExecutable
+        -_types_: string[]
+        -name: string
+        +getTypes(): string[]
+        +getExecutable(): PseudoExecutable
+        +getName(): string
+    }
+
+    class PseudoMethod {
+        -_types_: string[]
+        -_static_: boolean
+        -name: string;
+        +getTypes(): string[]
+        +boolean isStatic()
+        +getName(): string
+    }
+
+    PseudoExecutable <|-down- PseudoMethod
+}
+
