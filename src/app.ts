@@ -1,7 +1,7 @@
 /** NOTE: Do not consider this to be final, acceptable code. This is the initial code to get a working AST export. */
 
 import * as fs from 'fs';
-import { parseAST } from './ASTParser';
+import { categories, parseAST } from './ASTParser';
 import { scanDir } from './utils';
 
 const doFolder = (path: string, debug: boolean = false) => {
@@ -12,6 +12,8 @@ const doFolder = (path: string, debug: boolean = false) => {
     for (const file of files) {
         doFile(file, debug);
     }
+
+    console.log({categories})
 };
 
 const doFile = (path: string, debug: boolean = false) => {

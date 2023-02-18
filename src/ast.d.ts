@@ -10,7 +10,7 @@ export type Expression =
     | ModuleConstructorExpression
     | ObjectConstructorExpression
     | AssignmentExpression
-    | RecipeItemsExpression
+    | StringArrayLiteral
     | BooleanLiteral
     | NumericLiteral
     | StringLiteral
@@ -56,9 +56,9 @@ export type AssignmentExpression = {
     value: Expression;
 };
 
-export type RecipeItemsExpression = {
-    type: 'RecipeItemsExpression';
-    values: string[];
+export type StringArrayLiteral = {
+    type: 'StringArrayLiteral';
+    value: string[];
 }
 
 /* (LITERAL) */

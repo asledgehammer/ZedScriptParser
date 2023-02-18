@@ -14,9 +14,12 @@ import {
     NumericLiteral,
     ObjectConstructorExpression,
     ObjectStatement,
-    RecipeItemsExpression,
+    StringArrayLiteral,
     Statement,
 } from './ast';
+
+
+export const categories: string[] = [];
 
 export function parseAST(text: string, debug: boolean = false): Chunk {
     const tokens = tokenizeScript(text);
@@ -153,7 +156,7 @@ export function parseAST(text: string, debug: boolean = false): Chunk {
 
         const onRecipeItems = (body: Statement[], items: string[]) => {
             body.push(
-                assignmentStatement('__Items', recipeItemsExpression(items)),
+                assignmentStatement('__Items', stringArrayLiteral(items)),
             );
         };
 
@@ -194,6 +197,9 @@ export function parseAST(text: string, debug: boolean = false): Chunk {
         };
 
         const onObject = (category: string) => {
+
+            if(categories.indexOf(category) === -1) categories.push(category);
+
             const moduleID = module!!.id.value;
             let moduleBody = (module!!.value as ModuleConstructorExpression)
                 .body;
@@ -288,6 +294,8 @@ export function parseAST(text: string, debug: boolean = false): Chunk {
         if (tokenLower === 'module') onModule();
     }
 
+    categories.sort((a, b) => a.localeCompare(b));
+
     return chunk;
 }
 
@@ -328,8 +336,8 @@ export function assignmentExpression(
     return { type: 'AssignmentExpression', operator, value };
 }
 
-function recipeItemsExpression(values: string[]): RecipeItemsExpression {
-    return { type: 'RecipeItemsExpression', values };
+function stringArrayLiteral(value: string[]): StringArrayLiteral {
+    return { type: 'StringArrayLiteral', value };
 }
 
 export function nullLiteral(): NullLiteral {

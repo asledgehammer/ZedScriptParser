@@ -1,0 +1,26 @@
+export type BloodClothingType =
+    | 'Jacket'
+    | 'LongJacket'
+    | 'Trousers'
+    | 'ShortsShort'
+    | 'Shirt'
+    | 'ShirtLongSleeves'
+    | 'ShirtNoSleeves'
+    | 'Jumper'
+    | 'JumperNoSleeves'
+    | 'Shoes'
+    | 'FullHelmet'
+    | 'Apron'
+    | 'Bag'
+    | 'Hands'
+    | 'Head'
+    | 'Neck'
+    | 'UpperBody'
+    | 'LowerBody'
+    | 'LowerLegs'
+    | 'UpperLegs'
+    | 'LowerArms'
+    | 'UpperArms'
+    | 'Groin';
+
+    export type ScriptBloodClothingTypes = BloodClothingType[] | undefined;
