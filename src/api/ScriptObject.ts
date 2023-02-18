@@ -8,7 +8,6 @@ export type ScriptIntArray = number[] | undefined;
 export type ScriptFloatArray = number[] | undefined;
 export type ScriptStringArray = string[] | undefined;
 
-
 export function getString(
     statement: AssignmentStatement,
     discardNullOrWhitespace: boolean = false,
@@ -29,7 +28,9 @@ export function getString(
     return val;
 }
 
-export function getStringArray(statement: AssignmentStatement): ScriptStringArray {
+export function getStringArray(
+    statement: AssignmentStatement,
+): ScriptStringArray {
     if (statement.value.type !== 'AssignmentExpression') {
         throw new Error();
     }
@@ -84,8 +85,38 @@ export function getFloat(statement: AssignmentStatement): ScriptFloat {
     }
 }
 
+export function getFloatOrInt(statement: AssignmentStatement): number {
+    if (statement.value.type !== 'AssignmentExpression') {
+        throw new Error();
+    }
+
+    switch (statement.value.value.type) {
+        case 'NumericLiteral':
+            const raw = '' + statement.value.value.value;
+            if (raw.indexOf('.') !== -1) {
+                return statement.value.value.value;
+            } else {
+                return Math.round(statement.value.value.value);
+            }
+        case 'StringLiteral':
+            const val = parseFloat(statement.value.value.value);
+            if (isNaN(val)) {
+                throw new Error();
+            } else if (!isFinite(val)) {
+                throw new Error();
+            }
+
+            if (statement.value.value.value.indexOf('.') !== -1) {
+                return val;
+            } else {
+                return Math.round(val);
+            }
+        default:
+            throw new Error();
+    }
+}
+
 export function getBoolean(statement: AssignmentStatement): ScriptBoolean {
-    
     if (statement.value.type !== 'AssignmentExpression') {
         throw new Error();
     }
@@ -129,8 +160,6 @@ export abstract class ScriptObject {
             }
         });
     }
-
-    
 
     onImport(statement: ImportsStatement) {}
 

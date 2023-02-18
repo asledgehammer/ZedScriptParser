@@ -353,7 +353,7 @@ export function numericLiteral(value: number): NumericLiteral {
 }
 
 export function numericArrayLiteral(values: number[]): NumericArrayLiteral {
-    return { type: 'NumericArrayLiteral', values };
+    return { type: 'NumericArrayLiteral', value: values };
 }
 
 export function stringLiteral(value: string) {

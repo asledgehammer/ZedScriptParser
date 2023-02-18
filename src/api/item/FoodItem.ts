@@ -1,13 +1,13 @@
-import { ScriptObject } from "api/ScriptObject";
-import { AssignmentStatement } from "ast";
+import { AssignmentStatement } from 'ast';
+import { ItemScript } from './ItemScript';
 
-export class FoodItem extends ScriptObject {
-    
+export class FoodItem extends ItemScript {
     constructor(statement: AssignmentStatement) {
         super(statement);
     }
 
     onStatement(statement: AssignmentStatement): void {
+        super.onStatement(statement);
         const property = statement.id.value;
         switch (property.toLowerCase()) {
             default:

@@ -2,8 +2,10 @@ import { AssignmentStatement } from 'ast';
 import {
     getBoolean,
     getFloat,
+    getFloatOrInt,
     getInt,
     getString,
+    getStringArray,
     ScriptBoolean,
     ScriptFloat,
     ScriptInt,
@@ -16,7 +18,9 @@ import {
     ScriptBloodClothingTypes,
 } from './BloodClothingType';
 
-export class ItemScript extends ScriptObject {
+export abstract class ItemScript extends ScriptObject {
+    customProperties: { [name: string]: any } = {};
+
     activatedItem: ScriptBoolean;
     alcoholic: ScriptBoolean;
     alcoholPower: ScriptFloat;
@@ -24,13 +28,11 @@ export class ItemScript extends ScriptObject {
     attachmentReplacement: ScriptString;
     attachmentsProvided: ScriptStringArray;
     attachmentType: ScriptString;
-
     bandagePower: ScriptFloat;
     bloodLocation: ScriptBloodClothingTypes;
     boredomChange: ScriptInt;
-    brakeForce: ScriptFloat;
+    brakeForce: ScriptInt;
     breakSound: ScriptString;
-
     canBeRemote: ScriptBoolean;
     canStack: ScriptBoolean;
     canStoreWater: ScriptBoolean;
@@ -45,33 +47,24 @@ export class ItemScript extends ScriptObject {
     count: ScriptInt;
     countDownSound: ScriptString;
     customContextMenu: ScriptString;
-
     displayCategory: ScriptString;
-
+    displayName: ScriptString;
     engineLoudness: ScriptFloat;
     evolvedRecipeName: ScriptString;
     explosionSound: ScriptString;
-
     fatigueChange: ScriptFloat;
     foodType: ScriptString;
-
     gunType: ScriptString;
-
     iconsForTexture: ScriptStringArray;
     isWaterSource: ScriptBoolean;
     itemWhenDry: ScriptString;
-
     keepOnDeplete: ScriptBoolean;
-
     lightDistance: ScriptInt;
     lightStrength: ScriptFloat;
-
     maxAmmo: ScriptInt;
     metalValue: ScriptFloat;
-
     poison: ScriptBoolean;
     poisonDetectionLevel: ScriptInt;
-
     reduceInfectionPower: ScriptFloat;
     remoteController: ScriptBoolean;
     remoteRange: ScriptInt;
@@ -79,16 +72,12 @@ export class ItemScript extends ScriptObject {
     replaceOnUseOn: ScriptString;
     requireInHandOrInventory: ScriptStringArray;
     requiresEquippedBothHands: ScriptBoolean;
-
     stressChange: ScriptInt;
     suspensionCompression: ScriptFloat;
     suspensionDamping: ScriptFloat;
-
     tooltip: ScriptString;
     torchCone: ScriptBoolean;
-
     unhappyChange: ScriptInt;
-
     weight: ScriptFloat;
     wet: ScriptBoolean;
     wetCooldown: ScriptFloat;
@@ -118,6 +107,9 @@ export class ItemScript extends ScriptObject {
                 break;
             case 'count':
                 this.count = getInt(statement);
+                break;
+            case 'displayname':
+                this.displayName = getString(statement);
                 break;
             case 'lightstrength':
                 this.lightStrength = getFloat(statement);
@@ -235,7 +227,7 @@ export class ItemScript extends ScriptObject {
                 this.keepOnDeplete = getBoolean(statement);
                 break;
             case 'brakeforce':
-                this.brakeForce = getInt(statement); // Cast to float.
+                this.brakeForce = getInt(statement); // Cast to float in PZ.
                 break;
             case 'chancetospawndamaged':
                 this.chanceToSpawnDamaged = getInt(statement);
@@ -284,9 +276,30 @@ export class ItemScript extends ScriptObject {
             case 'attachmenttype':
                 this.attachmentType = getString(statement);
                 break;
-            default:
-                console.warn(`[${this.name}] :: Unknown property: ${property}`);
-                break;
         }
+    }
+
+    addCustomProperty(statement: AssignmentStatement) {
+        if (statement.value.type !== 'AssignmentExpression') {
+            return;
+        }
+
+        const name = statement.id.value;
+        let value: any;
+
+        switch (statement.value.value.type) {
+            case 'NullLiteral':
+                value = null;
+                break;
+            case 'NumericLiteral':
+            case 'BooleanLiteral':
+            case 'NumericArrayLiteral':
+            case 'StringLiteral':
+            case 'StringArrayLiteral':
+                value = statement.value.value.value;
+        }
+
+        console.log(`Adding custom property: ${name} = ${value}`);
+        this.customProperties[name] = value;
     }
 }

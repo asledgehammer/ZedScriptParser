@@ -13,6 +13,7 @@ export type Expression =
     | StringArrayLiteral
     | BooleanLiteral
     | NumericLiteral
+    | NumericArrayLiteral    
     | StringLiteral
     | NullLiteral;
 
@@ -83,7 +84,7 @@ export type NullLiteral = {
 
 export type NumericArrayLiteral = {
     type: 'NumericArrayLiteral',
-    values: number[];
+    value: number[];
 };
 
 /* (IDENTIFIER) */

@@ -23,4 +23,4 @@ export type BloodClothingType =
     | 'UpperArms'
     | 'Groin';
 
-    export type ScriptBloodClothingTypes = BloodClothingType[] | undefined;
+export type ScriptBloodClothingTypes = BloodClothingType[] | undefined;
