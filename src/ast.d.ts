@@ -1,5 +1,7 @@
 /* (GENERAL) */
-export type Chunk = Statement[];
+export type Chunk = {
+    body: Statement[];
+};
 
 /* (STATEMENTS) */
 export type Statement = ImportsStatement | AssignmentStatement | ObjectStatement;

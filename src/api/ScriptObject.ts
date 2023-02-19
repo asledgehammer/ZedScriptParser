@@ -1,4 +1,4 @@
-import { AssignmentStatement, ImportsStatement, Statement } from 'ast';
+import { AssignmentStatement, ImportsStatement, ObjectStatement, Statement } from 'ast';
 
 export type ScriptBoolean = boolean | undefined;
 export type ScriptFloat = number | undefined;
@@ -134,7 +134,7 @@ export function getBoolean(statement: AssignmentStatement): ScriptBoolean {
 export abstract class ScriptObject {
     readonly name: string;
 
-    constructor(statement: AssignmentStatement) {
+    constructor(statement: ObjectStatement) {
         this.name = statement.id.value;
         if (this.name == null || this.name === '') {
             throw new Error(

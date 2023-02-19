@@ -1,8 +1,8 @@
-import { AssignmentStatement } from 'ast';
+import { AssignmentStatement, ObjectStatement } from 'ast';
 import { ItemScript } from './ItemScript';
 
 export class LiteratureItem extends ItemScript {
-    constructor(statement: AssignmentStatement) {
+    constructor(statement: ObjectStatement) {
         super(statement);
     }
 
@@ -11,7 +11,7 @@ export class LiteratureItem extends ItemScript {
         const property = statement.id.value;
         switch (property.toLowerCase()) {
             default:
-                console.warn(`[${this.name}] :: Unknown property: ${property}`);
+                // console.warn(`[${this.name}] :: Unknown property: ${property}`);
                 break;
         }
     }

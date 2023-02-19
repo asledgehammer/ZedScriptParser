@@ -2,10 +2,8 @@ import { AssignmentStatement } from 'ast';
 import {
     getBoolean,
     getFloat,
-    getFloatOrInt,
     getInt,
     getString,
-    getStringArray,
     ScriptBoolean,
     ScriptFloat,
     ScriptInt,
@@ -82,10 +80,6 @@ export abstract class ItemScript extends ScriptObject {
     wet: ScriptBoolean;
     wetCooldown: ScriptFloat;
     wheelFriction: ScriptFloat;
-
-    constructor(statement: AssignmentStatement) {
-        super(statement);
-    }
 
     onStatement(statement: AssignmentStatement): void {
         const property = statement.id.value;
@@ -302,4 +296,6 @@ export abstract class ItemScript extends ScriptObject {
         console.log(`Adding custom property: ${name} = ${value}`);
         this.customProperties[name] = value;
     }
+
+
 }

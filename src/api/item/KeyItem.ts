@@ -1,5 +1,5 @@
-import { getBoolean, ScriptBoolean } from 'api/ScriptObject';
-import { AssignmentStatement } from 'ast';
+import { getBoolean, ScriptBoolean } from '../../api/ScriptObject';
+import { AssignmentStatement, ObjectStatement } from 'ast';
 import { ItemScript } from './ItemScript';
 
 export class KeyItem extends ItemScript {
@@ -7,7 +7,7 @@ export class KeyItem extends ItemScript {
     digitalPadlock: ScriptBoolean;
     padlock: ScriptBoolean;
 
-    constructor(statement: AssignmentStatement) {
+    constructor(statement: ObjectStatement) {
         super(statement);
     }
 
@@ -22,7 +22,7 @@ export class KeyItem extends ItemScript {
                 this.padlock = getBoolean(statement);
                 break;
             default:
-                console.warn(`[${this.name}] :: Unknown property: ${property}`);
+                // console.warn(`[${this.name}] :: Unknown property: ${property}`);
                 break;
         }
     }

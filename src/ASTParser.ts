@@ -18,7 +18,6 @@ import {
     Statement,
 } from './ast';
 
-
 export const categories: string[] = [];
 
 export function parseAST(text: string, debug: boolean = false): Chunk {
@@ -30,7 +29,7 @@ export function parseAST(text: string, debug: boolean = false): Chunk {
 
     let module: AssignmentStatement | undefined;
     let object: ObjectStatement | undefined;
-    const chunk: Chunk = [];
+    const chunk: Chunk = { body: [] };
     let index = 0;
 
     while (true) {
@@ -197,8 +196,7 @@ export function parseAST(text: string, debug: boolean = false): Chunk {
         };
 
         const onObject = (category: string) => {
-
-            if(categories.indexOf(category) === -1) categories.push(category);
+            if (categories.indexOf(category) === -1) categories.push(category);
 
             const moduleID = module!!.id.value;
             let moduleBody = (module!!.value as ModuleConstructorExpression)
@@ -287,7 +285,7 @@ export function parseAST(text: string, debug: boolean = false): Chunk {
                 else onObject(nextToken);
             }
 
-            chunk.push(module);
+            chunk.body.push(module);
             module = undefined;
         };
 
