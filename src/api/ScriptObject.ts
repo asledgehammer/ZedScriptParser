@@ -132,13 +132,13 @@ export function getBoolean(statement: AssignmentStatement): ScriptBoolean {
 }
 
 export abstract class ScriptObject {
-    readonly name: string;
+     __name: string | undefined;
 
     constructor(statement: ObjectStatement) {
-        this.name = statement.id.value;
-        if (this.name == null || this.name === '') {
+        this.__name = statement.id.value;
+        if (this.__name == null || this.__name === '') {
             throw new Error(
-                `The 'name' provided for the ScriptObject is either null or empty.`,
+                `The name provided for the ScriptObject is either null or empty.`,
             );
         }
 
@@ -162,6 +162,12 @@ export abstract class ScriptObject {
     }
 
     onImport(statement: ImportsStatement) {}
+
+    toJSON(): any {
+        let o = {...this};
+        o.__name = undefined;
+        return o;
+    }
 
     abstract onStatement(statement: AssignmentStatement): void;
 }

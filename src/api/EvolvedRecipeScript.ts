@@ -1,10 +1,9 @@
-import { AssignmentStatement } from 'ast';
+import { AssignmentStatement, ObjectStatement } from 'ast';
 import { ItemRecipe } from './ItemRecipe';
-import { ScriptObject } from './ScriptObject';
+import { getBoolean, getInt, getString, ScriptObject, ScriptString } from './ScriptObject';
 
 export class EvolvedRecipeScript extends ScriptObject {
-    displayName: string | undefined;
-    originalName: string | undefined;
+    _name: ScriptString;
     maxItems: number | undefined;
     items: { [name: string]: ItemRecipe } | undefined;
     resultItem: string | undefined;
@@ -16,7 +15,7 @@ export class EvolvedRecipeScript extends ScriptObject {
     hidden: boolean | undefined;
     allowFrozenItem: boolean | undefined;
 
-    constructor(statement: AssignmentStatement) {
+    constructor(statement: ObjectStatement) {
         super(statement);
     }
 
@@ -24,37 +23,37 @@ export class EvolvedRecipeScript extends ScriptObject {
         const property = statement.id.value;
         switch (property.toLowerCase()) {
             case 'baseitem':
-                this.baseItem = this.getStringValue(statement);
+                this.baseItem = getString(statement);
                 break;
             case 'name':
-                this.originalName = this.displayName;
+                this._name = getString(statement);
                 break;
             case 'resultitem':
-                this.resultItem = this.getStringValue(statement);
+                this.resultItem = getString(statement);
                 break;
             case 'cookable':
                 this.cookable = true; // Set to true regardless of flag set.
                 break;
             case 'maxitems':
-                this.maxItems = this.getIntValue(statement);
+                this.maxItems = getInt(statement);
                 break;
             case 'addingredientifcooked':
-                this.addIngredientIfCooked = this.getBooleanValue(statement);
+                this.addIngredientIfCooked = getBoolean(statement);
                 break;
             case 'addingredientsound':
-                this.addIngredientSound = this.getStringValue(statement, true);
+                this.addIngredientSound = getString(statement, true);
                 break;
             case 'canaddspicesempty':
-                this.canAddSpicesEmpty = this.getBooleanValue(statement);
+                this.canAddSpicesEmpty = getBoolean(statement);
                 break;
             case 'ishidden':
-                this.hidden = this.getBooleanValue(statement);
+                this.hidden = getBoolean(statement);
                 break;
             case 'allowfrozenitem':
-                this.allowFrozenItem = this.getBooleanValue(statement);
+                this.allowFrozenItem = getBoolean(statement);
                 break;
             default:
-                console.warn(`[${this.name}] :: Unknown property: ${property}`);
+                console.warn(`[${this.__name}] :: Unknown property: ${property}`);
         }
     }
 }

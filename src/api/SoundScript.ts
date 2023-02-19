@@ -1,18 +1,20 @@
-import { AssignmentStatement } from 'ast';
-import { ScriptObject } from './ScriptObject';
+import { AssignmentStatement, ObjectStatement } from 'ast';
+import { getBoolean, getInt, getString, ScriptBoolean, ScriptInt, ScriptObject, ScriptString } from './ScriptObject';
 import { SoundClip } from './SoundClip';
 
 export type MasterVolume = 'Primary' | 'Ambient' | 'Music' | 'VehicleEngine';
+export type ScriptMasterVolume = MasterVolume | undefined;
+export type ScriptSoundClip = SoundClip | undefined;
 
 export class SoundScript extends ScriptObject {
-    category: string | undefined;
-    is3D: boolean | undefined;
-    loop: boolean | undefined;
-    master: MasterVolume | undefined;
-    maxInstancesPerEmitter: number | undefined;
-    clip: SoundClip | undefined;
+    category: ScriptString;
+    is3D: ScriptBoolean;
+    loop: ScriptBoolean;
+    master: ScriptMasterVolume;
+    maxInstancesPerEmitter: ScriptInt;
+    clip: ScriptSoundClip;
 
-    constructor(statement: AssignmentStatement) {
+    constructor(statement: ObjectStatement) {
         super(statement);
     }
 
@@ -20,25 +22,25 @@ export class SoundScript extends ScriptObject {
         const property = statement.id.value;
         switch (property.toLowerCase()) {
             case 'category':
-                this.category = this.getStringValue(statement);
+                this.category = getString(statement);
                 break;
             case 'is3d':
-                this.is3D = this.getBooleanValue(statement);
+                this.is3D = getBoolean(statement);
                 break;
             case 'loop':
-                this.loop = this.getBooleanValue(statement);
+                this.loop = getBoolean(statement);
                 break;
             case 'master':
-                this.master = this.getStringValue(statement) as MasterVolume;
+                this.master = getString(statement) as MasterVolume;
                 break;
             case 'maxInstancesPerEmitter':
-                this.maxInstancesPerEmitter = this.getIntValue(statement);
+                this.maxInstancesPerEmitter = getInt(statement);
                 break;
             case 'clip':
-                this.clip = new SoundClip(statement);
+                this.clip = new SoundClip(statement.value as ObjectStatement);
                 break;
             default:
-                console.warn(`[${this.name}] :: Unknown property: ${property}`);
+                console.warn(`[${this.__name}] :: Unknown property: ${property}`);
                 break;
         }
     }

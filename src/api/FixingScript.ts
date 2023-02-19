@@ -1,4 +1,4 @@
-import { AssignmentStatement } from 'ast';
+import { AssignmentStatement, ObjectStatement } from 'ast';
 import { Fixer, ScriptFixer, ScriptFixerArray } from './Fixer';
 import { getFloat, getString, getStringArray, ScriptFloat, ScriptObject, ScriptStringArray } from './ScriptObject';
 import { FixerSkill } from './FixerSkill';
@@ -9,7 +9,7 @@ export class FixingScript extends ScriptObject {
     globalItem: ScriptFixer;
     conditionModifier: ScriptFloat;
 
-    constructor(statement: AssignmentStatement) {
+    constructor(statement: ObjectStatement) {
         super(statement);
     }
 
@@ -64,7 +64,7 @@ export class FixingScript extends ScriptObject {
                 }
                 break;
             default:
-                console.warn(`[${this.name}] :: Unknown property: ${property}`);
+                console.warn(`[${this.__name}] :: Unknown property: ${property}`);
                 break;
         }
     }

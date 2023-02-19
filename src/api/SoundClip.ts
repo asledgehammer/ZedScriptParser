@@ -1,17 +1,17 @@
-import { AssignmentStatement } from 'ast';
-import { ScriptObject } from './ScriptObject';
+import { AssignmentStatement, ObjectStatement } from 'ast';
+import { getFloat, getInt, getString, ScriptFloat, ScriptInt, ScriptObject, ScriptString } from './ScriptObject';
 
 export class SoundClip extends ScriptObject {
-    distanceMin: number | undefined;
-    distanceMax: number | undefined;
-    event: string | undefined;
-    file: string | undefined;
-    pitch: number | undefined;
-    volume: number | undefined;
-    reverbFactor: number | undefined;
-    reverbMaxRange: number | undefined;
+    distanceMin: ScriptInt;
+    distanceMax: ScriptInt;
+    event: ScriptString;
+    file: ScriptString;
+    pitch: ScriptFloat;
+    volume: ScriptFloat;
+    reverbFactor: ScriptFloat;
+    reverbMaxRange: ScriptFloat;
 
-    constructor(statement: AssignmentStatement) {
+    constructor(statement: ObjectStatement) {
         super(statement);
     }
 
@@ -19,31 +19,31 @@ export class SoundClip extends ScriptObject {
         const property = statement.id.value;
         switch (property.toLowerCase()) {
             case 'distancemin':
-                this.distanceMin = this.getIntValue(statement);
+                this.distanceMin = getInt(statement);
                 break;
             case 'distancemax':
-                this.distanceMax = this.getIntValue(statement);
+                this.distanceMax = getInt(statement);
                 break;
             case 'event':
-                this.event = this.getStringValue(statement);
+                this.event = getString(statement);
                 break;
             case 'file':
-                this.file = this.getStringValue(statement);
+                this.file = getString(statement);
                 break;
             case 'pitch':
-                this.pitch = this.getFloatValue(statement);
+                this.pitch = getFloat(statement);
                 break;
             case 'volume':
-                this.volume = this.getFloatValue(statement);
+                this.volume = getFloat(statement);
                 break;
             case 'reverbfactor':
-                this.reverbFactor = this.getFloatValue(statement);
+                this.reverbFactor = getFloat(statement);
                 break;
             case 'reverbmaxrange':
-                this.reverbMaxRange = this.getFloatValue(statement);
+                this.reverbMaxRange = getFloat(statement);
                 break;
             default:
-                console.warn(`[${this.name}] :: Unknown property: ${property}`);
+                console.warn(`[${this.__name}] :: Unknown property: ${property}`);
                 break;
         }
     }

@@ -1,11 +1,11 @@
-import { AssignmentStatement } from 'ast';
-import { ScriptObject } from './ScriptObject';
+import { AssignmentStatement, ObjectStatement } from 'ast';
+import { getString, ScriptObject, ScriptString, ScriptStringArray } from './ScriptObject';
 
 export class AnimationScript extends ScriptObject {
-    meshFile: string | undefined;
-    animationDirectories: string[] | undefined;
+    meshFile: ScriptString;
+    animationDirectories: ScriptStringArray;
 
-    constructor(statement: AssignmentStatement) {
+    constructor(statement: ObjectStatement) {
         super(statement);
     }
 
@@ -13,10 +13,10 @@ export class AnimationScript extends ScriptObject {
         const property = statement.id.value;
         switch (property.toLowerCase()) {
             case 'meshname':
-                this.meshFile = this.getStringValue(statement);
+                this.meshFile = getString(statement);
                 break;
             case 'animationdirectory':
-                const value = this.getStringValue(statement)!!;
+                const value = getString(statement)!!;
                 if (value != null) {
                     if (this.animationDirectories == null) {
                         this.animationDirectories = [];
@@ -25,7 +25,7 @@ export class AnimationScript extends ScriptObject {
                 }
                 break;
             default:
-                console.warn(`[${this.name}] :: Unknown property: ${property}`);
+                console.warn(`[${this.__name}] :: Unknown property: ${property}`);
                 break;
         }
 

@@ -17,7 +17,7 @@ import {
 } from './BloodClothingType';
 
 export abstract class ItemScript extends ScriptObject {
-    customProperties: { [name: string]: any } = {};
+    customProperties: { [name: string]: any } | undefined = {};
 
     activatedItem: ScriptBoolean;
     alcoholic: ScriptBoolean;
@@ -294,8 +294,25 @@ export abstract class ItemScript extends ScriptObject {
         }
 
         console.log(`Adding custom property: ${name} = ${value}`);
-        this.customProperties[name] = value;
+        this.customProperties!![name] = value;
     }
 
+    toJSON(): any {
+        let o: any = {};
 
+
+        const thisKeys: string[] = Object.keys(this);
+        thisKeys.sort((a, b) => a.localeCompare(b));
+
+        thisKeys.splice(thisKeys.indexOf('__name'), 1);
+
+        for(const key of thisKeys) {
+            if(key === 'customProperties' && Object.keys(this.customProperties!!).length === 0) {
+                continue;
+            }
+            o[key as string] = (this as any)[key];
+        }
+
+        return o;
+    }
 }

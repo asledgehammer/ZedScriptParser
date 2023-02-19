@@ -28,8 +28,13 @@ import { scanDir } from './utils';
 
 // doFolder('./assets/media/scripts');
 
-
 const modules = parse('./assets/media/scripts');
-console.log(modules);
 
-fs.writeFileSync('test.json', JSON.stringify(modules, null, 4));
+let json: any = {modules: {}};
+const moduleKeys = Object.keys(modules);
+moduleKeys.sort((a, b) => a.localeCompare(b));
+for (const key of moduleKeys) {
+    json.modules[key] = modules[key].toJSON();
+}
+
+fs.writeFileSync('test.json', JSON.stringify(json, null, 4));

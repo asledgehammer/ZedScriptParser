@@ -1,4 +1,9 @@
-import { AssignmentStatement, Identifier, ImportsStatement, ObjectStatement } from 'ast';
+import {
+    AssignmentStatement,
+    Identifier,
+    ImportsStatement,
+    ObjectStatement,
+} from 'ast';
 import { AnimationScript } from './AnimationScript';
 import { EvolvedRecipeScript } from './EvolvedRecipeScript';
 import { FixingScript } from './FixingScript';
@@ -68,30 +73,30 @@ export class ScriptModule {
                 this.onImport(entry);
                 continue;
             } else {
-                switch(entry.category.value.toLowerCase()) {
+                switch (entry.category.value.toLowerCase()) {
                     case 'item':
                         const item = ScriptModule.createItem(entry);
-                        this.items[item.name] = item;
+                        this.items[item.__name!!] = item;
                         continue;
-                    
                 }
             }
         }
     }
 
     static createItem(statement: ObjectStatement): ItemScript {
-        const body: {[name: string]: any} = statement.value.body;
+        const body: { [name: string]: any } = statement.value.body;
         let type: string = '';
-        const statements: AssignmentStatement[] = Object.values(statement.value.body);
-        for(const next of statements) {
-
-            if(next.id.value.toLowerCase() === 'type') {
+        const statements: AssignmentStatement[] = Object.values(
+            statement.value.body,
+        );
+        for (const next of statements) {
+            if (next.id.value.toLowerCase() === 'type') {
                 type = getString(next)!!;
                 break;
             }
         }
 
-        switch(type.toLowerCase()) {
+        switch (type.toLowerCase()) {
             case 'alarmclock':
                 return new AlarmClockItem(statement);
             case 'alarmclockclothing':
@@ -126,6 +131,21 @@ export class ScriptModule {
                 console.log('Unknown item type: ' + type.toLowerCase());
                 return new NormalItem(statement);
         }
+    }
 
+    toJSON(): any {
+        const o: any = {
+            items: {},
+        };
+
+        const itemKeys = Object.keys(this.items).sort((a, b) =>
+            a.localeCompare(b),
+        );
+        for (const key of itemKeys) {
+            const item = this.items[key];
+            o.items[key] = item.toJSON();
+        }
+
+        return o;
     }
 }

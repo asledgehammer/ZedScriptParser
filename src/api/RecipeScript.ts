@@ -1,9 +1,9 @@
-import { AssignmentStatement } from 'ast';
+import { AssignmentStatement, ObjectStatement } from 'ast';
 import { ScriptObject } from './ScriptObject';
 
 export class RecipeScript extends ScriptObject {
 
-    constructor(statement: AssignmentStatement) {
+    constructor(statement: ObjectStatement) {
         super(statement);
     }
 
@@ -11,7 +11,7 @@ export class RecipeScript extends ScriptObject {
         const property = statement.id.value;
         switch (property.toLowerCase()) {
             default:
-                console.warn(`[${this.name}] :: Unknown property: ${property}`);
+                console.warn(`[${this.__name}] :: Unknown property: ${property}`);
                 break;
         }
     }
