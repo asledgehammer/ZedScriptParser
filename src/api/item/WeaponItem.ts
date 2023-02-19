@@ -288,7 +288,7 @@ export class WeaponItem extends ItemScript {
                     modelName,
                     attachmentNameSelf,
                     attachmentParent,
-                ] = getString(statement)!!.split('\\s+');
+                ] = getString(statement)!!.split(' ');
                 const mwp = new ModelWeaponPart(
                     partType,
                     modelName,
