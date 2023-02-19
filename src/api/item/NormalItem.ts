@@ -18,4 +18,8 @@ export class NormalItem extends ItemScript {
                 break;
         }
     }
+
+    getType(): String {
+        return 'Normal';
+    }
 }

@@ -26,4 +26,8 @@ export class KeyItem extends ItemScript {
                 break;
         }
     }
+
+    getType(): String {
+        return 'Key';
+    }
 }

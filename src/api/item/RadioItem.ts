@@ -15,4 +15,8 @@ export class RadioItem extends ItemScript {
                 break;
         }
     }
+
+    getType(): String {
+        return 'Radio';
+    }
 }

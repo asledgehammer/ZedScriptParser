@@ -15,4 +15,8 @@ export class FoodItem extends ItemScript {
                 break;
         }
     }
+
+    getType(): String {
+        return 'Food';
+    }
 }

@@ -15,4 +15,8 @@ export class MapItem extends ItemScript {
                 break;
         }
     }
+
+    getType(): String {
+        return 'Map';
+    }
 }

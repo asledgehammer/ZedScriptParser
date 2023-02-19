@@ -15,4 +15,8 @@ export class ContainerItem extends ItemScript {
                 break;
         }
     }
+
+    getType(): String {
+        return 'Container';
+    }
 }

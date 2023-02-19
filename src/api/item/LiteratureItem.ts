@@ -15,4 +15,8 @@ export class LiteratureItem extends ItemScript {
                 break;
         }
     }
+
+    getType(): String {
+        return 'Literature';
+    }
 }

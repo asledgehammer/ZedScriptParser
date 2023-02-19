@@ -15,4 +15,8 @@ export class KeyRingItem extends ItemScript {
                 break;
         }
     }
+
+    getType(): String {
+        return 'KeyRing';
+    }
 }

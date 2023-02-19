@@ -15,4 +15,8 @@ export class MoveableItem extends ItemScript {
                 break;
         }
     }
+
+    getType(): String {
+        return 'Moveable';
+    }
 }

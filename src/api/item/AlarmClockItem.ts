@@ -15,4 +15,8 @@ export class AlarmClockItem extends ItemScript {
                 break;
         }
     }
+
+    getType(): String {
+        return 'AlarmClock';
+    }
 }

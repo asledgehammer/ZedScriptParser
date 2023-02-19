@@ -15,4 +15,8 @@ export class DrainableItem extends ItemScript {
                 break;
         }
     }
+
+    getType(): String {
+        return 'Draining';
+    }
 }

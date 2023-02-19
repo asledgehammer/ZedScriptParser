@@ -53,6 +53,7 @@ export abstract class ItemScript extends ScriptObject {
     fatigueChange: ScriptFloat;
     foodType: ScriptString;
     gunType: ScriptString;
+    icon: ScriptString;
     iconsForTexture: ScriptStringArray;
     isWaterSource: ScriptBoolean;
     itemWhenDry: ScriptString;
@@ -80,6 +81,8 @@ export abstract class ItemScript extends ScriptObject {
     wet: ScriptBoolean;
     wetCooldown: ScriptFloat;
     wheelFriction: ScriptFloat;
+
+    type: String = this.getType();
 
     onStatement(statement: AssignmentStatement): void {
         const property = statement.id.value;
@@ -270,6 +273,9 @@ export abstract class ItemScript extends ScriptObject {
             case 'attachmenttype':
                 this.attachmentType = getString(statement);
                 break;
+            case 'icon':
+                this.icon = getString(statement);
+                break;
         }
     }
 
@@ -294,7 +300,8 @@ export abstract class ItemScript extends ScriptObject {
         }
 
         console.log(`Adding custom property: ${name} = ${value}`);
-        this.customProperties!![name] = value;
+        if(this.customProperties == null) this.customProperties = {};
+        this.customProperties[name] = value;
     }
 
     toJSON(): any {
@@ -314,5 +321,9 @@ export abstract class ItemScript extends ScriptObject {
         }
 
         return o;
+    }
+
+    getType(): String {
+        return 'Normal';
     }
 }

@@ -15,4 +15,8 @@ export class WeaponPartItem extends ItemScript {
                 break;
         }
     }
+
+    getType(): String {
+        return 'WeaponPart';
+    }
 }
