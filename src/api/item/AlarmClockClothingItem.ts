@@ -1,25 +1,33 @@
-import { getString, ScriptString } from '../ScriptObject';
+import { getInt, getString, ScriptInt, ScriptString } from '../ScriptObject';
 import { AssignmentStatement, ObjectStatement } from 'ast';
 import { ItemScript } from './ItemScript';
+import { ClothingItem } from './ClothingItem';
 
-export class AlarmClockClothingItem extends ItemScript {
+export class AlarmClockClothingItem extends ClothingItem {
 
-    spriteName: ScriptString;
+    alarmSound: ScriptString;
+    soundRadius: ScriptInt;
 
     constructor(statement: ObjectStatement) {
         super(statement);
     }
 
     onStatement(statement: AssignmentStatement): void {
-        super.onStatement(statement);
+        
         const property = statement.id.value;
         switch (property.toLowerCase()) {
-            case 'spritename':
-                this.spriteName = getString(statement);
+            case 'alarmsound':
+                this.alarmSound = getString(statement);
+                break;
+            case 'soundradius':
+                this.soundRadius = getInt(statement);
+                break;
             default:
                 // console.warn(`[${this.name}] :: Unknown property: ${property}`);
                 break;
         }
+
+        super.onStatement(statement);
     }
 
     getType(): String {
