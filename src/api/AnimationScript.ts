@@ -1,9 +1,19 @@
 import { AssignmentStatement, ObjectStatement } from 'ast';
-import { getString, ScriptObject, ScriptString, ScriptStringArray } from './ScriptObject';
+import { CopyFrame } from './CopyFrame';
+import { CopyFrames } from './CopyFrames';
+import {
+    getString,
+    ScriptObject,
+    ScriptString,
+    ScriptStringArray,
+} from './ScriptObject';
 
 export class AnimationScript extends ScriptObject {
     meshFile: ScriptString;
     animationDirectories: ScriptStringArray;
+
+    copyFrame: CopyFrame[] | undefined;
+    copyFrames: CopyFrames[] | undefined;
 
     constructor(statement: ObjectStatement) {
         super(statement);
@@ -11,7 +21,16 @@ export class AnimationScript extends ScriptObject {
 
     onStatement(statement: AssignmentStatement): void {
         const property = statement.id.value;
+        console.log(property);
         switch (property.toLowerCase()) {
+            case 'copyframe':
+                if (this.copyFrame == null) this.copyFrame = [];
+                this.copyFrame.push(new CopyFrame(statement));
+                break;
+            case 'copyframes':
+                if (this.copyFrames == null) this.copyFrames = [];
+                this.copyFrames.push(new CopyFrames(statement));
+                break;
             case 'meshname':
                 this.meshFile = getString(statement);
                 break;
@@ -25,10 +44,10 @@ export class AnimationScript extends ScriptObject {
                 }
                 break;
             default:
-                console.warn(`[${this.__name}] :: Unknown property: ${property}`);
+                console.warn(
+                    `[${this.__name}] :: Unknown property: ${property}`,
+                );
                 break;
         }
-
-        throw new Error('Method not implemented.');
     }
 }

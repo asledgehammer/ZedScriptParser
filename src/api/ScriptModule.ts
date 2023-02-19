@@ -74,6 +74,10 @@ export class ScriptModule {
                 continue;
             } else {
                 switch (entry.category.value.toLowerCase()) {
+                    case 'animation':
+                        const animation = new AnimationScript(entry);
+                        this.animations[animation.__name!!] = animation;
+                        continue;
                     case 'item':
                         const item = ScriptModule.createItem(entry);
                         this.items[item.__name!!] = item;
@@ -135,8 +139,17 @@ export class ScriptModule {
 
     toJSON(): any {
         const o: any = {
+            animations: {},
             items: {},
         };
+
+        const animKeys = Object.keys(this.animations).sort((a, b) =>
+            a.localeCompare(b),
+        );
+        for (const key of animKeys) {
+            const anim = this.animations[key];
+            o.animations[key] = anim.toJSON();
+        }
 
         const itemKeys = Object.keys(this.items).sort((a, b) =>
             a.localeCompare(b),
