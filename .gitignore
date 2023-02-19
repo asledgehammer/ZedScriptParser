@@ -10,3 +10,4 @@ dist
 coverage
 
 assets/media/scripts/**/**
+test.json
