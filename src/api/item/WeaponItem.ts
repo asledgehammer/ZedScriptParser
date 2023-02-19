@@ -40,6 +40,7 @@ export class WeaponItem extends ItemScript {
     doorDamage: ScriptInt;
     doorHitSound: ScriptString;
     enduranceMod: ScriptFloat;
+    equipSound: ScriptString;
     explosionPower: ScriptInt;
     explosionRange: ScriptInt;
     explosionTimer: ScriptInt;
@@ -71,6 +72,7 @@ export class WeaponItem extends ItemScript {
     minRange: ScriptFloat;
     modelWeaponParts: ScriptModelWeaponPartArray;
     multipleHitConditionAffected: ScriptBoolean;
+    noiseDuration: ScriptInt;
     noiseRange: ScriptInt;
     npcSoundBoost: ScriptFloat;
     otherHandRequire: ScriptString;
@@ -103,6 +105,7 @@ export class WeaponItem extends ItemScript {
     toHitModifier: ScriptFloat;
     treeDamage: ScriptInt;
     triggerExplosionTimer: ScriptInt;
+    unequipSound: ScriptString;
     useEndurance: ScriptBoolean;
     useSelf: ScriptBoolean;
     weaponLength: ScriptFloat;
@@ -119,169 +122,172 @@ export class WeaponItem extends ItemScript {
         switch (property.toLowerCase()) {
             case 'aimingmod':
                 this.aimingMod = getFloat(statement);
-                break;
+                return;
             case 'aimingperkcritmodifier':
                 this.aimingPerkCritModifier = getInt(statement);
-                break;
+                return;
             case 'aimingperkhitchancemodifier':
                 this.aimingPerkHitChanceModifier = getFloat(statement);
-                break;
+                return;
             case 'aimingperkminanglemodifier':
                 this.aimingPerkMinAngleModifier = getFloat(statement);
-                break;
+                return;
             case 'aimingperkrangemodifier':
                 this.aimingPerkRangeModifier = getFloat(statement);
-                break;
+                return;
             case 'aimingtime':
                 this.aimingTime = getInt(statement);
-                break;
+                return;
             case 'alwaysknockdown':
                 this.alwaysKnockdown = getBoolean(statement);
-                break;
+                return;
             case 'ammobox':
                 this.ammoBox = getString(statement);
-                break;
+                return;
             case 'anglefalloff':
                 this.angleFalloff = getBoolean(statement);
-                break;
+                return;
             case 'basespeed':
                 this.baseSpeed = getFloat(statement);
-                break;
+                return;
             case 'bulletoutsound':
                 this.bulletOutSound = getString(statement);
-                break;
+                return;
             case 'canbarricade':
                 this.canBarricade = getBoolean(statement);
-                break;
+                return;
             case 'canbeplaced':
                 this.canBePlaced = getBoolean(statement);
-                break;
+                return;
             case 'canbereused':
                 this.canBeReused = getBoolean(statement);
-                break;
+                return;
             case 'cantattackwithlowestendurance':
                 this.cantAttackWithLowestEndurance = getBoolean(statement);
-                break;
+                return;
             case 'categories':
                 this.categories = getString(statement)?.split(';');
-                break;
+                return;
             case 'clicksound':
                 this.clickSound = getString(statement);
-                break;
+                return;
             case 'clipsize':
                 this.clipSize = getInt(statement);
-                break;
+                return;
             case 'conditionlowerchanceonein':
                 this.conditionLowerChanceOneIn = getInt(statement);
-                break;
+                return;
             case 'critdmgmultiplier':
                 this.critDmgMultiplier = getFloat(statement);
-                break;
+                return;
             case 'criticalchance':
                 this.criticalChance = getFloat(statement);
-                break;
+                return;
             case 'damagecategory':
                 this.damageCategory = getString(statement);
-                break;
+                return;
             case 'damagemakehole':
                 this.damageMakeHole = getBoolean(statement);
-                break;
+                return;
             case 'doordamage':
                 this.doorDamage = getInt(statement);
-                break;
+                return;
             case 'doorhitsound':
                 this.doorHitSound = getString(statement);
-                break;
+                return;
             case 'endurancemod':
                 this.enduranceMod = getFloat(statement);
-                break;
+                return;
+            case 'equipsound':
+                this.equipSound = getString(statement);
+                return;
             case 'explosionpower':
                 this.explosionPower = getInt(statement);
-                break;
+                return;
             case 'explosionrange':
                 this.explosionRange = getInt(statement);
-                break;
+                return;
             case 'explosiontimer':
                 this.explosionTimer = getInt(statement);
-                break;
+                return;
             case 'extradamage':
                 this.extraDamage = getFloat(statement);
-                break;
+                return;
             case 'firemode':
                 this.fireMode = getString(statement);
-                break;
+                return;
             case 'firemodepossibilities':
                 this.fireModePossibilities = getString(statement)?.split('/');
-                break;
+                return;
             case 'firepower':
                 this.firePower = getInt(statement);
-                break;
+                return;
             case 'firerange':
                 this.fireRange = getInt(statement);
-                break;
+                return;
             case 'havechamber':
                 this.haveChamber = getBoolean(statement);
-                break;
+                return;
             case 'hitanglemod':
                 this.hitAngleMod = getFloat(statement);
-                break;
+                return;
             case 'hitchance':
                 this.hitChance = getInt(statement);
-                break;
+                return;
             case 'hitfloorsound':
                 this.hitFloorSound = getString(statement);
-                break;
+                return;
             case 'hitsound':
                 this.hitSound = getString(statement);
-                break;
+                return;
             case 'idleanim':
                 this.idleAnim = getString(statement);
-                break;
+                return;
             case 'impactsound':
                 this.impactSound = getString(statement);
-                break;
+                return;
             case 'insertallbulletsreload':
                 this.insertAllBulletsReload = getBoolean(statement);
-                break;
+                return;
             case 'isaimedfirearm':
                 this.isAimedFirearm = getBoolean(statement);
-                break;
+                return;
             case 'isaimedhandweapon':
                 this.isAimedHandWeapon = getBoolean(statement);
-                break;
+                return;
             case 'jamgunchance':
                 this.jamGunChance = getFloat(statement);
-                break;
+                return;
             case 'knockbackonnodeath':
                 this.knockBackOnNoDeath = getBoolean(statement);
-                break;
+                return;
             case 'knockdownmod':
                 this.knockdownMod = getFloat(statement);
-                break;
+                return;
             case 'magazinetype':
                 this.magazineType = getString(statement);
-                break;
+                return;
             case 'maxdamage':
                 this.maxDamage = getFloat(statement);
-                break;
+                return;
             case 'maxhitcount':
                 this.maxHitCount = getInt(statement);
-                break;
+                return;
             case 'maxrange':
                 this.maxRange = getFloat(statement);
-                break;
+                return;
             case 'minangle':
                 this.minAngle = getFloat(statement);
-                break;
+                return;
             case 'mindamage':
                 this.minDamage = getFloat(statement);
-                break;
+                return;
             case 'minimumswingtime':
                 this.minimumSwingTime = getFloat(statement);
-                break;
+                return;
             case 'minrange':
                 this.minRange = getFloat(statement);
-                break;
+                return;
             case 'modelweaponpart':
                 const [
                     partType,
@@ -301,127 +307,136 @@ export class WeaponItem extends ItemScript {
                 this.modelWeaponParts.push(mwp);
             case 'multiplehitconditionaffected':
                 this.multipleHitConditionAffected = getBoolean(statement);
-                break;
+                return;
+            case 'noiseduration':
+                this.noiseDuration = getInt(statement);
+                return;
             case 'noiserange':
                 this.noiseRange = getInt(statement);
-                break;
+                return;
             case 'npcsoundboost':
                 this.npcSoundBoost = getFloat(statement);
-                break;
+                return;
             case 'otherhandrequire':
                 this.otherHandRequire = getString(statement);
-                break;
+                return;
             case 'otherhanduse':
                 this.otherHandUse = getBoolean(statement);
-                break;
+                return;
             case 'physicsobject':
                 this.physicsObject = getString(statement);
-                break;
+                return;
             case 'piercingbullets':
                 this.piercingBullets = getBoolean(statement);
-                break;
+                return;
             case 'placedsprite':
                 this.placedSprite = getString(statement);
-                break;
+                return;
             case 'pushbackmod':
                 this.pushBackMod = getFloat(statement);
-                break;
+                return;
             case 'rackaftershoot':
                 this.rackAfterShoot = getBoolean(statement);
-                break;
+                return;
             case 'ranged':
                 this.ranged = getBoolean(statement);
-                break;
+                return;
             case 'rangefalloff':
                 this.rangeFalloff = getBoolean(statement);
-                break;
+                return;
             case 'recoildelay':
                 this.recoilDelay = getInt(statement);
-                break;
+                return;
             case 'reloadtime':
                 this.reloadTime = getInt(statement);
-                break;
+                return;
             case 'runanim':
                 this.runAnim = getString(statement);
-                break;
+                return;
             case 'sensorrange':
                 this.sensorRange = getInt(statement);
-                break;
+                return;
             case 'sharedamage':
                 this.shareDamage = getBoolean(statement);
-                break;
+                return;
             case 'shareendurance':
                 this.shareEndurance = getBoolean(statement);
-                break;
+                return;
             case 'shellfallsound':
                 this.shellFallSound = getString(statement);
-                break;
+                return;
             case 'smokerange':
                 this.smokeRange = getInt(statement);
-                break;
+                return;
             case 'soundgain':
                 this.soundGain = getFloat(statement);
-                break;
+                return;
             case 'soundradius':
                 this.soundRadius = getInt(statement);
-                break;
+                return;
             case 'soundvolume':
                 this.soundVolume = getInt(statement);
-                break;
+                return;
             case 'splatbloodonnodeath':
                 this.splatBloodOnNoDeath = getBoolean(statement);
-                break;
+                return;
             case 'splatnumber':
                 this.splatNumber = getInt(statement);
-                break;
+                return;
             case 'splatsize':
                 this.splatSize = getFloat(statement);
-                break;
+                return;
             case 'subcategory':
                 this.subCategory = getString(statement);
-                break;
+                return;
             case 'swingamountbeforeimpact':
                 this.swingAmountBeforeImpact = getFloat(statement);
-                break;
+                return;
             case 'swingsound':
                 this.swingSound = getString(statement);
-                break;
+                return;
             case 'swingtime':
                 this.swingTime = getFloat(statement);
-                break;
+                return;
             case 'tohitmodifier':
                 this.toHitModifier = getFloat(statement);
-                break;
+                return;
             case 'treedamage':
                 this.treeDamage = getInt(statement);
-                break;
+                return;
             case 'triggerexplosiontimer':
                 this.triggerExplosionTimer = getInt(statement);
-                break;
+                return;
+            case 'unequipsound':
+                this.unequipSound = getString(statement);
+                return;
             case 'useendurance':
                 this.useEndurance = getBoolean(statement);
-                break;
+                return;
             case 'useself':
                 this.useSelf = getBoolean(statement);
-                break;
+                return;
             case 'weaponlength':
                 this.weaponLength = getFloat(statement);
-                break;
+                return;
             case 'weaponreloadtype':
                 this.weaponReloadType = getString(statement);
-                break;
+                return;
             case 'weaponsprite':
                 this.weaponSprite = getString(statement);
-                break;
+                return;
             case 'weaponweight':
                 this.weaponWeight = getFloat(statement);
-                break;
+                return;
             default:
-                // console.warn(`[${this.name}] :: Unknown property: ${property}`);
                 break;
         }
 
         super.onStatement(statement);
+    }
+
+    allowCustomProperties() {
+        return true;
     }
 
     getType(): String {

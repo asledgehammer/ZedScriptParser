@@ -62,6 +62,7 @@ export abstract class ItemScript extends ScriptObject {
     lightStrength: ScriptFloat;
     maxAmmo: ScriptInt;
     metalValue: ScriptFloat;
+    obsolete: ScriptBoolean;
     poison: ScriptBoolean;
     poisonDetectionLevel: ScriptInt;
     reduceInfectionPower: ScriptFloat;
@@ -72,8 +73,11 @@ export abstract class ItemScript extends ScriptObject {
     requireInHandOrInventory: ScriptStringArray;
     requiresEquippedBothHands: ScriptBoolean;
     stressChange: ScriptInt;
+    survivalGear: ScriptBoolean;
     suspensionCompression: ScriptFloat;
     suspensionDamping: ScriptFloat;
+    swingAnim: ScriptString;
+    tags: ScriptStringArray;
     tooltip: ScriptString;
     torchCone: ScriptBoolean;
     unhappyChange: ScriptInt;
@@ -81,6 +85,7 @@ export abstract class ItemScript extends ScriptObject {
     wet: ScriptBoolean;
     wetCooldown: ScriptFloat;
     wheelFriction: ScriptFloat;
+    worldStaticModel: ScriptString;
 
     type: String = this.getType();
 
@@ -89,194 +94,220 @@ export abstract class ItemScript extends ScriptObject {
         switch (property.toLowerCase()) {
             case 'activateditem':
                 this.activatedItem = getBoolean(statement);
-                break;
+                return;
             case 'alcohol':
                 this.alcoholic = getBoolean(statement);
-                break;
+                return;
             case 'alcoholpower':
                 this.alcoholPower = getFloat(statement);
-                break;
+                return;
             case 'boredomchange':
                 this.boredomChange = getInt(statement);
-                break;
+                return;
             case 'conditionmax':
                 this.conditionMax = getInt(statement);
-                break;
+                return;
             case 'count':
                 this.count = getInt(statement);
-                break;
+                return;
             case 'displayname':
                 this.displayName = getString(statement);
-                break;
+                return;
             case 'lightstrength':
                 this.lightStrength = getFloat(statement);
-                break;
+                return;
             case 'stresschange':
                 this.stressChange = getInt(statement);
-                break;
+                return;
             case 'torchcone':
                 this.torchCone = getBoolean(statement);
-                break;
+                return;
             case 'lightdistance':
                 this.lightDistance = getInt(statement);
-                break;
+                return;
             case 'unhappychange':
                 this.unhappyChange = getInt(statement);
-                break;
+                return;
             case 'weight':
                 this.weight = getFloat(statement);
-                break;
+                return;
             case 'replaceonuseon':
                 this.replaceOnUseOn = getString(statement);
-                break;
+                return;
             case 'requireinhandorinventory':
                 this.requireInHandOrInventory =
                     getString(statement)?.split('/');
-                break;
+                return;
             case 'attachmentsprovided':
                 this.attachmentsProvided = getString(statement)?.split(';');
-                break;
+                return;
             case 'attachmentreplacement':
                 this.attachmentReplacement = getString(statement);
-                break;
+                return;
             case 'iswatersource':
                 this.isWaterSource = getBoolean(statement);
-                break;
+                return;
             case 'canstorewater':
                 this.canStoreWater = getBoolean(statement);
-                break;
+                return;
             case 'canstack':
                 this.canStack = getBoolean(statement);
-                break;
+                return;
             case 'poison':
                 this.poison = getBoolean(statement);
-                break;
+                return;
             case 'foodtype':
                 this.foodType = getString(statement);
-                break;
+                return;
             case 'fatiguechange':
                 this.fatigueChange = getFloat(statement); // fatigueChange /= 100 in PZ.
-                break;
+                return;
             case 'posiondetectionlevel':
                 this.poisonDetectionLevel = getInt(statement);
-                break;
+                return;
             case 'tooltip':
                 this.tooltip = getString(statement);
-                break;
+                return;
             case 'displaycategory':
                 this.displayCategory = getString(statement);
-                break;
+                return;
             case 'requiresequippedbothhands':
                 this.requiresEquippedBothHands = getBoolean(statement);
-                break;
+                return;
             case 'breaksound':
                 this.breakSound = getString(statement);
-                break;
+                return;
             case 'replaceonuse':
                 this.replaceOnUse = getString(statement);
-                break;
+                return;
             case 'bandagepower':
                 this.bandagePower = getFloat(statement);
-                break;
+                return;
             case 'reduceinfectionpower':
                 this.reduceInfectionPower = getFloat(statement);
-                break;
+                return;
             case 'canberemote':
                 this.canBeRemote = getBoolean(statement);
-                break;
+                return;
             case 'remotecontroller':
                 this.remoteController = getBoolean(statement);
-                break;
+                return;
             case 'remoterange':
                 this.remoteRange = getInt(statement);
-                break;
+                return;
             case 'countdownsound':
                 this.countDownSound = getString(statement);
-                break;
+                return;
             case 'explosionsound':
                 this.explosionSound = getString(statement);
-                break;
+                return;
             case 'colorred':
                 this.colorRed = getInt(statement);
-                break;
+                return;
             case 'colorgreen':
                 this.colorGreen = getInt(statement);
-                break;
+                return;
             case 'colorblue':
                 this.colorBlue = getInt(statement);
-                break;
+                return;
             case 'evolvedrecipename':
                 this.evolvedRecipeName = getString(statement); // Translator.getItemEvolvedRecipeName()
-                break;
+                return;
             case 'metalvalue':
                 this.metalValue = getFloat(statement);
-                break;
+                return;
             case 'wet':
                 this.wet = getBoolean(statement);
-                break;
+                return;
             case 'wetcooldown':
                 this.wetCooldown = getFloat(statement);
-                break;
+                return;
             case 'itemwhendry':
                 this.itemWhenDry = getString(statement);
-                break;
+                return;
             case 'keepondeplete':
                 this.keepOnDeplete = getBoolean(statement);
-                break;
+                return;
             case 'brakeforce':
                 this.brakeForce = getInt(statement); // Cast to float in PZ.
-                break;
+                return;
             case 'chancetospawndamaged':
                 this.chanceToSpawnDamaged = getInt(statement);
-                break;
+                return;
             case 'conditionlowernormal':
                 this.conditionLowerNormal = getFloat(statement);
-                break;
+                return;
             case 'conditionloweroffroad':
                 this.conditionLowerOffroad = getFloat(statement);
-                break;
+                return;
             case 'wheelfriction':
                 this.wheelFriction = getFloat(statement);
-                break;
+                return;
             case 'suspensioncompression':
                 this.suspensionCompression = getFloat(statement);
-                break;
+                return;
             case 'engineloudness':
                 this.engineLoudness = getFloat(statement);
-                break;
+                return;
             case 'suspensiondamping':
                 this.suspensionDamping = getFloat(statement);
-                break;
+                return;
             case 'customcontextmenu':
                 this.customContextMenu = getString(statement); // ContextMenu_${CustomContextMenu}
-                break;
+                return;
             case 'iconsfortexture':
                 this.iconsForTexture = getString(statement)?.split(';');
-                break;
+                return;
             case 'bloodlocation':
                 this.bloodLocation = getString(statement)?.split(
                     ';',
                 ) as BloodClothingType[]; // BloodClothingType[]
-                break;
+                return;
             case 'closekillmove':
                 this.closeKillMove = getString(statement);
-                break;
+                return;
             case 'ammotype':
                 this.ammoType = getString(statement); // PZ code doesn't trim this for some reason..
-                break;
+                return;
             case 'maxammo':
                 this.maxAmmo = getInt(statement);
-                break;
+                return;
             case 'guntype':
                 this.gunType = getString(statement); // PZ code doesn't trim this for some reason..
-                break;
+                return;
             case 'attachmenttype':
                 this.attachmentType = getString(statement);
-                break;
+                return;
             case 'icon':
                 this.icon = getString(statement);
-                break;
+                return;
+            case 'survivalgear':
+                this.survivalGear = getBoolean(statement);
+                return;
+            case 'swinganim':
+                this.swingAnim = getString(statement);
+                return;
+            case 'tags':
+                this.tags = getString(statement)?.split(';');
+                return;
+            case 'type':
+                return;
+            case 'worldstaticmodel':
+                this.worldStaticModel = getString(statement);
+                return;
+            case 'obsolete':
+                this.obsolete = getBoolean(statement);
+                return;
+            default:
+                if (this.allowCustomProperties()) {
+                    this.addCustomProperty(statement);
+                }
+                return;
         }
+    }
+
+    allowCustomProperties() {
+        return false;
     }
 
     addCustomProperty(statement: AssignmentStatement) {
@@ -299,22 +330,26 @@ export abstract class ItemScript extends ScriptObject {
                 value = statement.value.value.value;
         }
 
-        console.log(`Adding custom property: ${name} = ${value}`);
-        if(this.customProperties == null) this.customProperties = {};
+        console.log(
+            `[${this.__name}] :: Adding custom property: ${name} = ${value}`,
+        );
+        if (this.customProperties == null) this.customProperties = {};
         this.customProperties[name] = value;
     }
 
     toJSON(): any {
         let o: any = {};
 
-
         const thisKeys: string[] = Object.keys(this);
         thisKeys.sort((a, b) => a.localeCompare(b));
 
         thisKeys.splice(thisKeys.indexOf('__name'), 1);
 
-        for(const key of thisKeys) {
-            if(key === 'customProperties' && Object.keys(this.customProperties!!).length === 0) {
+        for (const key of thisKeys) {
+            if (
+                key === 'customProperties' &&
+                Object.keys(this.customProperties!!).length === 0
+            ) {
                 continue;
             }
             o[key as string] = (this as any)[key];

@@ -7,13 +7,10 @@ export class AlarmClockItem extends ItemScript {
     }
 
     onStatement(statement: AssignmentStatement): void {
-        super.onStatement(statement);
         const property = statement.id.value;
         switch (property.toLowerCase()) {
-            default:
-                // console.warn(`[${this.name}] :: Unknown property: ${property}`);
-                break;
         }
+        super.onStatement(statement);
     }
 
     getType(): String {

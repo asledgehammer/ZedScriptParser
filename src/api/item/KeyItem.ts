@@ -12,19 +12,16 @@ export class KeyItem extends ItemScript {
     }
 
     onStatement(statement: AssignmentStatement): void {
-        super.onStatement(statement);
         const property = statement.id.value;
         switch (property.toLowerCase()) {
             case 'digitalpadlock':
                 this.digitalPadlock = getBoolean(statement);
-                break;
+                return;
             case 'padlock':
                 this.padlock = getBoolean(statement);
-                break;
-            default:
-                // console.warn(`[${this.name}] :: Unknown property: ${property}`);
-                break;
+                return;
         }
+        super.onStatement(statement);
     }
 
     getType(): String {

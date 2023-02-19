@@ -18,13 +18,10 @@ export class AlarmClockClothingItem extends ClothingItem {
         switch (property.toLowerCase()) {
             case 'alarmsound':
                 this.alarmSound = getString(statement);
-                break;
+                return;
             case 'soundradius':
                 this.soundRadius = getInt(statement);
-                break;
-            default:
-                // console.warn(`[${this.name}] :: Unknown property: ${property}`);
-                break;
+                return;
         }
 
         super.onStatement(statement);

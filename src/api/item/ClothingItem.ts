@@ -35,66 +35,61 @@ export class ClothingItem extends ItemScript {
     }
 
     onStatement(statement: AssignmentStatement): void {
-        super.onStatement(statement);
         const property = statement.id.value;
         switch (property.toLowerCase()) {
             case 'bitedefense':
                 this.biteDefense = getFloat(statement);
-                break;
+                return;
             case 'bulletdefense':
                 this.bulletDefense = getFloat(statement);
-                break;
+                return;
             case 'canhaveholes':
                 this.canHaveHoles = getBoolean(statement);
-                break;
+                return;
             case 'chancetofall':
                 this.chanceToFall = getInt(statement);
-                break;
+                return;
             case 'combatspeedmodifier':
                 this.combatSpeedModifier = getFloat(statement);
-                break;
+                return;
             case 'conditionlowerchanceonein':
                 this.conditionLowerChanceOneIn = getInt(statement);
-                break;
+                return;
             case 'neckprotectionmodifier':
                 this.neckProtectionModifier = getFloat(statement);
-                break;
+                return;
             case 'removeonbroken':
                 this.removeOnBroken = getBoolean(statement);
-                break;
+                return;
             case 'runspeedmodifier':
                 this.runSpeedModifier = getFloat(statement);
-                break;
+                return;
             case 'scratchdefense':
                 this.scratchDefense = getFloat(statement);
-                break;
+                return;
             case 'spritename':
                 this.spriteName = getString(statement);
-                break;
+                return;
             case 'stomppower':
                 this.stompPower = getFloat(statement);
-                break;
+                return;
             case 'temperature':
                 this.temperature = getFloat(statement);
-                break;
+                return;
             case 'insulation':
                 this.insulation = getFloat(statement);
-                break;
+                return;
             case 'WaterResistance':
                 this.waterResistance = getFloat(statement);
-                break;
+                return;
             case 'weightwet':
                 this.weightWet = getFloat(statement);
-                break;
+                return;
             case 'windresistance':
                 this.windResistance = getFloat(statement);
-                break;
-
-            default:
-                // this.addCustomProperty(statement);
-                // console.warn(`[${this.name}] :: Unknown property: ${property}`);
-                break;
+                return;
         }
+        super.onStatement(statement);
     }
 
     getType(): String {
