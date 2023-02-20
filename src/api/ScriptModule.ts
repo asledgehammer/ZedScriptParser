@@ -82,6 +82,10 @@ export class ScriptModule {
                         const evolvedRecipe = new EvolvedRecipeScript(entry);
                         this.evolvedRecipes[evolvedRecipe.__id] = evolvedRecipe;
                         continue;
+                    case 'fixing':
+                        const fixing = new FixingScript(entry);
+                        this.fixings[fixing.__id] = fixing;
+                        continue;
                     case 'item':
                         const item = ScriptModule.createItem(entry);
                         this.items[item.__id] = item;
@@ -154,8 +158,7 @@ export class ScriptModule {
     }
 
     toJSON(): any {
-        const o: any = {
-        };
+        const o: any = {};
 
         const toArray = (obj: any) => {
             const array: any[] = [];
@@ -169,6 +172,7 @@ export class ScriptModule {
 
         o.animations = toArray(this.animations);
         o.evolvedRecipes = toArray(this.evolvedRecipes);
+        o.fixings = toArray(this.fixings);
         o.items = toArray(this.items);
         o.sounds = toArray(this.sounds);
 

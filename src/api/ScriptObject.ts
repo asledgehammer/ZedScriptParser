@@ -46,7 +46,7 @@ export function getStringArray(
         case 'StringArrayLiteral':
             return statement.value.value.value;
         default:
-            throw new Error();
+            throw new Error(statement.value.value.type);
     }
 }
 

@@ -22,11 +22,11 @@ export class FixingScript extends ScriptObject {
 
     onStatement(statement: AssignmentStatement): boolean {
         const property = statement.id.value;
-        let raw: string = '';
+        let raw: string | null | undefined;
         let split: string[] = [];
         switch (property.toLowerCase()) {
             case 'require':
-                this.require = getStringArray(statement);
+                this.require = getString(statement)?.split(';');
                 return true;
             case 'conditionmodifier':
                 this.conditionModifier = getFloat(statement);
@@ -43,23 +43,43 @@ export class FixingScript extends ScriptObject {
                 }
                 return true;
             case 'fixer':
-                raw = getString(statement)!!;
+                if (this.fixers == null) this.fixers = [];
+                raw = getString(statement);
+                if (raw == null) return true;
+
                 if (raw.indexOf(';') !== -1) {
-                    split = getString(statement)!!.split('=');
-                    const item = split[0];
-                    const amount = parseInt(split[1].trim());
-                    if (this.fixers == null) this.fixers = [];
-                    this.fixers.push(new Fixer(item, amount));
+                    split = raw.split(';');
+
+                    for (const entry of split) {
+                        if (entry.indexOf('=') !== -1) {
+                            const split = entry.split('=');
+                            const item = split[0].trim();
+                            const amount = parseInt(split[1].trim());
+                            this.fixers.push(new Fixer(item, amount));
+                        } else {
+                            this.fixers.push(new Fixer(entry.trim(), 1));
+                        }
+                    }
+
                 } else {
                     split = raw.split(';');
 
-                    let ssplit = split[0].split('=');
-                    const item = ssplit[0].trim();
-                    const amount = parseInt(ssplit[1].trim());
+                    let item = '';
+                    let amount: number = 1;
+
+                    if (raw.indexOf('=') !== -1) {
+                        let ssplit = split[0].split('=');
+                        item = ssplit[0].trim();
+                        amount = parseInt(ssplit[1].trim());
+                    } else {
+                        item = raw;
+                    }
+
                     const fixer = new Fixer(item, amount);
 
-                    for (let index = 1; index < raw.length; index++) {
-                        ssplit = raw[index].split('=');
+                    for (let index = 1; index < split.length; index++) {
+                        const ssplit = split[index].split('=');
+
                         const skill = ssplit[0].trim();
                         const level = parseInt(ssplit[1].trim());
 
@@ -67,7 +87,6 @@ export class FixingScript extends ScriptObject {
                         fixer.skills.push(new FixerSkill(skill, level));
                     }
 
-                    if (this.fixers == null) this.fixers = [];
                     this.fixers.push(fixer);
                 }
                 return true;
