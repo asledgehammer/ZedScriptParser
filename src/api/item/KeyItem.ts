@@ -24,6 +24,10 @@ export class KeyItem extends ItemScript {
         return super.onStatement(statement);
     }
 
+    allowCustomProperties(): boolean {
+        return true;
+    }
+
     getType(): String {
         return 'Key';
     }

@@ -8,7 +8,7 @@ import {
 export type ScriptBoolean = boolean | undefined;
 export type ScriptFloat = number | undefined;
 export type ScriptInt = number | undefined;
-export type ScriptString = string | undefined;
+export type ScriptString = string | null | undefined;
 export type ScriptIntArray = number[] | undefined;
 export type ScriptFloatArray = number[] | undefined;
 export type ScriptStringArray = string[] | undefined;
@@ -24,6 +24,8 @@ export function getString(
     let val: string;
 
     switch (statement.value.value.type) {
+        case 'NullLiteral':
+            return null;
         default:
             val = (statement.value.value as any).value.toString();
     }

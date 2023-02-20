@@ -18,7 +18,7 @@ import {
 
 export abstract class ItemScript extends ScriptObject {
     activatedItem: ScriptBoolean;
-    alcoholic: ScriptBoolean;
+    alcohol: ScriptBoolean;
     alcoholPower: ScriptFloat;
     ammoType: ScriptString;
     attachmentReplacement: ScriptString;
@@ -50,6 +50,7 @@ export abstract class ItemScript extends ScriptObject {
     evolvedRecipeName: ScriptString;
     explosionSound: ScriptString;
     fatigueChange: ScriptFloat;
+    fishingLure: ScriptBoolean;
     foodType: ScriptString;
     gunType: ScriptString;
     icon: ScriptString;
@@ -60,7 +61,9 @@ export abstract class ItemScript extends ScriptObject {
     lightDistance: ScriptInt;
     lightStrength: ScriptFloat;
     maxAmmo: ScriptInt;
+    medical: ScriptBoolean;
     metalValue: ScriptFloat;
+    onCreate: ScriptString;
     obsolete: ScriptBoolean;
     poison: ScriptBoolean;
     poisonDetectionLevel: ScriptInt;
@@ -85,6 +88,7 @@ export abstract class ItemScript extends ScriptObject {
     useDelta: ScriptFloat;
     useWhileEquipped: ScriptBoolean;
     weight: ScriptFloat;
+    weightEmpty: ScriptFloat;
     wet: ScriptBoolean;
     wetCooldown: ScriptFloat;
     wheelFriction: ScriptFloat;
@@ -100,7 +104,7 @@ export abstract class ItemScript extends ScriptObject {
                 this.activatedItem = getBoolean(statement);
                 return true;
             case 'alcohol':
-                this.alcoholic = getBoolean(statement);
+                this.alcohol = getBoolean(statement);
                 return true;
             case 'alcoholpower':
                 this.alcoholPower = getFloat(statement);
@@ -120,11 +124,20 @@ export abstract class ItemScript extends ScriptObject {
             case 'displayname':
                 this.displayName = getString(statement);
                 return true;
+            case 'fishinglure':
+                this.fishingLure = getBoolean(statement);
+                return true;
             case 'lightdistance':
                 this.lightDistance = getInt(statement);
                 return true;
             case 'lightstrength':
                 this.lightStrength = getFloat(statement);
+                return true;
+            case 'medical':
+                this.medical = getBoolean(statement);
+                return true;
+            case 'oncreate':
+                this.onCreate = getString(statement);
                 return true;
             case 'stresschange':
                 this.stressChange = getInt(statement);
@@ -150,6 +163,9 @@ export abstract class ItemScript extends ScriptObject {
                 return true;
             case 'weight':
                 this.weight = getFloat(statement);
+                return true;
+            case 'weightempty':
+                this.weightEmpty = getFloat(statement);
                 return true;
             case 'worldobjectsprite':
                 this.worldStaticModel = getString(statement);
