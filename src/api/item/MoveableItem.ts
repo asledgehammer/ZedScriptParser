@@ -13,6 +13,10 @@ export class MoveableItem extends ItemScript {
         return super.onStatement(statement);
     }
 
+    allowCustomProperties(): boolean {
+        return true;
+    }
+
     getType(): String {
         return 'Moveable';
     }
