@@ -26,14 +26,20 @@ export abstract class ItemScript extends ScriptObject {
     attachmentType: ScriptString;
     bandagePower: ScriptFloat;
     bloodLocation: ScriptBloodClothingTypes;
+    bodyLocation: ScriptString;
     boredomChange: ScriptInt;
     brakeForce: ScriptInt;
     breakSound: ScriptString;
     canBeRemote: ScriptBoolean;
+    canHaveHoles: ScriptBoolean;
     canStack: ScriptBoolean;
     canStoreWater: ScriptBoolean;
     chanceToSpawnDamaged: ScriptInt;
     closeKillMove: ScriptString;
+    clothingExtraSubmenu: ScriptString;
+    clothingItem: ScriptString;
+    clothingItemExtra: ScriptString;
+    clothingItemExtraOption: ScriptString;
     colorBlue: ScriptInt;
     colorGreen: ScriptInt;
     colorRed: ScriptInt;
@@ -81,6 +87,7 @@ export abstract class ItemScript extends ScriptObject {
     replaceInPrimaryHand: ScriptStringArray;
     replaceInSecondHand: ScriptStringArray;
     requiresEquippedBothHands: ScriptBoolean;
+    runSpeedModifier: ScriptFloat;
     scaleWorldIcon: ScriptFloat;
     secondaryAnimMask: ScriptString;
     staticModel: ScriptString;
@@ -119,8 +126,27 @@ export abstract class ItemScript extends ScriptObject {
             case 'alcoholpower':
                 this.alcoholPower = getFloat(statement);
                 return true;
+            case 'bodylocation':
+                this.bodyLocation = getString(statement);
+                return true;
             case 'boredomchange':
                 this.boredomChange = getInt(statement);
+                return true;
+            case 'canhaveholes':
+                this.canHaveHoles = getBoolean(statement);
+                return true;
+
+            case 'clothingextrasubmenu':
+                this.clothingExtraSubmenu = getString(statement);
+                return true;
+            case 'clothingitem':
+                this.clothingItem = getString(statement);
+                return true;
+            case 'clothingitemextra':
+                this.clothingItemExtra = getString(statement);
+                return true;
+            case 'clothingitemextraoption':
+                this.clothingItemExtraOption = getString(statement);
                 return true;
             case 'conditionmax':
                 this.conditionMax = getInt(statement);
@@ -160,6 +186,9 @@ export abstract class ItemScript extends ScriptObject {
                 return true;
             case 'primaryanimmask':
                 this.primaryAnimMask = getString(statement);
+                return true;
+            case 'runspeedmodifier':
+                this.runSpeedModifier = getFloat(statement);
                 return true;
             case 'scaleworldicon':
                 this.scaleWorldIcon = getFloat(statement);
