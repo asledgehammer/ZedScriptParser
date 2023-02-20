@@ -40,7 +40,7 @@ export class SoundScript extends ScriptObject {
                 this.clip = new SoundClip(statement.value as ObjectStatement);
                 break;
             default:
-                console.warn(`[${this.__name}] :: Unknown property: ${property}`);
+                console.warn(`[${this.__id}] :: Unknown property: ${property}`);
                 break;
         }
     }

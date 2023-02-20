@@ -10,7 +10,7 @@ export class UniqueRecipeScript extends ScriptObject {
         const property = statement.id.value;
         switch (property.toLowerCase()) {
             default:
-                console.warn(`[${this.__name}] :: Unknown property: ${property}`);
+                console.warn(`[${this.__id}] :: Unknown property: ${property}`);
                 break;
         }
     }

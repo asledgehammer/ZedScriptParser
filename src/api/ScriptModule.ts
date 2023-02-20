@@ -76,11 +76,11 @@ export class ScriptModule {
                 switch (entry.category.value.toLowerCase()) {
                     case 'animation':
                         const animation = new AnimationScript(entry);
-                        this.animations[animation.__name!!] = animation;
+                        this.animations[animation.__id!!] = animation;
                         continue;
                     case 'item':
                         const item = ScriptModule.createItem(entry);
-                        this.items[item.__name!!] = item;
+                        this.items[item.__id!!] = item;
                         continue;
                 }
             }
@@ -139,8 +139,8 @@ export class ScriptModule {
 
     toJSON(): any {
         const o: any = {
-            animations: {},
-            items: {},
+            animations: [],
+            items: [],
         };
 
         const animKeys = Object.keys(this.animations).sort((a, b) =>
@@ -148,7 +148,7 @@ export class ScriptModule {
         );
         for (const key of animKeys) {
             const anim = this.animations[key];
-            o.animations[key] = anim.toJSON();
+            o.animations.push(anim.toJSON());
         }
 
         const itemKeys = Object.keys(this.items).sort((a, b) =>
@@ -156,7 +156,7 @@ export class ScriptModule {
         );
         for (const key of itemKeys) {
             const item = this.items[key];
-            o.items[key] = item.toJSON();
+            o.items.push(item.toJSON());
         }
 
         return o;

@@ -43,7 +43,7 @@ export class SoundClip extends ScriptObject {
                 this.reverbMaxRange = getFloat(statement);
                 break;
             default:
-                console.warn(`[${this.__name}] :: Unknown property: ${property}`);
+                console.warn(`[${this.__id}] :: Unknown property: ${property}`);
                 break;
         }
     }

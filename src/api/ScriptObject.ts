@@ -137,13 +137,13 @@ export function getBoolean(statement: AssignmentStatement): ScriptBoolean {
 }
 
 export abstract class ScriptObject {
-    __name: string | undefined;
+    __id: string | undefined;
 
     customProperties: { [name: string]: any } | undefined = {};
 
     constructor(statement: ObjectStatement) {
-        this.__name = statement.id.value;
-        if (this.__name == null || this.__name === '') {
+        this.__id = statement.id.value;
+        if (this.__id == null || this.__id === '') {
             throw new Error(
                 `The name provided for the ScriptObject is either null or empty.`,
             );
@@ -198,7 +198,7 @@ export abstract class ScriptObject {
         }
 
         console.log(
-            `[${this.__name}] :: Adding custom property: ${name} = ${value}`,
+            `[${this.__id}] :: Adding custom property: ${name} = ${value}`,
         );
         if (this.customProperties == null) this.customProperties = {};
         this.customProperties[name] = value;
@@ -206,7 +206,7 @@ export abstract class ScriptObject {
 
     toJSON(): any {
         let o = { ...this };
-        o.__name = undefined;
+        o.__id = undefined;
         return o;
     }
 

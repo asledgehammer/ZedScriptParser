@@ -53,7 +53,7 @@ export class EvolvedRecipeScript extends ScriptObject {
                 this.allowFrozenItem = getBoolean(statement);
                 break;
             default:
-                console.warn(`[${this.__name}] :: Unknown property: ${property}`);
+                console.warn(`[${this.__id}] :: Unknown property: ${property}`);
         }
     }
 }
