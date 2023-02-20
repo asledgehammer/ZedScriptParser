@@ -25,6 +25,10 @@ export class AlarmClockClothingItem extends ClothingItem {
         return super.onStatement(statement);
     }
 
+    allowCustomProperties(): boolean {
+        return true;
+    }
+
     getType(): String {
         return 'AlarmClockClothing';
     }

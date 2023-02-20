@@ -19,7 +19,7 @@ import { KeyRingItem } from './item/KeyringItem';
 import { LiteratureItem } from './item/LiteratureItem';
 import { MapItem } from './item/MapItem';
 import { MoveableItem } from './item/MoveableItem';
-import { NormalItem } from './item/NormalItem';
+import { ComboItem } from './item/ComboItem';
 import { RadioItem } from './item/RadioItem';
 import { WeaponItem } from './item/WeaponItem';
 import { WeaponPartItem } from './item/WeaponPartItem';
@@ -138,10 +138,10 @@ export class ScriptModule {
             case 'weaponpart':
                 return new WeaponPartItem(statement);
             case 'normal':
-                return new NormalItem(statement);
+                return new ComboItem(statement);
             default:
-                console.log('Unknown item type: ' + type.toLowerCase());
-                return new NormalItem(statement);
+                console.log(statement.id.value + ' : Unknown item type: ' + type.toLowerCase());
+                return new ComboItem(statement);
         }
     }
 

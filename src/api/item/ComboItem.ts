@@ -3,7 +3,7 @@ import { ItemScript } from './ItemScript';
 
 console.log(ItemScript);
 
-export class NormalItem extends ItemScript {
+export class ComboItem extends ItemScript {
     
     constructor(statement: ObjectStatement) {
         super(statement);
@@ -14,6 +14,10 @@ export class NormalItem extends ItemScript {
         switch (property.toLowerCase()) {
         }
         return super.onStatement(statement);
+    }
+
+    allowCustomProperties(): boolean {
+        return true;
     }
 
     getType(): String {

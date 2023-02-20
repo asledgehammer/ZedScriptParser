@@ -122,7 +122,7 @@ export function scanDir(dir: string, extension: string, files: string[]) {
 
 export const removeSyntaxErrors = (s: string) => {
     // I have no idea why PZ's parser tolerates two commas in a row..
-    return s.replace(/,,/g, '');
+    return s.replace(/,,/g, ',');
 };
 
 export function EOF(id: string) {

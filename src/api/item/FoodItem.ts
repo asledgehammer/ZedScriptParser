@@ -14,11 +14,9 @@ export class FoodItem extends ItemScript {
     alcoholic: ScriptBoolean;
     badCold: ScriptBoolean;
     badInMicrowave: ScriptBoolean;
-    calories: ScriptInt;
     cannedFood: ScriptBoolean;
     cantBeFrozen: ScriptBoolean;
     cantEat: ScriptBoolean;
-    carbohydrates: ScriptInt;
     cookingSound: ScriptString;
     dangerousUncooked: ScriptBoolean;
     daysFresh: ScriptInt;
@@ -30,7 +28,6 @@ export class FoodItem extends ItemScript {
     herbalistType: ScriptString;
     hungerChange: ScriptInt;
     isCookable: ScriptBoolean;
-    lipids: ScriptInt;
     minutesToBurn: ScriptInt;
     minutesToCook: ScriptInt;
     onCooked: ScriptString;
@@ -39,7 +36,6 @@ export class FoodItem extends ItemScript {
     painReduction: ScriptInt;
     poisonDetectionLevel: ScriptInt;
     poisonPower: ScriptInt;
-    proteins: ScriptInt;
     reduceFoodSickness: ScriptInt;
     removeNegativeEffectOnCooked: ScriptBoolean;
     removeUnhappinessWhenCooked: ScriptBoolean;
@@ -56,17 +52,11 @@ export class FoodItem extends ItemScript {
     onStatement(statement: AssignmentStatement): boolean {
         const property = statement.id.value;
         switch (property.toLowerCase()) {
-            case 'alcoholic':
-                this.alcoholic = getBoolean(statement);
-                return true;
             case 'badcold':
                 this.badCold = getBoolean(statement);
                 return true;
             case 'badinmicrowave':
                 this.badInMicrowave = getBoolean(statement);
-                return true;
-            case 'calories':
-                this.calories = getInt(statement);
                 return true;
             case 'cannedfood':
                 this.cannedFood = getBoolean(statement);
@@ -76,9 +66,6 @@ export class FoodItem extends ItemScript {
                 return true;
             case 'canteat':
                 this.cantEat = getBoolean(statement);
-                return true;
-            case 'carbohydrates':
-                this.carbohydrates = getInt(statement);
                 return true;
             case 'cookingsound':
                 this.cookingSound = getString(statement);
@@ -128,9 +115,6 @@ export class FoodItem extends ItemScript {
             case 'iscookable':
                 this.isCookable = getBoolean(statement);
                 return true;
-            case 'lipids':
-                this.lipids = getInt(statement);
-                return true;
             case 'minutestoburn':
                 this.minutesToBurn = getInt(statement);
                 return true;
@@ -154,9 +138,6 @@ export class FoodItem extends ItemScript {
                 return true;
             case 'poisonpower':
                 this.poisonPower = getInt(statement);
-                return true;
-            case 'proteins':
-                this.proteins = getInt(statement);
                 return true;
             case 'reducefoodsickness':
                 this.reduceFoodSickness = getInt(statement);
