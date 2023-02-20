@@ -1,6 +1,13 @@
 import { AssignmentStatement, ObjectStatement } from 'ast';
 import { Fixer, ScriptFixer, ScriptFixerArray } from './Fixer';
-import { getFloat, getString, getStringArray, ScriptFloat, ScriptObject, ScriptStringArray } from './ScriptObject';
+import {
+    getFloat,
+    getString,
+    getStringArray,
+    ScriptFloat,
+    ScriptObject,
+    ScriptStringArray,
+} from './ScriptObject';
 import { FixerSkill } from './FixerSkill';
 
 export class FixingScript extends ScriptObject {
@@ -13,17 +20,17 @@ export class FixingScript extends ScriptObject {
         super(statement);
     }
 
-    onStatement(statement: AssignmentStatement): void {
+    onStatement(statement: AssignmentStatement): boolean {
         const property = statement.id.value;
         let raw: string = '';
         let split: string[] = [];
         switch (property.toLowerCase()) {
             case 'require':
                 this.require = getStringArray(statement);
-                break;
+                return true;
             case 'conditionmodifier':
                 this.conditionModifier = getFloat(statement);
-                break;
+                return true;
             case 'globalitem':
                 raw = getString(statement)!!;
                 if (raw.indexOf('=') !== -1) {
@@ -34,6 +41,7 @@ export class FixingScript extends ScriptObject {
                 } else {
                     this.globalItem = new Fixer(raw.trim(), 1);
                 }
+                return true;
             case 'fixer':
                 raw = getString(statement)!!;
                 if (raw.indexOf(';') !== -1) {
@@ -62,10 +70,12 @@ export class FixingScript extends ScriptObject {
                     if (this.fixers == null) this.fixers = [];
                     this.fixers.push(fixer);
                 }
-                break;
-            default:
-                console.warn(`[${this.__id}] :: Unknown property: ${property}`);
-                break;
+                return true;
         }
+        return false;
+    }
+
+    allowCustomProperties(): boolean {
+        return true;
     }
 }

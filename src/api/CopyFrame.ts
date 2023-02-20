@@ -1,6 +1,8 @@
 import { AssignmentStatement } from 'ast';
 import { getInt, getString, ScriptInt, ScriptString } from './ScriptObject';
 
+export type ScriptCopyFrameArray = CopyFrame[] | undefined;
+
 export class CopyFrame {
     frame: ScriptInt;
     source: ScriptString;

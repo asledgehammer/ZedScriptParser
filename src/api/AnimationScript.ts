@@ -1,6 +1,6 @@
 import { AssignmentStatement, ObjectStatement } from 'ast';
-import { CopyFrame } from './CopyFrame';
-import { CopyFrames } from './CopyFrames';
+import { CopyFrame, ScriptCopyFrameArray } from './CopyFrame';
+import { CopyFrames, ScriptCopyFramesArray } from './CopyFrames';
 import {
     getString,
     ScriptObject,
@@ -12,8 +12,8 @@ export class AnimationScript extends ScriptObject {
     meshFile: ScriptString;
     animationDirectories: ScriptStringArray;
 
-    copyFrame: CopyFrame[] | undefined;
-    copyFrames: CopyFrames[] | undefined;
+    copyFrame: ScriptCopyFrameArray;
+    copyFrames: ScriptCopyFramesArray;
 
     constructor(statement: ObjectStatement) {
         super(statement);

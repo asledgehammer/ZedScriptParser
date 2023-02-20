@@ -1,18 +1,19 @@
-import { AssignmentStatement, ObjectStatement } from "ast";
-import { ScriptObject } from "./ScriptObject";
+import { AssignmentStatement, ObjectStatement } from 'ast';
+import { ScriptObject } from './ScriptObject';
 
 export class VehicleScript extends ScriptObject {
     constructor(statement: ObjectStatement) {
         super(statement);
     }
 
-    onStatement(statement: AssignmentStatement): void {
+    onStatement(statement: AssignmentStatement): boolean {
         const property = statement.id.value;
         switch (property.toLowerCase()) {
-            default:
-                console.warn(`[${this.__id}] :: Unknown property: ${property}`);
-                break;
         }
+        return false;
     }
 
+    allowCustomProperties(): boolean {
+        return true;
+    }
 }

@@ -73,6 +73,8 @@ export class SoundClip {
         }
     }
 
+    
+
     toJSON(): any {
         const o = { ...this };
         // @ts-ignore

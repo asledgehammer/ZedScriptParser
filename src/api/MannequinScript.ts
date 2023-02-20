@@ -6,12 +6,14 @@ export class MannequinScript extends ScriptObject {
         super(statement);
     }
 
-    onStatement(statement: AssignmentStatement): void {
+    onStatement(statement: AssignmentStatement): boolean {
         const property = statement.id.value;
         switch (property.toLowerCase()) {
-            default:
-                console.warn(`[${this.__id}] :: Unknown property: ${property}`);
-                break;
         }
+        return false;
+    }
+
+    allowCustomProperties(): boolean {
+        return true;
     }
 }
