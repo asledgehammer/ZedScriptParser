@@ -18,6 +18,7 @@ export class ClothingItem extends ItemScript {
     chanceToFall: ScriptInt;
     combatSpeedModifier: ScriptFloat;
     conditionLowerChanceOneIn: ScriptInt;
+    cosmetic: ScriptBoolean;
     insulation: ScriptFloat;
     neckProtectionModifier: ScriptFloat;
     removeOnBroken: ScriptBoolean;
@@ -29,6 +30,7 @@ export class ClothingItem extends ItemScript {
     waterResistance: ScriptFloat;
     weightWet: ScriptFloat;
     windResistance: ScriptFloat;
+    worldRender: ScriptBoolean;
 
     constructor(statement: ObjectStatement) {
         super(statement);
@@ -55,6 +57,9 @@ export class ClothingItem extends ItemScript {
             case 'conditionlowerchanceonein':
                 this.conditionLowerChanceOneIn = getInt(statement);
                 return true;
+            case 'cosmetic':
+                this.cosmetic = getBoolean(statement);
+                return true;
             case 'neckprotectionmodifier':
                 this.neckProtectionModifier = getFloat(statement);
                 return true;
@@ -79,7 +84,7 @@ export class ClothingItem extends ItemScript {
             case 'insulation':
                 this.insulation = getFloat(statement);
                 return true;
-            case 'WaterResistance':
+            case 'waterresistance':
                 this.waterResistance = getFloat(statement);
                 return true;
             case 'weightwet':
@@ -88,8 +93,15 @@ export class ClothingItem extends ItemScript {
             case 'windresistance':
                 this.windResistance = getFloat(statement);
                 return true;
+            case 'worldrender':
+                this.worldRender = getBoolean(statement);
+                return true;
         }
         return super.onStatement(statement);
+    }
+
+    allowCustomProperties(): boolean {
+        return true;
     }
 
     getType(): String {

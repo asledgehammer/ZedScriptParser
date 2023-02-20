@@ -57,6 +57,7 @@ export abstract class ItemScript extends ScriptObject {
     engineLoudness: ScriptFloat;
     evolvedRecipeName: ScriptString;
     explosionSound: ScriptString;
+    fabricType: ScriptString;
     fatigueChange: ScriptFloat;
     fishingLure: ScriptBoolean;
     foodType: ScriptString;
@@ -165,6 +166,9 @@ export abstract class ItemScript extends ScriptObject {
                 return true;
             case 'eattype':
                 this.eatType = getString(statement);
+                return true;
+            case 'fabrictype':
+                this.fabricType = getString(statement);
                 return true;
             case 'fishinglure':
                 this.fishingLure = getBoolean(statement);
