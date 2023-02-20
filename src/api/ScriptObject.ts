@@ -137,9 +137,10 @@ export function getBoolean(statement: AssignmentStatement): ScriptBoolean {
 }
 
 export abstract class ScriptObject {
-    __id: string | undefined;
+    readonly __id: string | undefined;
+    readonly customProperties: { [name: string]: any } = {};
 
-    customProperties: { [name: string]: any } | undefined = {};
+    protected readonly ignoreProperties: { [name: string]: boolean } = {};
 
     constructor(statement: ObjectStatement) {
         this.__id = statement.id.value;
@@ -200,13 +201,33 @@ export abstract class ScriptObject {
         console.log(
             `[${this.__id}] :: Adding custom property: ${name} = ${value}`,
         );
-        if (this.customProperties == null) this.customProperties = {};
         this.customProperties[name] = value;
     }
 
     toJSON(): any {
-        let o = { ...this };
-        o.__id = undefined;
+        let o: any = {};
+        const thisKeys: string[] = Object.keys(this);
+
+        /* (Sort all keys alphanumerically) */
+        thisKeys.sort((a, b) => a.localeCompare(b));
+
+        for (const key of thisKeys) {
+            if (key === 'ignoreProperties') continue;
+
+            /* (Ignore keys that specific objects define) */
+            if (this.ignoreProperties[key]) continue;
+
+            /* (Only add custom properties if populated) */
+            if (
+                key === 'customProperties' &&
+                Object.keys(this.customProperties!!).length === 0
+            ) {
+                continue;
+            }
+
+            /* (Add property to the exported JSON object) */
+            o[key as string] = (this as any)[key];
+        }
         return o;
     }
 

@@ -70,7 +70,7 @@ export function parseAST(text: string, debug: boolean = false): Chunk {
             const id = parentID + '.' + name;
 
             if (value === ',') {
-                console.warn(
+                if(debug) console.warn(
                     `The value for '${id}' is empty. Interpreting as null..`,
                 );
                 value = '';

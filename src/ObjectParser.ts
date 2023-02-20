@@ -4,7 +4,7 @@ import { scanDir } from "./utils";
 import { ScriptModule } from "./api/ScriptModule";
 
 const doFile = (modules: {[name: string]: ScriptModule}, path: string, debug: boolean = false) => {
-    console.log(`[ZedScriptParse] :: Parsing '${path}'`);
+    // console.log(`[ZedScriptParse] :: Parsing '${path}'`);
     const ast = parseAST(fs.readFileSync(path).toString(), debug);
 
     for(const entry of ast.body) {

@@ -1,5 +1,13 @@
 import { AssignmentStatement, ObjectStatement } from 'ast';
-import { getBoolean, getInt, getString, ScriptBoolean, ScriptInt, ScriptObject, ScriptString } from './ScriptObject';
+import {
+    getBoolean,
+    getInt,
+    getString,
+    ScriptBoolean,
+    ScriptInt,
+    ScriptObject,
+    ScriptString,
+} from './ScriptObject';
 import { SoundClip } from './SoundClip';
 
 export type MasterVolume = 'Primary' | 'Ambient' | 'Music' | 'VehicleEngine';
@@ -16,32 +24,66 @@ export class SoundScript extends ScriptObject {
 
     constructor(statement: ObjectStatement) {
         super(statement);
+        this.ignoreProperties['__id'] = true;
     }
 
-    onStatement(statement: AssignmentStatement): void {
+    onStatement(statement: AssignmentStatement): boolean {
         const property = statement.id.value;
         switch (property.toLowerCase()) {
             case 'category':
                 this.category = getString(statement);
-                break;
+                return true;
             case 'is3d':
                 this.is3D = getBoolean(statement);
-                break;
+                return true;
             case 'loop':
                 this.loop = getBoolean(statement);
-                break;
+                return true;
             case 'master':
                 this.master = getString(statement) as MasterVolume;
-                break;
-            case 'maxInstancesPerEmitter':
+                return true;
+            case 'maxinstancesperemitter':
                 this.maxInstancesPerEmitter = getInt(statement);
-                break;
+                return true;
             case 'clip':
-                this.clip = new SoundClip(statement.value as ObjectStatement);
-                break;
-            default:
-                console.warn(`[${this.__id}] :: Unknown property: ${property}`);
-                break;
+                this.clip = new SoundClip(statement);
+                return true;
         }
+        return false;
+    }
+
+    toJSON(): any {
+        let o: any = {};
+        const thisKeys: string[] = Object.keys(this);
+
+        /* (Sort all keys alphanumerically) */
+        thisKeys.sort((a, b) => a.localeCompare(b));
+
+        for (const key of thisKeys) {
+            if (key === 'ignoreProperties') continue;
+
+            /* (Ignore keys that specific objects define) */
+            if (this.ignoreProperties[key]) continue;
+
+            /* (Only add custom properties if populated) */
+            if (
+                key === 'customProperties' &&
+                Object.keys(this.customProperties!!).length === 0
+            ) {
+                continue;
+            }
+
+            if (key === 'clip') {
+                o['clip'] = this.clip!!.toJSON();
+            }
+
+            /* (Add property to the exported JSON object) */
+            o[key as string] = (this as any)[key];
+        }
+        return o;
+    }
+
+    allowCustomProperties(): boolean {
+        return true;
     }
 }

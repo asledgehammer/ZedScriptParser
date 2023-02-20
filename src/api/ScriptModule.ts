@@ -82,6 +82,14 @@ export class ScriptModule {
                         const item = ScriptModule.createItem(entry);
                         this.items[item.__id!!] = item;
                         continue;
+                    case 'sound':
+                        const sound = new SoundScript(entry);
+                        this.sounds[sound.__id!!] = sound;
+                        continue;
+                    default:
+                        // console.log(
+                        //     'Unknown object type: ' + entry.category.value,
+                        // );
                 }
             }
         }
@@ -141,6 +149,7 @@ export class ScriptModule {
         const o: any = {
             animations: [],
             items: [],
+            sounds: [],
         };
 
         const animKeys = Object.keys(this.animations).sort((a, b) =>
@@ -157,6 +166,14 @@ export class ScriptModule {
         for (const key of itemKeys) {
             const item = this.items[key];
             o.items.push(item.toJSON());
+        }
+
+        const soundKeys = Object.keys(this.sounds).sort((a, b) =>
+            a.localeCompare(b),
+        );
+        for (const key of soundKeys) {
+            const sound = this.sounds[key];
+            o.sounds.push(sound.toJSON());
         }
 
         return o;
