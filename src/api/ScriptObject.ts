@@ -1,4 +1,9 @@
-import { AssignmentStatement, ImportsStatement, ObjectStatement, Statement } from 'ast';
+import {
+    AssignmentStatement,
+    ImportsStatement,
+    ObjectStatement,
+    Statement,
+} from 'ast';
 
 export type ScriptBoolean = boolean | undefined;
 export type ScriptFloat = number | undefined;
@@ -132,7 +137,9 @@ export function getBoolean(statement: AssignmentStatement): ScriptBoolean {
 }
 
 export abstract class ScriptObject {
-     __name: string | undefined;
+    __name: string | undefined;
+
+    customProperties: { [name: string]: any } | undefined = {};
 
     constructor(statement: ObjectStatement) {
         this.__name = statement.id.value;
@@ -150,7 +157,12 @@ export abstract class ScriptObject {
         body.forEach((statement) => {
             switch (statement.type) {
                 case 'AssignmentStatement':
-                    this.onStatement(statement);
+                    if (
+                        !this.onStatement(statement) &&
+                        this.allowCustomProperties()
+                    ) {
+                        this.addCustomProperty(statement);
+                    }
                     break;
                 // case 'ImportStatement':
                 // this.onImport(statement);
@@ -161,13 +173,44 @@ export abstract class ScriptObject {
         });
     }
 
-    onImport(statement: ImportsStatement) {}
+    allowCustomProperties() {
+        return false;
+    }
+
+    addCustomProperty(statement: AssignmentStatement) {
+        if (statement.value.type !== 'AssignmentExpression') {
+            return;
+        }
+
+        const name = statement.id.value;
+        let value: any;
+
+        switch (statement.value.value.type) {
+            case 'NullLiteral':
+                value = null;
+                break;
+            case 'NumericLiteral':
+            case 'BooleanLiteral':
+            case 'NumericArrayLiteral':
+            case 'StringLiteral':
+            case 'StringArrayLiteral':
+                value = statement.value.value.value;
+        }
+
+        console.log(
+            `[${this.__name}] :: Adding custom property: ${name} = ${value}`,
+        );
+        if (this.customProperties == null) this.customProperties = {};
+        this.customProperties[name] = value;
+    }
 
     toJSON(): any {
-        let o = {...this};
+        let o = { ...this };
         o.__name = undefined;
         return o;
     }
 
-    abstract onStatement(statement: AssignmentStatement): void;
+    onImport(statement: ImportsStatement) {}
+
+    abstract onStatement(statement: AssignmentStatement): boolean;
 }

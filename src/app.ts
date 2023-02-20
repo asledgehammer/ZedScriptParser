@@ -9,11 +9,9 @@ import { scanDir } from './utils';
 //     const files: string[] = [];
 //     scanDir(path, '.txt', files);
 //     files.sort((a, b) => a.localeCompare(b));
-
 //     for (const file of files) {
 //         doFile(file, debug);
 //     }
-
 //     console.log({categories})
 // };
 

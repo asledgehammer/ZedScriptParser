@@ -11,17 +11,17 @@ export class KeyItem extends ItemScript {
         super(statement);
     }
 
-    onStatement(statement: AssignmentStatement): void {
+    onStatement(statement: AssignmentStatement): boolean {
         const property = statement.id.value;
         switch (property.toLowerCase()) {
             case 'digitalpadlock':
                 this.digitalPadlock = getBoolean(statement);
-                return;
+                return true;
             case 'padlock':
                 this.padlock = getBoolean(statement);
-                return;
+                return true;
         }
-        super.onStatement(statement);
+        return super.onStatement(statement);
     }
 
     getType(): String {

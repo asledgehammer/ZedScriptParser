@@ -17,8 +17,6 @@ import {
 } from './BloodClothingType';
 
 export abstract class ItemScript extends ScriptObject {
-    customProperties: { [name: string]: any } | undefined = {};
-
     activatedItem: ScriptBoolean;
     alcoholic: ScriptBoolean;
     alcoholPower: ScriptFloat;
@@ -65,6 +63,7 @@ export abstract class ItemScript extends ScriptObject {
     obsolete: ScriptBoolean;
     poison: ScriptBoolean;
     poisonDetectionLevel: ScriptInt;
+    rainFactor: ScriptFloat;
     reduceInfectionPower: ScriptFloat;
     remoteController: ScriptBoolean;
     remoteRange: ScriptInt;
@@ -72,6 +71,7 @@ export abstract class ItemScript extends ScriptObject {
     replaceOnUseOn: ScriptString;
     requireInHandOrInventory: ScriptStringArray;
     requiresEquippedBothHands: ScriptBoolean;
+    staticModel: ScriptString;
     stressChange: ScriptInt;
     survivalGear: ScriptBoolean;
     suspensionCompression: ScriptFloat;
@@ -89,252 +89,224 @@ export abstract class ItemScript extends ScriptObject {
 
     type: String = this.getType();
 
-    onStatement(statement: AssignmentStatement): void {
+    onStatement(statement: AssignmentStatement): boolean {
         const property = statement.id.value;
         switch (property.toLowerCase()) {
             case 'activateditem':
                 this.activatedItem = getBoolean(statement);
-                return;
+                return true;
             case 'alcohol':
                 this.alcoholic = getBoolean(statement);
-                return;
+                return true;
             case 'alcoholpower':
                 this.alcoholPower = getFloat(statement);
-                return;
+                return true;
             case 'boredomchange':
                 this.boredomChange = getInt(statement);
-                return;
+                return true;
             case 'conditionmax':
                 this.conditionMax = getInt(statement);
-                return;
+                return true;
             case 'count':
                 this.count = getInt(statement);
-                return;
+                return true;
             case 'displayname':
                 this.displayName = getString(statement);
-                return;
+                return true;
             case 'lightstrength':
                 this.lightStrength = getFloat(statement);
-                return;
+                return true;
             case 'stresschange':
                 this.stressChange = getInt(statement);
-                return;
+                return true;
             case 'torchcone':
                 this.torchCone = getBoolean(statement);
-                return;
+                return true;
             case 'lightdistance':
                 this.lightDistance = getInt(statement);
-                return;
+                return true;
             case 'unhappychange':
                 this.unhappyChange = getInt(statement);
-                return;
+                return true;
             case 'weight':
                 this.weight = getFloat(statement);
-                return;
+                return true;
             case 'replaceonuseon':
                 this.replaceOnUseOn = getString(statement);
-                return;
+                return true;
             case 'requireinhandorinventory':
                 this.requireInHandOrInventory =
                     getString(statement)?.split('/');
-                return;
+                return true;
             case 'attachmentsprovided':
                 this.attachmentsProvided = getString(statement)?.split(';');
-                return;
+                return true;
             case 'attachmentreplacement':
                 this.attachmentReplacement = getString(statement);
-                return;
+                return true;
             case 'iswatersource':
                 this.isWaterSource = getBoolean(statement);
-                return;
+                return true;
             case 'canstorewater':
                 this.canStoreWater = getBoolean(statement);
-                return;
+                return true;
             case 'canstack':
                 this.canStack = getBoolean(statement);
-                return;
+                return true;
             case 'poison':
                 this.poison = getBoolean(statement);
-                return;
+                return true;
             case 'foodtype':
                 this.foodType = getString(statement);
-                return;
+                return true;
             case 'fatiguechange':
                 this.fatigueChange = getFloat(statement); // fatigueChange /= 100 in PZ.
-                return;
+                return true;
             case 'posiondetectionlevel':
                 this.poisonDetectionLevel = getInt(statement);
-                return;
+                return true;
             case 'tooltip':
                 this.tooltip = getString(statement);
-                return;
+                return true;
             case 'displaycategory':
                 this.displayCategory = getString(statement);
-                return;
+                return true;
             case 'requiresequippedbothhands':
                 this.requiresEquippedBothHands = getBoolean(statement);
-                return;
+                return true;
             case 'breaksound':
                 this.breakSound = getString(statement);
-                return;
+                return true;
             case 'replaceonuse':
                 this.replaceOnUse = getString(statement);
-                return;
+                return true;
             case 'bandagepower':
                 this.bandagePower = getFloat(statement);
-                return;
+                return true;
             case 'reduceinfectionpower':
                 this.reduceInfectionPower = getFloat(statement);
-                return;
+                return true;
             case 'canberemote':
                 this.canBeRemote = getBoolean(statement);
-                return;
+                return true;
             case 'remotecontroller':
                 this.remoteController = getBoolean(statement);
-                return;
+                return true;
             case 'remoterange':
                 this.remoteRange = getInt(statement);
-                return;
+                return true;
             case 'countdownsound':
                 this.countDownSound = getString(statement);
-                return;
+                return true;
             case 'explosionsound':
                 this.explosionSound = getString(statement);
-                return;
+                return true;
             case 'colorred':
                 this.colorRed = getInt(statement);
-                return;
+                return true;
             case 'colorgreen':
                 this.colorGreen = getInt(statement);
-                return;
+                return true;
             case 'colorblue':
                 this.colorBlue = getInt(statement);
-                return;
+                return true;
             case 'evolvedrecipename':
                 this.evolvedRecipeName = getString(statement); // Translator.getItemEvolvedRecipeName()
-                return;
+                return true;
             case 'metalvalue':
                 this.metalValue = getFloat(statement);
-                return;
+                return true;
             case 'wet':
                 this.wet = getBoolean(statement);
-                return;
+                return true;
             case 'wetcooldown':
                 this.wetCooldown = getFloat(statement);
-                return;
+                return true;
             case 'itemwhendry':
                 this.itemWhenDry = getString(statement);
-                return;
+                return true;
             case 'keepondeplete':
                 this.keepOnDeplete = getBoolean(statement);
-                return;
+                return true;
             case 'brakeforce':
                 this.brakeForce = getInt(statement); // Cast to float in PZ.
-                return;
+                return true;
             case 'chancetospawndamaged':
                 this.chanceToSpawnDamaged = getInt(statement);
-                return;
+                return true;
             case 'conditionlowernormal':
                 this.conditionLowerNormal = getFloat(statement);
-                return;
+                return true;
             case 'conditionloweroffroad':
                 this.conditionLowerOffroad = getFloat(statement);
-                return;
+                return true;
             case 'wheelfriction':
                 this.wheelFriction = getFloat(statement);
-                return;
+                return true;
             case 'suspensioncompression':
                 this.suspensionCompression = getFloat(statement);
-                return;
+                return true;
             case 'engineloudness':
                 this.engineLoudness = getFloat(statement);
-                return;
+                return true;
             case 'suspensiondamping':
                 this.suspensionDamping = getFloat(statement);
-                return;
+                return true;
             case 'customcontextmenu':
                 this.customContextMenu = getString(statement); // ContextMenu_${CustomContextMenu}
-                return;
+                return true;
             case 'iconsfortexture':
                 this.iconsForTexture = getString(statement)?.split(';');
-                return;
+                return true;
             case 'bloodlocation':
                 this.bloodLocation = getString(statement)?.split(
                     ';',
                 ) as BloodClothingType[]; // BloodClothingType[]
-                return;
+                return true;
             case 'closekillmove':
                 this.closeKillMove = getString(statement);
-                return;
+                return true;
             case 'ammotype':
                 this.ammoType = getString(statement); // PZ code doesn't trim this for some reason..
-                return;
+                return true;
             case 'maxammo':
                 this.maxAmmo = getInt(statement);
-                return;
+                return true;
             case 'guntype':
                 this.gunType = getString(statement); // PZ code doesn't trim this for some reason..
-                return;
+                return true;
             case 'attachmenttype':
                 this.attachmentType = getString(statement);
-                return;
+                return true;
             case 'icon':
                 this.icon = getString(statement);
-                return;
+                return true;
             case 'survivalgear':
                 this.survivalGear = getBoolean(statement);
-                return;
+                return true;
             case 'swinganim':
                 this.swingAnim = getString(statement);
-                return;
+                return true;
             case 'tags':
                 this.tags = getString(statement)?.split(';');
-                return;
+                return true;
             case 'type':
-                return;
+                return true;
             case 'worldstaticmodel':
                 this.worldStaticModel = getString(statement);
-                return;
+                return true;
             case 'obsolete':
                 this.obsolete = getBoolean(statement);
-                return;
-            default:
-                if (this.allowCustomProperties()) {
-                    this.addCustomProperty(statement);
-                }
-                return;
+                return true;
+            case 'staticmodel':
+                this.staticModel = getString(statement);
+                return true;
+            case 'rainfactor':
+                this.rainFactor = getFloat(statement);
+                return true;
         }
-    }
 
-    allowCustomProperties() {
         return false;
-    }
-
-    addCustomProperty(statement: AssignmentStatement) {
-        if (statement.value.type !== 'AssignmentExpression') {
-            return;
-        }
-
-        const name = statement.id.value;
-        let value: any;
-
-        switch (statement.value.value.type) {
-            case 'NullLiteral':
-                value = null;
-                break;
-            case 'NumericLiteral':
-            case 'BooleanLiteral':
-            case 'NumericArrayLiteral':
-            case 'StringLiteral':
-            case 'StringArrayLiteral':
-                value = statement.value.value.value;
-        }
-
-        console.log(
-            `[${this.__name}] :: Adding custom property: ${name} = ${value}`,
-        );
-        if (this.customProperties == null) this.customProperties = {};
-        this.customProperties[name] = value;
     }
 
     toJSON(): any {

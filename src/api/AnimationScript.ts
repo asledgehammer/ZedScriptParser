@@ -19,21 +19,20 @@ export class AnimationScript extends ScriptObject {
         super(statement);
     }
 
-    onStatement(statement: AssignmentStatement): void {
+    onStatement(statement: AssignmentStatement): boolean {
         const property = statement.id.value;
-        console.log(property);
         switch (property.toLowerCase()) {
             case 'copyframe':
                 if (this.copyFrame == null) this.copyFrame = [];
                 this.copyFrame.push(new CopyFrame(statement));
-                break;
+                return true;
             case 'copyframes':
                 if (this.copyFrames == null) this.copyFrames = [];
                 this.copyFrames.push(new CopyFrames(statement));
-                break;
+                return true;
             case 'meshname':
                 this.meshFile = getString(statement);
-                break;
+                return true;
             case 'animationdirectory':
                 const value = getString(statement)!!;
                 if (value != null) {
@@ -42,12 +41,8 @@ export class AnimationScript extends ScriptObject {
                     }
                     this.animationDirectories.push(value);
                 }
-                break;
-            default:
-                console.warn(
-                    `[${this.__name}] :: Unknown property: ${property}`,
-                );
-                break;
+                return true;
         }
+        return false;
     }
 }

@@ -34,62 +34,62 @@ export class ClothingItem extends ItemScript {
         super(statement);
     }
 
-    onStatement(statement: AssignmentStatement): void {
+    onStatement(statement: AssignmentStatement): boolean {
         const property = statement.id.value;
         switch (property.toLowerCase()) {
             case 'bitedefense':
                 this.biteDefense = getFloat(statement);
-                return;
+                return true;
             case 'bulletdefense':
                 this.bulletDefense = getFloat(statement);
-                return;
+                return true;
             case 'canhaveholes':
                 this.canHaveHoles = getBoolean(statement);
-                return;
+                return true;
             case 'chancetofall':
                 this.chanceToFall = getInt(statement);
-                return;
+                return true;
             case 'combatspeedmodifier':
                 this.combatSpeedModifier = getFloat(statement);
-                return;
+                return true;
             case 'conditionlowerchanceonein':
                 this.conditionLowerChanceOneIn = getInt(statement);
-                return;
+                return true;
             case 'neckprotectionmodifier':
                 this.neckProtectionModifier = getFloat(statement);
-                return;
+                return true;
             case 'removeonbroken':
                 this.removeOnBroken = getBoolean(statement);
-                return;
+                return true;
             case 'runspeedmodifier':
                 this.runSpeedModifier = getFloat(statement);
-                return;
+                return true;
             case 'scratchdefense':
                 this.scratchDefense = getFloat(statement);
-                return;
+                return true;
             case 'spritename':
                 this.spriteName = getString(statement);
-                return;
+                return true;
             case 'stomppower':
                 this.stompPower = getFloat(statement);
-                return;
+                return true;
             case 'temperature':
                 this.temperature = getFloat(statement);
-                return;
+                return true;
             case 'insulation':
                 this.insulation = getFloat(statement);
-                return;
+                return true;
             case 'WaterResistance':
                 this.waterResistance = getFloat(statement);
-                return;
+                return true;
             case 'weightwet':
                 this.weightWet = getFloat(statement);
-                return;
+                return true;
             case 'windresistance':
                 this.windResistance = getFloat(statement);
-                return;
+                return true;
         }
-        super.onStatement(statement);
+        return super.onStatement(statement);
     }
 
     getType(): String {

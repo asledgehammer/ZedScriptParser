@@ -12,19 +12,17 @@ export class AlarmClockClothingItem extends ClothingItem {
         super(statement);
     }
 
-    onStatement(statement: AssignmentStatement): void {
-        
+    onStatement(statement: AssignmentStatement): boolean {
         const property = statement.id.value;
         switch (property.toLowerCase()) {
             case 'alarmsound':
                 this.alarmSound = getString(statement);
-                return;
+                return true;
             case 'soundradius':
                 this.soundRadius = getInt(statement);
-                return;
+                return true;
         }
-
-        super.onStatement(statement);
+        return super.onStatement(statement);
     }
 
     getType(): String {

@@ -9,11 +9,11 @@ export class NormalItem extends ItemScript {
         super(statement);
     }
 
-    onStatement(statement: AssignmentStatement): void {
+    onStatement(statement: AssignmentStatement): boolean {
         const property = statement.id.value;
         switch (property.toLowerCase()) {
         }
-        super.onStatement(statement);
+        return super.onStatement(statement);
     }
 
     getType(): String {
