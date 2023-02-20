@@ -76,20 +76,24 @@ export class ScriptModule {
                 switch (entry.category.value.toLowerCase()) {
                     case 'animation':
                         const animation = new AnimationScript(entry);
-                        this.animations[animation.__id!!] = animation;
+                        this.animations[animation.__id] = animation;
+                        continue;
+                    case 'evolvedrecipe':
+                        const evolvedRecipe = new EvolvedRecipeScript(entry);
+                        this.evolvedRecipes[evolvedRecipe.__id] = evolvedRecipe;
                         continue;
                     case 'item':
                         const item = ScriptModule.createItem(entry);
-                        this.items[item.__id!!] = item;
+                        this.items[item.__id] = item;
                         continue;
                     case 'sound':
                         const sound = new SoundScript(entry);
-                        this.sounds[sound.__id!!] = sound;
+                        this.sounds[sound.__id] = sound;
                         continue;
                     default:
-                        // console.log(
-                        //     'Unknown object type: ' + entry.category.value,
-                        // );
+                    // console.log(
+                    //     'Unknown object type: ' + entry.category.value,
+                    // );
                 }
             }
         }
@@ -140,41 +144,33 @@ export class ScriptModule {
             case 'normal':
                 return new ComboItem(statement);
             default:
-                console.log(statement.id.value + ' : Unknown item type: ' + type.toLowerCase());
+                console.log(
+                    statement.id.value +
+                        ' : Unknown item type: ' +
+                        type.toLowerCase(),
+                );
                 return new ComboItem(statement);
         }
     }
 
     toJSON(): any {
         const o: any = {
-            animations: [],
-            items: [],
-            sounds: [],
         };
 
-        const animKeys = Object.keys(this.animations).sort((a, b) =>
-            a.localeCompare(b),
-        );
-        for (const key of animKeys) {
-            const anim = this.animations[key];
-            o.animations.push(anim.toJSON());
-        }
+        const toArray = (obj: any) => {
+            const array: any[] = [];
+            const keys = Object.keys(obj).sort((a, b) => a.localeCompare(b));
+            for (const key of keys) {
+                const value = obj[key];
+                array.push(value.toJSON());
+            }
+            return array;
+        };
 
-        const itemKeys = Object.keys(this.items).sort((a, b) =>
-            a.localeCompare(b),
-        );
-        for (const key of itemKeys) {
-            const item = this.items[key];
-            o.items.push(item.toJSON());
-        }
-
-        const soundKeys = Object.keys(this.sounds).sort((a, b) =>
-            a.localeCompare(b),
-        );
-        for (const key of soundKeys) {
-            const sound = this.sounds[key];
-            o.sounds.push(sound.toJSON());
-        }
+        o.animations = toArray(this.animations);
+        o.evolvedRecipes = toArray(this.evolvedRecipes);
+        o.items = toArray(this.items);
+        o.sounds = toArray(this.sounds);
 
         return o;
     }

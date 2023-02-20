@@ -45,4 +45,8 @@ export class AnimationScript extends ScriptObject {
         }
         return false;
     }
+
+    allowCustomProperties(): boolean {
+        return true;
+    }
 }

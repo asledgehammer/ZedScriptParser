@@ -139,7 +139,7 @@ export function getBoolean(statement: AssignmentStatement): ScriptBoolean {
 }
 
 export abstract class ScriptObject {
-    readonly __id: string | undefined;
+    readonly __id: string;
     readonly customProperties: { [name: string]: any } = {};
 
     protected readonly ignoreProperties: { [name: string]: boolean } = {};
