@@ -155,6 +155,12 @@ export abstract class ScriptObject {
         }
 
         const body: Statement[] = statement.value.body;
+
+        /* (Helpful alphanumeric sort) */
+        body.sort((a, b) =>
+            (a as any).id.value.localeCompare((b as any).id.value),
+        );
+        
         body.forEach((statement) => {
             switch (statement.type) {
                 case 'AssignmentStatement':

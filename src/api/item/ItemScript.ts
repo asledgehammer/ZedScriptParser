@@ -43,6 +43,7 @@ export abstract class ItemScript extends ScriptObject {
     count: ScriptInt;
     countDownSound: ScriptString;
     customContextMenu: ScriptString;
+    disappearOnUse: ScriptBoolean;
     displayCategory: ScriptString;
     displayName: ScriptString;
     engineLoudness: ScriptFloat;
@@ -81,10 +82,13 @@ export abstract class ItemScript extends ScriptObject {
     tooltip: ScriptString;
     torchCone: ScriptBoolean;
     unhappyChange: ScriptInt;
+    useDelta: ScriptFloat;
+    useWhileEquipped: ScriptBoolean;
     weight: ScriptFloat;
     wet: ScriptBoolean;
     wetCooldown: ScriptFloat;
     wheelFriction: ScriptFloat;
+    worldObjectSprite: ScriptString;
     worldStaticModel: ScriptString;
 
     type: String = this.getType();
@@ -110,8 +114,14 @@ export abstract class ItemScript extends ScriptObject {
             case 'count':
                 this.count = getInt(statement);
                 return true;
+            case 'disappearonuse':
+                this.disappearOnUse = getBoolean(statement);
+                return true;
             case 'displayname':
                 this.displayName = getString(statement);
+                return true;
+            case 'lightdistance':
+                this.lightDistance = getInt(statement);
                 return true;
             case 'lightstrength':
                 this.lightStrength = getFloat(statement);
@@ -122,14 +132,8 @@ export abstract class ItemScript extends ScriptObject {
             case 'torchcone':
                 this.torchCone = getBoolean(statement);
                 return true;
-            case 'lightdistance':
-                this.lightDistance = getInt(statement);
-                return true;
             case 'unhappychange':
                 this.unhappyChange = getInt(statement);
-                return true;
-            case 'weight':
-                this.weight = getFloat(statement);
                 return true;
             case 'replaceonuseon':
                 this.replaceOnUseOn = getString(statement);
@@ -138,6 +142,19 @@ export abstract class ItemScript extends ScriptObject {
                 this.requireInHandOrInventory =
                     getString(statement)?.split('/');
                 return true;
+            case 'usedelta':
+                this.useDelta = getFloat(statement);
+                return true;
+            case 'usewhileequipped':
+                this.useWhileEquipped = getBoolean(statement);
+                return true;
+            case 'weight':
+                this.weight = getFloat(statement);
+                return true;
+            case 'worldobjectsprite':
+                this.worldStaticModel = getString(statement);
+                return true;
+
             case 'attachmentsprovided':
                 this.attachmentsProvided = getString(statement)?.split(';');
                 return true;
