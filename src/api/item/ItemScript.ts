@@ -43,9 +43,11 @@ export abstract class ItemScript extends ScriptObject {
     count: ScriptInt;
     countDownSound: ScriptString;
     customContextMenu: ScriptString;
+    customEatSound: ScriptString;
     disappearOnUse: ScriptBoolean;
     displayCategory: ScriptString;
     displayName: ScriptString;
+    eatType: ScriptString;
     engineLoudness: ScriptFloat;
     evolvedRecipeName: ScriptString;
     explosionSound: ScriptString;
@@ -55,6 +57,7 @@ export abstract class ItemScript extends ScriptObject {
     gunType: ScriptString;
     icon: ScriptString;
     iconsForTexture: ScriptStringArray;
+    isCookable: ScriptBoolean;
     isWaterSource: ScriptBoolean;
     itemWhenDry: ScriptString;
     keepOnDeplete: ScriptBoolean;
@@ -67,6 +70,7 @@ export abstract class ItemScript extends ScriptObject {
     obsolete: ScriptBoolean;
     poison: ScriptBoolean;
     poisonDetectionLevel: ScriptInt;
+    primaryAnimMask: ScriptString;
     rainFactor: ScriptFloat;
     reduceInfectionPower: ScriptFloat;
     remoteController: ScriptBoolean;
@@ -74,7 +78,11 @@ export abstract class ItemScript extends ScriptObject {
     replaceOnUse: ScriptString;
     replaceOnUseOn: ScriptString;
     requireInHandOrInventory: ScriptStringArray;
+    replaceInPrimaryHand: ScriptStringArray;
+    replaceInSecondHand: ScriptStringArray;
     requiresEquippedBothHands: ScriptBoolean;
+    scaleWorldIcon: ScriptFloat;
+    secondaryAnimMask: ScriptString;
     staticModel: ScriptString;
     stressChange: ScriptInt;
     survivalGear: ScriptBoolean;
@@ -84,9 +92,11 @@ export abstract class ItemScript extends ScriptObject {
     tags: ScriptStringArray;
     tooltip: ScriptString;
     torchCone: ScriptBoolean;
+    torchDot: ScriptFloat;
     unhappyChange: ScriptInt;
     useDelta: ScriptFloat;
     useWhileEquipped: ScriptBoolean;
+    useWorldItem: ScriptBoolean;
     weight: ScriptFloat;
     weightEmpty: ScriptFloat;
     wet: ScriptBoolean;
@@ -118,14 +128,23 @@ export abstract class ItemScript extends ScriptObject {
             case 'count':
                 this.count = getInt(statement);
                 return true;
+            case 'customeatsound':
+                this.customEatSound = getString(statement);
+                return true;
             case 'disappearonuse':
                 this.disappearOnUse = getBoolean(statement);
                 return true;
             case 'displayname':
                 this.displayName = getString(statement);
                 return true;
+            case 'eattype':
+                this.eatType = getString(statement);
+                return true;
             case 'fishinglure':
                 this.fishingLure = getBoolean(statement);
+                return true;
+            case 'iscookable':
+                this.isCookable = getBoolean(statement);
                 return true;
             case 'lightdistance':
                 this.lightDistance = getInt(statement);
@@ -139,14 +158,29 @@ export abstract class ItemScript extends ScriptObject {
             case 'oncreate':
                 this.onCreate = getString(statement);
                 return true;
+            case 'primaryanimmask':
+                this.primaryAnimMask = getString(statement);
+                return true;
+            case 'scaleworldicon':
+                this.scaleWorldIcon = getFloat(statement);
+                return true;
+            case 'secondaryanimmask':
+                this.secondaryAnimMask = getString(statement);
+                return true;
             case 'stresschange':
                 this.stressChange = getInt(statement);
                 return true;
             case 'torchcone':
                 this.torchCone = getBoolean(statement);
                 return true;
+            case 'torchdot':
+                this.torchDot = getFloat(statement);
+                return true;
             case 'unhappychange':
                 this.unhappyChange = getInt(statement);
+                return true;
+            case 'useworlditem':
+                this.useWorldItem = getBoolean(statement);
                 return true;
             case 'replaceonuseon':
                 this.replaceOnUseOn = getString(statement);
@@ -154,6 +188,12 @@ export abstract class ItemScript extends ScriptObject {
             case 'requireinhandorinventory':
                 this.requireInHandOrInventory =
                     getString(statement)?.split('/');
+                return true;
+            case 'replaceinprimaryhand':
+                this.replaceInPrimaryHand = getString(statement)?.split(' ');
+                return true;
+            case 'replaceinsecondhand':
+                this.replaceInSecondHand = getString(statement)?.split(' ');
                 return true;
             case 'usedelta':
                 this.useDelta = getFloat(statement);

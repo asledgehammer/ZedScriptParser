@@ -20,11 +20,9 @@ export class FoodItem extends ItemScript {
     cantEat: ScriptBoolean;
     carbohydrates: ScriptInt;
     cookingSound: ScriptString;
-    customEatSound: ScriptString;
     dangerousUncooked: ScriptBoolean;
     daysFresh: ScriptInt;
     daysTotallyRotten: ScriptInt;
-    eatType: ScriptString;
     enduranceChange: ScriptInt;
     evolvedRecipe: ScriptEvolvedRecipeArray;
     fluReduction: ScriptInt;
@@ -85,9 +83,6 @@ export class FoodItem extends ItemScript {
             case 'cookingsound':
                 this.cookingSound = getString(statement);
                 return true;
-            case 'customeatsound':
-                this.customEatSound = getString(statement);
-                return true;
             case 'dangerousuncooked':
                 this.dangerousUncooked = getBoolean(statement);
                 return true;
@@ -96,9 +91,6 @@ export class FoodItem extends ItemScript {
                 return true;
             case 'daystotallyrotten':
                 this.daysTotallyRotten = getInt(statement);
-                return true;
-            case 'eattype':
-                this.eatType = getString(statement);
                 return true;
             case 'endurancechange':
                 this.enduranceChange = getInt(statement);
