@@ -104,7 +104,6 @@ export class WeaponItem extends ItemScript {
     smokeRange: ScriptInt;
     soundGain: ScriptFloat;
     soundMap: ScriptStringArray;
-    soundRadius: ScriptInt;
     soundVolume: ScriptInt;
     splatBloodOnNoDeath: ScriptBoolean;
     splatNumber: ScriptInt;
@@ -416,9 +415,6 @@ export class WeaponItem extends ItemScript {
                 return true;
             case 'soundmap':
                 this.soundMap = getString(statement)?.split(' ');
-                return true;
-            case 'soundradius':
-                this.soundRadius = getInt(statement);
                 return true;
             case 'soundvolume':
                 this.soundVolume = getInt(statement);

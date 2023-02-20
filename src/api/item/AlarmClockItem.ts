@@ -13,6 +13,10 @@ export class AlarmClockItem extends ItemScript {
         return super.onStatement(statement);
     }
 
+    allowCustomProperties(): boolean {
+        return true;
+    }
+
     getType(): String {
         return 'AlarmClock';
     }

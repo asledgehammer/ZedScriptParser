@@ -18,6 +18,7 @@ import {
 
 export abstract class ItemScript extends ScriptObject {
     activatedItem: ScriptBoolean;
+    alarmSound: ScriptString;
     alcohol: ScriptBoolean;
     alcoholPower: ScriptFloat;
     ammoType: ScriptString;
@@ -91,6 +92,7 @@ export abstract class ItemScript extends ScriptObject {
     runSpeedModifier: ScriptFloat;
     scaleWorldIcon: ScriptFloat;
     secondaryAnimMask: ScriptString;
+    soundRadius: ScriptInt;
     staticModel: ScriptString;
     stressChange: ScriptInt;
     survivalGear: ScriptBoolean;
@@ -120,6 +122,9 @@ export abstract class ItemScript extends ScriptObject {
         switch (property.toLowerCase()) {
             case 'activateditem':
                 this.activatedItem = getBoolean(statement);
+                return true;
+            case 'alarmsound':
+                this.alarmSound = getString(statement);
                 return true;
             case 'alcohol':
                 this.alcohol = getBoolean(statement);
@@ -199,6 +204,9 @@ export abstract class ItemScript extends ScriptObject {
                 return true;
             case 'secondaryanimmask':
                 this.secondaryAnimMask = getString(statement);
+                return true;
+            case 'soundradius':
+                this.soundRadius = getInt(statement);
                 return true;
             case 'stresschange':
                 this.stressChange = getInt(statement);
