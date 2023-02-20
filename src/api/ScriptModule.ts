@@ -90,6 +90,10 @@ export class ScriptModule {
                         const item = ScriptModule.createItem(entry);
                         this.items[item.__id] = item;
                         continue;
+                    case 'mannequin':
+                        const mannequin = new MannequinScript(entry);
+                        this.mannequins[mannequin.__id] = mannequin;
+                        continue;
                     case 'sound':
                         const sound = new SoundScript(entry);
                         this.sounds[sound.__id] = sound;
@@ -160,9 +164,10 @@ export class ScriptModule {
     toJSON(): any {
         const o: any = {};
 
-        const toArray = (obj: any) => {
-            const array: any[] = [];
+        const toArray = (obj: any): any | undefined => {
             const keys = Object.keys(obj).sort((a, b) => a.localeCompare(b));
+            if (keys.length === 0) return undefined;
+            const array: any[] = [];
             for (const key of keys) {
                 const value = obj[key];
                 array.push(value.toJSON());
@@ -174,6 +179,7 @@ export class ScriptModule {
         o.evolvedRecipes = toArray(this.evolvedRecipes);
         o.fixings = toArray(this.fixings);
         o.items = toArray(this.items);
+        o.mannequins = toArray(this.mannequins);
         o.sounds = toArray(this.sounds);
 
         return o;
