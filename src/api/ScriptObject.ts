@@ -152,7 +152,7 @@ export abstract class ScriptObject {
             );
         }
 
-        if (statement.value.type !== 'ObjectConstructorExpression') {
+        if (statement.value.type !== 'ObjectConstructor' && statement.value.type !== 'RecipeConstructor') {
             throw new Error('The value provided is not a ObjectConstructor.');
         }
 

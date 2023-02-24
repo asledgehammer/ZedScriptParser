@@ -12,7 +12,7 @@ import {
     NullLiteral,
     NumericArrayLiteral,
     NumericLiteral,
-    ObjectConstructorExpression,
+    ObjectConstructor,
     ObjectStatement,
     StringArrayLiteral,
     Statement,
@@ -53,7 +53,7 @@ export function parseAST(text: string, debug: boolean = false): Chunk {
             body: Statement[],
             name: string,
         ) => {
-            if (debug) console.log(`onProperty(${parentID}.${name})`);
+            // if (debug) console.log(`onProperty(${parentID}.${name})`);
             const operator = next();
             if (operator !== '=' && operator !== ':') {
                 throw new Error();
@@ -70,9 +70,10 @@ export function parseAST(text: string, debug: boolean = false): Chunk {
             const id = parentID + '.' + name;
 
             if (value === ',') {
-                if(debug) console.warn(
-                    `The value for '${id}' is empty. Interpreting as null..`,
-                );
+                if (debug)
+                    console.warn(
+                        `The value for '${id}' is empty. Interpreting as null..`,
+                    );
                 value = '';
                 type = 'null';
             } else {
@@ -169,7 +170,7 @@ export function parseAST(text: string, debug: boolean = false): Chunk {
                 objectConstructorExpression(),
             );
             const id = `${parentID}.${name}`;
-            const sBody = (statement.value as ObjectConstructorExpression).body;
+            const sBody = (statement.value as ObjectConstructor).body;
 
             const openBrace = next();
             if (openBrace == null) EOF(id);
@@ -195,8 +196,109 @@ export function parseAST(text: string, debug: boolean = false): Chunk {
             body.push(statement);
         };
 
+        const onRecipe = () => {
+            const moduleID = module!!.id.value;
+            let moduleBody = (module!!.value as ModuleConstructorExpression)
+                .body;
+            let name: string = next();
+            while (true) {
+                const n = next();
+                if (n === '{') break;
+                else if (n == null) EOF('recipe.' + name);
+                name += ' ' + n;
+            }
+
+            const id = `${moduleID}.${name}`;
+            // if (debug) console.log(`onRecipe(${id})`);
+
+            const recipe = {
+                type: 'RecipeConstructor',
+                sources: [],
+                body: [],
+            };
+
+            object = {
+                type: 'ObjectStatement',
+                category: identifier('recipe'),
+                id: identifier(name),
+                // @ts-ignore
+                value: recipe,
+            };
+
+            while (true) {
+                const token = tokens[index];
+                const nextToken = next();
+                if (nextToken === '}') break;
+                else if (nextToken == null) EOF(id);
+
+                if (peek() === ':') {
+                    onProperty(id, recipe.body, token);
+                } else {
+                    const tokenLower = token.toLowerCase();
+                    if (tokenLower === 'keep') {
+                        // console.log('keep: ' + token + ", " + peek())
+                        const source = {
+                            type: 'RecipeSourceExpression',
+                            items: peek()
+                                .split('/')
+                                .map((a) => {
+                                    return a.trim();
+                                }),
+                            action: 'keep',
+                        };
+
+                        index+=2;
+
+                        // @ts-ignore
+                        recipe.sources.push(source);
+                    } else if (tokenLower === 'destroy') {
+                        // console.log('destroy: ' + token + ", " + peek())
+
+                        const source = {
+                            type: 'RecipeSourceExpression',
+                            items: peek()
+                                .split('/')
+                                .map((a) => {
+                                    return a.trim();
+                                }),
+                            action: 'keep',
+                        };
+
+                        index+=2;
+
+                        // @ts-ignore
+                        recipe.sources.push(source);
+                    } else {
+                        // console.log('infer destroy: ' + token + ", " + peek())
+                        const source = {
+                            type: 'RecipeSourceExpression',
+                            items: token
+                                .split('/')
+                                .map((a) => {
+                                    return a.trim();
+                                }),
+                            action: 'destroy',
+                        };
+
+                        index++;
+
+                        // @ts-ignore
+                        recipe.sources.push(source);
+                    }
+                }
+            }
+
+            moduleBody.push(object!!);
+            object = undefined;
+        };
+
         const onObject = (category: string) => {
             if (categories.indexOf(category) === -1) categories.push(category);
+
+            if (category.toLowerCase() === 'recipe') {
+                onRecipe();
+                return;
+            }
 
             const moduleID = module!!.id.value;
             let moduleBody = (module!!.value as ModuleConstructorExpression)
@@ -278,11 +380,16 @@ export function parseAST(text: string, debug: boolean = false): Chunk {
 
             module = assignmentStatement(id, moduleConstructor());
 
+            // let offset = 0;
             while (true) {
                 const nextToken = next();
                 if (nextToken === '}') break;
                 else if (nextToken === 'imports') onImports();
                 else onObject(nextToken);
+                // offset++;
+                // if(offset === 3) {
+                //     break;
+                // }
             }
 
             chunk.body.push(module);
@@ -299,8 +406,8 @@ export function parseAST(text: string, debug: boolean = false): Chunk {
 
 export function objectConstructorExpression(
     body: AssignmentStatement[] = [],
-): ObjectConstructorExpression {
-    return { type: 'ObjectConstructorExpression', body };
+): ObjectConstructor {
+    return { type: 'ObjectConstructor', body };
 }
 
 export function identifier(name: string): Identifier {
@@ -316,7 +423,7 @@ export function newObject(category: string, name: string): ObjectStatement {
         type: 'ObjectStatement',
         category: identifier(category),
         id: identifier(name),
-        value: { type: 'ObjectConstructorExpression', body: [] },
+        value: { type: 'ObjectConstructor', body: [] },
     };
 }
 

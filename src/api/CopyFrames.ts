@@ -10,7 +10,7 @@ export class CopyFrames {
     sourceFrame2: ScriptInt;
 
     constructor(statement: AssignmentStatement) {
-        if (statement.value.type !== 'ObjectConstructorExpression') {
+        if (statement.value.type !== 'ObjectConstructor') {
             throw new Error();
         }
 

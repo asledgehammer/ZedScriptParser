@@ -22,7 +22,7 @@ export class SoundClip {
     reverbMaxRange: ScriptFloat;
 
     constructor(statement: AssignmentStatement) {
-        if (statement.value.type !== 'ObjectConstructorExpression') {
+        if (statement.value.type !== 'ObjectConstructor') {
             throw new Error();
         }
 

@@ -4,6 +4,7 @@ import { parse } from './ObjectParser';
 import * as fs from 'fs';
 import { categories, parseAST } from './ASTParser';
 import { scanDir } from './utils';
+import { tokenize } from './lexer';
 
 // const doFolder = (path: string, debug: boolean = false) => {
 //     const files: string[] = [];
@@ -26,13 +27,20 @@ import { scanDir } from './utils';
 
 // doFolder('./assets/media/scripts');
 
-const modules = parse('./assets/media/scripts');
 
-let json: any = {modules: {}};
-const moduleKeys = Object.keys(modules);
-moduleKeys.sort((a, b) => a.localeCompare(b));
-for (const key of moduleKeys) {
-    json.modules[key] = modules[key].toJSON();
-}
+// const recipes = parseAST(fs.readFileSync('./assets/media/scripts/recipes.txt').toString(), true);
+// fs.writeFileSync('recipes.ast.json', JSON.stringify(recipes, null, 4));
 
-fs.writeFileSync('test.json', JSON.stringify(json, null, 4));
+// const modules = parse('./assets/media/scripts');
+// let json: any = {modules: {}};
+// const moduleKeys = Object.keys(modules);
+// moduleKeys.sort((a, b) => a.localeCompare(b));
+// for (const key of moduleKeys) {
+//     json.modules[key] = modules[key].toJSON();
+// }
+// fs.writeFileSync('test.json', JSON.stringify(json, null, 4));
+
+
+const tokens = tokenize('./assets/media/scripts/sounds_zombie.txt', {location: true});
+
+fs.writeFileSync('tokens.json', JSON.stringify(tokens, null, 4));

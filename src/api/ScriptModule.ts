@@ -99,6 +99,10 @@ export class ScriptModule {
                         const model = new ModelScript(entry);
                         this.models[model.__id] = model;
                         continue;
+                    case 'recipe':
+                        const recipe = new RecipeScript(entry);
+                        this.recipes[recipe.__id] = recipe;
+                        continue;
                     case 'sound':
                         const sound = new SoundScript(entry);
                         this.sounds[sound.__id] = sound;
@@ -186,6 +190,7 @@ export class ScriptModule {
         o.items = toArray(this.items);
         o.mannequins = toArray(this.mannequins);
         o.models = toArray(this.models);
+        o.recipes = toArray(this.recipes);
         o.sounds = toArray(this.sounds);
 
         return o;

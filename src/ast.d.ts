@@ -4,18 +4,22 @@ export type Chunk = {
 };
 
 /* (STATEMENTS) */
-export type Statement = ImportsStatement | AssignmentStatement | ObjectStatement;
+export type Statement =
+    | ImportsStatement
+    | AssignmentStatement
+    | ObjectStatement;
 
 /* (EXPRESSION) */
 export type Expression =
     | Identifier
     | ModuleConstructorExpression
-    | ObjectConstructorExpression
+    | ObjectConstructor
+    | RecipeConstructor
     | AssignmentExpression
     | StringArrayLiteral
     | BooleanLiteral
     | NumericLiteral
-    | NumericArrayLiteral    
+    | NumericArrayLiteral
     | StringLiteral
     | NullLiteral;
 
@@ -42,11 +46,11 @@ export type ObjectStatement = {
     type: 'ObjectStatement';
     id: Identifier;
     category: Identifier;
-    value: ObjectConstructorExpression;
+    value: ObjectConstructor | RecipeConstructor;
 };
 
-export type ObjectConstructorExpression = {
-    type: 'ObjectConstructorExpression';
+export type ObjectConstructor = {
+    type: 'ObjectConstructor';
     body: AssignmentStatement[];
 };
 
@@ -62,7 +66,7 @@ export type AssignmentExpression = {
 export type StringArrayLiteral = {
     type: 'StringArrayLiteral';
     value: string[];
-}
+};
 
 /* (LITERAL) */
 export type BooleanLiteral = {
@@ -82,10 +86,10 @@ export type StringLiteral = {
 
 export type NullLiteral = {
     type: 'NullLiteral';
-}
+};
 
 export type NumericArrayLiteral = {
-    type: 'NumericArrayLiteral',
+    type: 'NumericArrayLiteral';
     value: number[];
 };
 
@@ -94,3 +98,24 @@ export type Identifier = {
     type: 'Identifier';
     value: string;
 };
+
+/* (RECIPE) */
+export type RecipeAction = 'destroy' | 'keep';
+
+export type RecipeConstructor = {
+    type: 'RecipeConstructor';
+    sources: RecipeSourceExpression[];
+    body: AssignmentStatement[];
+};
+
+export type RecipeSourceExpression = {
+    type: 'RecipeSourceExpression';
+    items: RecipeSourceItem[];
+    action: RecipeAction;
+};
+
+export type RecipeSourceItem = {
+    type: 'RecipeSourceItem',
+    name: string;
+    amount: number;
+}

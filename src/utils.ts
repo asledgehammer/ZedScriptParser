@@ -1,28 +1,30 @@
 import * as fs from 'fs';
 
-export function tokenizeScript(text: string): string[] {
-    const removeComments = (t: string): string => {
-        let pruned = '';
+export const removeComments = (t: string): string => {
+    let pruned = '';
 
-        let layersIn = 0;
-        for (let index = 0; index < t.length; ) {
-            if (t[index] === '/' && t[index + 1] === '*') {
-                layersIn++;
-                index += 2;
-            } else if (t[index] === '*' && t[index + 1] === '/') {
-                layersIn--;
-                index += 2;
-            } else {
-                if (layersIn > 0) {
-                    index++;
-                    continue;
-                }
-                pruned += t[index++];
+    let layersIn = 0;
+    for (let index = 0; index < t.length; ) {
+        if (t[index] === '/' && t[index + 1] === '*') {
+            layersIn++;
+            index += 2;
+        } else if (t[index] === '*' && t[index + 1] === '/') {
+            layersIn--;
+            index += 2;
+        } else {
+            if (layersIn > 0) {
+                index++;
+                continue;
             }
+            pruned += t[index++];
         }
+    }
 
-        return pruned;
-    };
+    return pruned;
+};
+
+export function tokenizeScript(text: string): string[] {
+    
 
     const lines = removeSyntaxErrors(removeComments(text)).split(/\r\n/g);
 
