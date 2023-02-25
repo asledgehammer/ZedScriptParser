@@ -1,100 +1,281 @@
 import * as fs from 'fs';
 
 export type LexerCursor = { row: number; column: number };
-export type LexerToken = {
-    loc: { start: LexerCursor; stop: LexerCursor };
-    value: string;
-};
+export type LexerLocation = { start: LexerCursor; stop: LexerCursor };
+export type LexerToken = { value: string; loc?: LexerLocation };
+export type LexerOptions = { location: boolean };
 
-export type LexerOptions = {
-    location: boolean;
+export class LexerError extends Error {
+    /** @param {string} message */
+    constructor(cursor: LexerCursor, message: string) {
+        super(`[${cursor.row}:${cursor.column}] :: ${message}`);
+        this.name = 'LexerError';
+    }
+}
+
+export class LexerBag {
+    comments: LexerToken[] = [];
+    tokens: LexerToken[] = [];
+    options: Partial<LexerOptions>;
+    raw: string;
+    offset: number = 0;
+
+    constructor(path: string, options: Partial<LexerOptions>) {
+        this.raw = fs.readFileSync(path).toString().replace(/\r/g, '');
+        this.options = options;
+    }
+
+    token(value: string, start: LexerCursor, stop: LexerCursor): void {
+        this.tokens.push(
+            this.options.location ? { value, loc: { start, stop } } : { value },
+        );
+    }
+
+    isEOF(): boolean {
+        return this.offset >= this.raw.length;
+    }
+
+    comment() {
+        this.next();
+        const start = this.cursor();
+        let value = '';
+        let layersIn = 1;
+        while (layersIn > 0) {
+            if (this.peek() === '/' && this.peek(1) === '*') {
+                layersIn++;
+                this.offset += 2;
+            } else if (this.peek() === '*' && this.peek(1) === '/') {
+                layersIn--;
+                this.offset += 2;
+            } else {
+                value += this.raw[this.offset++];
+            }
+        }
+        const stop = this.cursor();
+        return { loc: { start, stop }, value: `${value}` };
+    }
+
+    cursor(o: number = this.offset): LexerCursor {
+        const c = { row: 1, column: 1 };
+        for (let i = 0; i < o; i++) {
+            const char = this.raw[i];
+            if (char === '\n') {
+                c.row++;
+                c.column = 1;
+            } else {
+                c.column++;
+            }
+        }
+        return c;
+    }
+
+    next(): string {
+        let c = this.raw[this.offset++];
+        if (c === '/' && this.peek() === '*') {
+            this.comments.push(this.comment());
+            c = this.next();
+        }
+        return c;
+    }
+
+    until(
+        patterns: string[],
+        removePattern: boolean = false,
+    ): string | undefined {
+        let s = '';
+        while (true) {
+            if (this.isEOF()) {
+                return undefined;
+            }
+            const c = this.next();
+            s += c;
+
+            for (const pattern of patterns) {
+                if (s.indexOf(pattern) !== -1) {
+                    if (removePattern) {
+                        s = s.substring(0, s.length - pattern.length);
+                    }
+                    return s;
+                }
+            }
+        }
+    }
+
+    print(message: string): void {
+        const cursor = this.cursor();
+        console.log(`[${cursor.row}:${cursor.column}] :: ${message}`);
+    }
+
+    error(message: string, cursor: LexerCursor = this.cursor()): void {
+        throw new LexerError(cursor, message);
+    }
+
+    peek(offsetArg: number = 0): string | undefined {
+        return this.raw[this.offset + offsetArg];
+    }
+}
+
+function stepInObjectName(bag: LexerBag): string {
+    const start = bag.cursor();
+    const value = bag.until(['{', '\n'])!!.trim();
+    const stop = bag.cursor(bag.offset - 1);
+    const token: LexerToken = { value };
+    if (bag.options.location) token.loc = { start, stop };
+    bag.tokens.push(token);
+    return value;
+}
+
+function stepInOpenBracket(bag: LexerBag): string {
+    if (bag.peek() === '{') {
+        const start = bag.cursor();
+        bag.next();
+        const stop = bag.cursor();
+        const token: LexerToken = { value: '{' };
+        if (bag.options.location) token.loc = { start, stop };
+        bag.tokens.push(token);
+        return '{';
+    }
+
+    const start = bag.cursor();
+    let value;
+    do {
+        value = bag.next();
+    } while (value !== '{' && value != null);
+    const stop = bag.cursor();
+
+    if (value === undefined) {
+        bag.error(`Unexpected EOF. (Expected '{')`);
+    }
+
+    if (value !== '{') {
+        bag.error(`Unexpected ${value}. (Expected: '{', Given: '${value}')`);
+    }
+
+    const token: LexerToken = { value };
+    if (bag.options.location) token.loc = { start, stop };
+    bag.tokens.push(token);
+
+    return '{';
+}
+
+function stepInSoundClip(bag: LexerBag, module: string, sound: string) {
+    stepInOpenBracket(bag);
+
+    while (!bag.isEOF()) {
+        const start = bag.cursor();
+        const line = bag.until([',', '}', '\n'])?.trim();
+        const stop = bag.cursor();
+
+        if (line == undefined) {
+            throw new Error('Unexpected EOF in Sound scope.');
+        } else if (line === '') {
+            continue;
+        } else if (line === '}') {
+            bag.token('}', bag.cursor(bag.offset - 1), bag.cursor());
+            break;
+        }
+
+        if (line.indexOf('=') === -1) {
+            bag.error(`Unexpected line in ${module}.${sound}.clip: ${line}`);
+        }
+
+        bag.token(line.replace(/\,/g, ''), start, stop);
+    }
+}
+
+function stepInSound(bag: LexerBag, module: string) {
+    const sound = stepInObjectName(bag);
+    stepInOpenBracket(bag);
+
+    let brk = false;
+    while (!brk && !bag.isEOF()) {
+        const start = bag.cursor();
+        const line = bag.until([',', '\n', '}'])?.trim();
+        const stop = bag.cursor(bag.offset - 1);
+
+        if (line == undefined) {
+            throw new Error('Unexpected EOF in Sound scope.');
+        } else if (line === '') {
+            continue;
+        } else if (line === '}') {
+            bag.token('}', bag.cursor(bag.offset - 1), bag.cursor());
+            break;
+        }
+
+        const lineLower = line.toLowerCase();
+
+        if (line.indexOf('=') !== -1) {
+            bag.token(line.replace(/\,/g, ''), start, stop);
+        } else {
+            if (lineLower.startsWith('clip')) {
+                bag.token('clip', start, stop);
+                stepInSoundClip(bag, module, sound);
+            }
+        }
+    }
+}
+
+function stepInModule(bag: LexerBag) {
+    const module = stepInObjectName(bag);
+    stepInOpenBracket(bag);
+
+    let brk = false;
+    while (!brk && !bag.isEOF()) {
+        const start = bag.cursor();
+        const word = bag.until([' ', '}'])?.trim();
+        const stop = bag.cursor(bag.offset - 1);
+
+        if (word === undefined) {
+            bag.error('EOF in module scope.');
+        }
+
+        const wordLower = word?.toLowerCase();
+
+        switch (wordLower) {
+            case '}':
+                bag.token('}', bag.cursor(bag.offset - 1), bag.cursor());
+                brk = true;
+                break;
+            case 'sound':
+                bag.token('sound', start, stop);
+                stepInSound(bag, module);
+                break;
+        }
+    }
 }
 
 export const tokenize = (
     path: string,
-    options: Partial<LexerOptions> = {location: false}
-): { tokens: LexerToken[] | string[]; comments: LexerToken[] | string[]} => {
-    const raw = fs.readFileSync(path).toString().replace(/\r/g, '');
-    let offset = 0;
-    const cursor = { row: 1, column: 1 };
-    const tokens: LexerToken[] = [];
-    const comments: LexerToken[] = [];
+    options: Partial<LexerOptions> = { location: false },
+): { tokens: LexerToken[] | string[]; comments: LexerToken[] | string[] } => {
+    const bag = new LexerBag(path, options);
 
-    function nextComment() {
-        const start = { row: cursor.row, column: cursor.column };
-        let value = '';
-        let layersIn = 1;
-        while (layersIn > 0) {
-            if (raw[offset] === '/' && raw[offset + 1] === '*') {
-                layersIn++;
-                offset += 2;
-                cursor.column += 2;
-            } else if (raw[offset] === '*' && raw[offset + 1] === '/') {
-                layersIn--;
-                offset += 2;
-                cursor.column += 2;
-            } else {
-                if (raw[offset] === '\n') {
-                    cursor.row++;
-                    cursor.column = 1;
-                } else cursor.column++;
-                value += raw[offset++];
-            }
-        }
-        const stop = { row: cursor.row, column: cursor.column };
-        return { loc: { start, stop }, value: `/*${value}*/` };
-    }
+    while (!bag.isEOF()) {
+        const start = bag.cursor();
+        const word = bag.until([' '])?.trim();
+        const stop = bag.cursor(bag.offset - 1);
 
-    function next(): LexerToken {
-        const start = { row: -1, column: -1 };
-        const stop = { row: -1, column: -1 };
-        let value = '';
-        while (true) {
-            const cCurr = raw[offset++];
-            if (cCurr === '\n') {
-                stop.column = cursor.column;
-                stop.row = cursor.row;
-                cursor.row++;
-                cursor.column = 1;
+        if (word == undefined) break;
+        const wordLower = word.toLowerCase();
+
+        switch (wordLower) {
+            case 'module':
+                bag.token('module', start, stop);
+                stepInModule(bag);
                 break;
-            } else if (cCurr === ' ') {
-                cursor.column++;
-                if (value === '') continue;
-                else {
-                    stop.column = cursor.column - 1;
-                    stop.row = cursor.row;
-                    break;
-                }
-            } else if (cCurr === '\t') {
-                cursor.column++;
-                continue;
-            } else if (cCurr === '/' && raw[offset] === '*') {
-                offset++;
-                comments.push(nextComment());
-                continue;
-            }
-            if (start.column === -1) {
-                start.column = cursor.column;
-                start.row = cursor.row;
-            }
-            cursor.column++;
-            value += cCurr;
         }
-        return { loc: { start, stop }, value };
-    }
-    let token;
-    while (true) {
-        if (offset >= raw.length) break;
-        token = next();
-        if (token.value === '') continue;
-        if (token.value == null) break;
-        tokens.push(token);
     }
 
-    if(options.location) {
-        return { tokens, comments };
+    if (options.location) {
+        return { tokens: bag.tokens, comments: bag.comments };
     } else {
-        return { tokens: tokens.map((o) => {return o.value;}),
-        comments: comments.map((o) => {return o.value;})};
+        return {
+            tokens: bag.tokens.map((o) => {
+                return o.value;
+            }),
+            comments: bag.comments.map((o) => {
+                return o.value;
+            }),
+        };
     }
 };
