@@ -3,7 +3,7 @@ import * as fs from 'fs';
 export type LexerCursor = { row: number; column: number };
 export type LexerLocation = { start: LexerCursor; stop: LexerCursor };
 export type LexerToken = { value: string; loc?: LexerLocation };
-export type LexerOptions = { location: boolean };
+export type LexerOptions = { comments: boolean; location: boolean };
 
 export class LexerError extends Error {
     /** @param {string} message */
@@ -55,8 +55,11 @@ export class LexerBag {
         return { loc: { start, stop }, value: `${value}` };
     }
 
-    cursor(o: number = this.offset): LexerCursor {
+    cursor(o: number = this.offset, force: boolean = false): LexerCursor {
         const c = { row: 1, column: 1 };
+        if(!this.options.location && !force) {
+            return { row: -1, column: -1};
+        }
         for (let i = 0; i < o; i++) {
             const char = this.raw[i];
             if (char === '\n') {
@@ -106,7 +109,7 @@ export class LexerBag {
         console.log(`[${cursor.row}:${cursor.column}] :: ${message}`);
     }
 
-    error(message: string, cursor: LexerCursor = this.cursor()): void {
+    error(message: string, cursor: LexerCursor = this.cursor(this.offset, true)): void {
         throw new LexerError(cursor, message);
     }
 
@@ -115,15 +118,8 @@ export class LexerBag {
     }
 }
 
-function stepInObjectName(bag: LexerBag): string {
-    const start = bag.cursor();
-    const value = bag.until(['{', '\n'])!!.trim();
-    const stop = bag.cursor(bag.offset - 1);
-    const token: LexerToken = { value };
-    if (bag.options.location) token.loc = { start, stop };
-    bag.tokens.push(token);
-    return value;
-}
+////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////
 
 function stepInOpenBracket(bag: LexerBag): string {
     if (bag.peek() === '{') {
@@ -136,11 +132,11 @@ function stepInOpenBracket(bag: LexerBag): string {
         return '{';
     }
 
-    const start = bag.cursor();
     let value;
     do {
         value = bag.next();
     } while (value !== '{' && value != null);
+    const start = bag.cursor(bag.offset - 1);
     const stop = bag.cursor();
 
     if (value === undefined) {
@@ -158,7 +154,33 @@ function stepInOpenBracket(bag: LexerBag): string {
     return '{';
 }
 
-function stepInSoundClip(bag: LexerBag, module: string, sound: string) {
+function stepInObjectName(bag: LexerBag): string {
+    const start = bag.cursor();
+    const value = bag.until(['{', '\n'])!!.trim();
+    const stop = bag.cursor(bag.offset - 1);
+    const token: LexerToken = { value };
+    if (bag.options.location) token.loc = { start, stop };
+    bag.tokens.push(token);
+    return value;
+}
+
+////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////
+
+function stepInProperty(
+    bag: LexerBag,
+    module: string,
+    definition: string,
+    property: string,
+    operator: '=' | ':',
+) {
+    const propLower = property.toLowerCase();
+    bag.token(
+        propLower,
+        bag.cursor(bag.offset - propLower.length),
+        bag.cursor(),
+    );
+
     stepInOpenBracket(bag);
 
     while (!bag.isEOF()) {
@@ -167,7 +189,10 @@ function stepInSoundClip(bag: LexerBag, module: string, sound: string) {
         const stop = bag.cursor();
 
         if (line == undefined) {
-            throw new Error('Unexpected EOF in Sound scope.');
+            bag.error(
+                `Unexpected EOF in ${property}: ${module}.${definition}.${property}`,
+            );
+            return;
         } else if (line === '') {
             continue;
         } else if (line === '}') {
@@ -175,16 +200,29 @@ function stepInSoundClip(bag: LexerBag, module: string, sound: string) {
             break;
         }
 
-        if (line.indexOf('=') === -1) {
-            bag.error(`Unexpected line in ${module}.${sound}.clip: ${line}`);
+        if (line.indexOf(operator) === -1) {
+            if(line === ',') continue;
+            bag.error(
+                `Illegal line in ${module}.${definition}.${property}: ${line}`,
+            );
         }
 
-        bag.token(line.replace(/\,/g, ''), start, stop);
+        bag.token(line.replace(/\,/g, '').replace(/\s/g, ''), start, stop);
     }
 }
 
-function stepInSound(bag: LexerBag, module: string) {
-    const sound = stepInObjectName(bag);
+////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////
+
+function stepInDefinition(
+    bag: LexerBag,
+    module: string,
+    category: string,
+    operator: '=' | ':',
+) {
+    const catLower = category.toLowerCase();
+    bag.token(catLower, bag.cursor(bag.offset - catLower.length), bag.cursor());
+    const name = stepInObjectName(bag);
     stepInOpenBracket(bag);
 
     let brk = false;
@@ -194,7 +232,8 @@ function stepInSound(bag: LexerBag, module: string) {
         const stop = bag.cursor(bag.offset - 1);
 
         if (line == undefined) {
-            throw new Error('Unexpected EOF in Sound scope.');
+            bag.error(`EOF in ${category}: ${module}.${name}`);
+            return;
         } else if (line === '') {
             continue;
         } else if (line === '}') {
@@ -202,18 +241,102 @@ function stepInSound(bag: LexerBag, module: string) {
             break;
         }
 
-        const lineLower = line.toLowerCase();
+        function checkProperty(
+            property: string,
+            categories: string[] | string,
+            categoryGiven: string,
+        ) {
+            const catLower = categoryGiven.toLowerCase();
+            if (typeof categories === 'string') categories = [categories];
+            for (const catExp of categories) {
+                const catExpLower = catExp.toLowerCase();
+                if (categoryGiven !== catExpLower) {
+                    const cats = `[${categories
+                        .map((o) => {
+                            return o.toLowerCase();
+                        })
+                        .join(', ')}]`;
+                    bag.error(
+                        `Cannot define ${property} in '${catLower}'. It is only allowed in ${cats}'.`,
+                    );
+                }
+            }
+        }
 
-        if (line.indexOf('=') !== -1) {
-            bag.token(line.replace(/\,/g, ''), start, stop);
+        if (line.indexOf(operator) !== -1) {
+            bag.token(line.replace(/\,/g, '').replace(/\s/g, ''), start, stop);
+        } else if(line === ',') {
+            continue;
         } else {
-            if (lineLower.startsWith('clip')) {
-                bag.token('clip', start, stop);
-                stepInSoundClip(bag, module, sound);
+            const propertyLower = line.toLowerCase();
+            switch (propertyLower) {
+                case 'attachment':
+                    checkProperty(
+                        propertyLower,
+                        ['model', 'vehicle'],
+                        category,
+                    );
+                    stepInProperty(bag, module, name, propertyLower, '=');
+                    break;
+                case 'copyframe':
+                    checkProperty(propertyLower, 'animation', category);
+                    stepInProperty(bag, module, name, propertyLower, '=');
+                    break;
+                case 'copyframes':
+                    checkProperty(propertyLower, 'animation', category);
+                    stepInProperty(bag, module, name, propertyLower, '=');
+                    break;
+                case 'clip':
+                    checkProperty(propertyLower, 'sound', category);
+                    stepInProperty(bag, module, name, propertyLower, '=');
+                    break;
+                case 'model':
+                    checkProperty(propertyLower, 'vehicle', category);
+                    stepInProperty(bag, module, name, propertyLower, '=');
+                    break;
+                case 'skin':
+                    checkProperty(propertyLower, 'vehicle', category);
+                    stepInProperty(bag, module, name, propertyLower, '=');
+                    break;
+                case 'data':
+                    checkProperty(propertyLower, 'vehicleenginerpm', category);
+                    stepInProperty(bag, module, name, propertyLower, '=');
+                    break;
+                default:
+                    bag.error(`Illegal line in '${module}.${name}': ${line}`);
             }
         }
     }
 }
+
+function stepInRecipe(bag: LexerBag, module: string, category: string) {
+    const catLower = category.toLowerCase();
+    bag.token(catLower, bag.cursor(bag.offset - catLower.length), bag.cursor());
+    const recipe = stepInObjectName(bag);
+    stepInOpenBracket(bag);
+
+    let brk = false;
+    while (!brk && !bag.isEOF()) {
+        const start = bag.cursor();
+        const line = bag.until([',', '\n', '}'])?.trim();
+        const stop = bag.cursor(bag.offset - 1);
+
+        if (line == undefined) {
+            bag.error(`EOF in recipe: ${module}.${recipe}`);
+            return;
+        } else if (line === '') {
+            continue;
+        } else if (line === '}') {
+            bag.token('}', bag.cursor(bag.offset - 1), bag.cursor());
+            break;
+        }
+
+        bag.token(line.replace(/\,/g, '').replace(/\s/g, ''), start, stop);
+    }
+}
+
+////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////
 
 function stepInModule(bag: LexerBag) {
     const module = stepInObjectName(bag);
@@ -221,33 +344,54 @@ function stepInModule(bag: LexerBag) {
 
     let brk = false;
     while (!brk && !bag.isEOF()) {
-        const start = bag.cursor();
         const word = bag.until([' ', '}'])?.trim();
-        const stop = bag.cursor(bag.offset - 1);
-
         if (word === undefined) {
-            bag.error('EOF in module scope.');
+            bag.error(`EOF in module: ${module}`);
+            return;
         }
 
-        const wordLower = word?.toLowerCase();
-
+        const wordLower = word.toLowerCase();
         switch (wordLower) {
+            /* (TERMINATOR) */
             case '}':
                 bag.token('}', bag.cursor(bag.offset - 1), bag.cursor());
                 brk = true;
                 break;
+
+            /* (Definitions using '=' assignments) */
+            case 'animation':
+            case 'animationsmesh':
+            case 'item':
+            case 'mannequin':
             case 'sound':
-                bag.token('sound', start, stop);
-                stepInSound(bag, module);
+            case 'soundtimeline':
+            case 'vehicle':
+            case 'vehicleenginerpm':
+                stepInDefinition(bag, module, wordLower, '=');
+                break;
+
+            /* (Definitions using ':' assignments) */
+            case 'fixing':
+            case 'multistagebuild':
+                stepInDefinition(bag, module, wordLower, ':');
+
+            /* (Recipe Definitions) */
+            case 'evolvedrecipe':
+            case 'recipe':
+            case 'uniquerecipe':
+                stepInRecipe(bag, module, wordLower);
                 break;
         }
     }
 }
 
+////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////
+
 export const tokenize = (
     path: string,
     options: Partial<LexerOptions> = { location: false },
-): { tokens: LexerToken[] | string[]; comments: LexerToken[] | string[] } => {
+): { tokens: LexerToken[] | string[]; comments?: LexerToken[] | string[] } => {
     const bag = new LexerBag(path, options);
 
     while (!bag.isEOF()) {
@@ -267,15 +411,20 @@ export const tokenize = (
     }
 
     if (options.location) {
-        return { tokens: bag.tokens, comments: bag.comments };
+        return {
+            tokens: bag.tokens,
+            comments: options?.comments ? bag.comments : undefined,
+        };
     } else {
         return {
             tokens: bag.tokens.map((o) => {
                 return o.value;
             }),
-            comments: bag.comments.map((o) => {
-                return o.value;
-            }),
+            comments: options.comments
+                ? bag.comments.map((o) => {
+                      return o.value;
+                  })
+                : undefined,
         };
     }
 };
