@@ -26,7 +26,7 @@ export class SoundScript extends Script {
         super(bag, '=');
     }
 
-    onPropertyObject(bag: ParseBag, property: string): boolean {
+    onPropertyToken(bag: ParseBag, property: string): boolean {
         switch (property.toLowerCase()) {
             case 'clip':
                 this.clip = new SoundClip(bag);

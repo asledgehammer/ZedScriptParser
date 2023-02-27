@@ -49,7 +49,7 @@ export class RecipeScript extends Script {
         this.parse(bag);
     }
 
-    onPropertyObject(bag: ParseBag, property: string): boolean {
+    onPropertyToken(bag: ParseBag, property: string): boolean {
         const onSource = (
             tokens: string[],
             action: 'keep' | 'destroy' | 'none',

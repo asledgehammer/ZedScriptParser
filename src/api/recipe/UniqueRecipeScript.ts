@@ -6,7 +6,7 @@ export class UniqueRecipeScript extends Script {
         super(bag, ':');
     }
 
-    onPropertyObject(bag: ParseBag, property: string): boolean {
+    onPropertyToken(bag: ParseBag, property: string): boolean {
         switch (property.toLowerCase()) {
         }
         return false;

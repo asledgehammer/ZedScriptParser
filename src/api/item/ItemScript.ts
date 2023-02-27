@@ -142,7 +142,7 @@ export abstract class ItemScript extends Script {
         this.type = type;
     }
 
-    onPropertyObject(_: ParseBag, __: string): boolean {
+    onPropertyToken(_: ParseBag, __: string): boolean {
         return false;
     }
 

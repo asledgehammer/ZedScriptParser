@@ -19,7 +19,7 @@ export class FixingScript extends Script {
         super(bag, '=');
     }
 
-    onPropertyObject(bag: ParseBag, property: string): boolean {
+    onPropertyToken(bag: ParseBag, property: string): boolean {
         return false;
     }
 

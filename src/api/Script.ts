@@ -78,7 +78,7 @@ export abstract class Script {
                 this.addCustomProperty(property, value);
             }
         } else {
-            if (!this.onPropertyObject(bag, curr)) {
+            if (!this.onPropertyToken(bag, curr)) {
                 throw new ParseError(`Unknown property object: ${curr}`);
             }
         }
@@ -128,7 +128,7 @@ export abstract class Script {
         );
     }
 
-    onPropertyObject(bag: ParseBag, property: string): boolean {
+    onPropertyToken(bag: ParseBag, property: string): boolean {
         return false;
     }
 

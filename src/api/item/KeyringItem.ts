@@ -6,8 +6,8 @@ export class KeyRingItem extends ItemScript {
         super(bag, '=', 'KeyRing');
     }
 
-    onPropertyObject(_: ParseBag, __: string): boolean {
-        return super.onPropertyObject(_, __);
+    onPropertyToken(_: ParseBag, __: string): boolean {
+        return super.onPropertyToken(_, __);
     }
 
     onPropertyValue(property: string, value: string): boolean {

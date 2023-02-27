@@ -13,7 +13,7 @@ export class AnimationScript extends Script {
         super(bag, '=');
     }
 
-    onPropertyObject(bag: ParseBag, property: string): boolean {
+    onPropertyToken(bag: ParseBag, property: string): boolean {
         switch(property.toLowerCase()) {
             case 'copyframe':
                 if (bag.next() !== '{') {

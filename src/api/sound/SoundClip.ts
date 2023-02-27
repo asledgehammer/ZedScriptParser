@@ -24,7 +24,7 @@ export class SoundClip extends Script {
         super(bag, '=', true, true);
     }
 
-    onPropertyObject(bag: ParseBag, property: string): boolean {
+    onPropertyToken(bag: ParseBag, property: string): boolean {
         return false;
     }
 

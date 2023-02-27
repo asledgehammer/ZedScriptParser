@@ -8,8 +8,8 @@ export class ComboItem extends ItemScript {
         super(bag, '=', 'Normal');
     }
 
-    onPropertyObject(bag: ParseBag, property: string): boolean {
-        return super.onPropertyObject(bag, property);
+    onPropertyToken(bag: ParseBag, property: string): boolean {
+        return super.onPropertyToken(bag, property);
     }
 
     onPropertyValue(property: string, value: string): boolean {

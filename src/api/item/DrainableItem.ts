@@ -25,8 +25,8 @@ export class DrainableItem extends ItemScript {
         super(bag, '=', 'Drainable');
     }
 
-    onPropertyObject(bag: ParseBag, property: string): boolean {
-        return super.onPropertyObject(bag, property);
+    onPropertyToken(bag: ParseBag, property: string): boolean {
+        return super.onPropertyToken(bag, property);
     }
 
     onPropertyValue(property: string, value: string): boolean {

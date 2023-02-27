@@ -9,8 +9,8 @@ export class MapItem extends ItemScript {
         super(bag, '=', 'Map');
     }
 
-    onPropertyObject(_: ParseBag, __: string): boolean {
-        return super.onPropertyObject(_, __);
+    onPropertyToken(_: ParseBag, __: string): boolean {
+        return super.onPropertyToken(_, __);
     }
 
     onPropertyValue(property: string, value: string): boolean {

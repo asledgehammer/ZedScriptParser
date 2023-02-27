@@ -20,7 +20,7 @@ export class MannequinScript extends Script {
         super(bag, '=');
     }
 
-    onPropertyObject(bag: ParseBag, property: string): boolean {
+    onPropertyToken(bag: ParseBag, property: string): boolean {
         return false;
     }
 
