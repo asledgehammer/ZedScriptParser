@@ -11,6 +11,7 @@ import {
     ScriptString,
 } from '../Script';
 import { SkillRequirement } from './SkillRequirement';
+import { RecipeAction } from './RecipeAction';
 
 export class RecipeScript extends Script {
     allowDestroyedItem: ScriptBoolean;
@@ -52,7 +53,7 @@ export class RecipeScript extends Script {
     onPropertyToken(bag: ParseBag, property: string): boolean {
         const onSource = (
             tokens: string[],
-            action: 'keep' | 'destroy' | 'none',
+            action: RecipeAction,
         ): void => {
             const sourceItems: RecipeSourceItem[] = [];
 
@@ -104,7 +105,7 @@ export class RecipeScript extends Script {
                     return o.trim();
                 });
 
-            onSource(tokens, 'none');
+            onSource(tokens, 'destroy');
         }
         return true;
     }
