@@ -104,6 +104,34 @@ export class ModuleScript {
         }
     }
 
+    toJSON(): any {
+        const o: any = {
+            __name: this.__name,
+        };
+
+        const toArray = (obj: any): any | undefined => {
+            const keys = Object.keys(obj).sort((a, b) => a.localeCompare(b));
+            if (keys.length === 0) return undefined;
+            const array: any[] = [];
+            for (const key of keys) {
+                const value = obj[key];
+                array.push(value.toJSON());
+            }
+            return array;
+        };
+
+        o.animations = toArray(this.animations);
+        o.evolvedRecipes = toArray(this.evolvedRecipes);
+        o.fixings = toArray(this.fixings);
+        o.items = toArray(this.items);
+        o.mannequins = toArray(this.mannequins);
+        o.models = toArray(this.models);
+        o.recipes = toArray(this.recipes);
+        o.sounds = toArray(this.sounds);
+
+        return o;
+    }
+
     static createItem(bag: ParseBag): ItemScript {
         let type: string = '';
 
@@ -153,33 +181,5 @@ export class ModuleScript {
             default:
                 throw new ParseError(`Unknown item type: ${type}`);
         }
-    }
-
-    toJSON(): any {
-        const o: any = {
-            __name: this.__name,
-        };
-
-        const toArray = (obj: any): any | undefined => {
-            const keys = Object.keys(obj).sort((a, b) => a.localeCompare(b));
-            if (keys.length === 0) return undefined;
-            const array: any[] = [];
-            for (const key of keys) {
-                const value = obj[key];
-                array.push(value.toJSON());
-            }
-            return array;
-        };
-
-        o.animations = toArray(this.animations);
-        o.evolvedRecipes = toArray(this.evolvedRecipes);
-        o.fixings = toArray(this.fixings);
-        o.items = toArray(this.items);
-        o.mannequins = toArray(this.mannequins);
-        o.models = toArray(this.models);
-        o.recipes = toArray(this.recipes);
-        o.sounds = toArray(this.sounds);
-
-        return o;
     }
 }

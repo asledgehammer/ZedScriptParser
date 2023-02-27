@@ -1,4 +1,4 @@
-import { ParseBag } from '../../Parser';
+import { ParseBag, ParseError } from '../../Parser';
 import { ItemRecipe } from './ItemRecipe';
 import {
     getBoolean,
@@ -29,58 +29,39 @@ export class EvolvedRecipeScript extends Script {
         super(bag, ':');
     }
 
-    onPropertyObject(bag: ParseBag, property: string): boolean {
-        return false;
-    }
-
     onPropertyValue(property: string, value: string): boolean {
         switch (property.toLowerCase()) {
-            case 'baseitem':
-                this.baseItem = getString(value);
-                break;
-            case 'name':
-                this.name = getString(value);
-                break;
-            case 'resultitem':
-                this.resultItem = getString(value);
-                break;
-            case 'cookable':
-                this.cookable = true; // Set to true regardless of flag set.
-                break;
-            case 'maxitems':
-                this.maxItems = getInt(value);
-                break;
             case 'addingredientifcooked':
                 this.addIngredientIfCooked = getBoolean(value);
-                break;
+                return true;
             case 'addingredientsound':
                 this.addIngredientSound = getString(value);
-                break;
-            case 'canaddspicesempty':
-                this.canAddSpicesEmpty = getBoolean(value);
-                break;
-            case 'ishidden':
-                this.hidden = getBoolean(value);
-                break;
+                return true;
             case 'allowfrozenitem':
                 this.allowFrozenItem = getBoolean(value);
-                break;
+                return true;
+            case 'baseitem':
+                this.baseItem = getString(value);
+                return true;
+            case 'canaddspicesempty':
+                this.canAddSpicesEmpty = getBoolean(value);
+                return true;
+            case 'cookable':
+                this.cookable = true; // Set to true regardless of flag set.
+                return true;
+            case 'ishidden':
+                this.hidden = getBoolean(value);
+                return true;
+            case 'maxitems':
+                this.maxItems = getInt(value);
+                return true;
+            case 'name':
+                this.name = getString(value);
+                return true;
+            case 'resultitem':
+                this.resultItem = getString(value);
+                return true;
         }
         return false;
-    }
-
-    parse(bag: ParseBag) {
-        while (!bag.isEOF()) {
-            const curr = bag.next();
-            if (curr === '}') return;
-
-            const split = curr.split(':');
-            const property = split[0];
-            const value = split[1];
-            const propLower = property.toLowerCase();
-
-            switch (propLower) {
-            }
-        }
     }
 }

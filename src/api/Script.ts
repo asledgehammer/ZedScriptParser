@@ -1,4 +1,5 @@
 import { ParseBag, ParseError } from '../Parser';
+import { EvolvedRecipeScript } from './recipe/EvolvedRecipeScript';
 
 export type ScriptBoolean = boolean | undefined;
 export type ScriptFloat = number | undefined;
@@ -127,6 +128,11 @@ export abstract class Script {
         );
     }
 
-    abstract onPropertyObject(bag: ParseBag, property: string): boolean;
-    abstract onPropertyValue(property: string, value: string): boolean;
+    onPropertyObject(bag: ParseBag, property: string): boolean {
+        return false;
+    }
+
+    onPropertyValue(property: string, value: string): boolean {
+        return false;
+    }
 }
