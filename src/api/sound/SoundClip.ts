@@ -13,7 +13,7 @@ import {
 export class SoundClip extends Script {
     distanceMin: ScriptInt;
     distanceMax: ScriptInt;
-    event: ScriptStringArray;
+    events: ScriptStringArray;
     file: ScriptString;
     pitch: ScriptFloat;
     volume: ScriptFloat;
@@ -21,7 +21,7 @@ export class SoundClip extends Script {
     reverbMaxRange: ScriptFloat;
 
     constructor(bag: ParseBag) {
-        super(bag, '=');
+        super(bag, '=', true, true);
     }
 
     onPropertyObject(bag: ParseBag, property: string): boolean {
@@ -37,7 +37,7 @@ export class SoundClip extends Script {
                 this.distanceMax = getInt(value);
                 return true;
             case 'event':
-                this.event = getString(value)
+                this.events = getString(value)
                     ?.split('/')
                     .map((a) => {
                         return a.trim();

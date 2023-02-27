@@ -96,6 +96,10 @@ export class ModuleScript {
                     const recipe = new RecipeScript(bag);
                     this.recipes[recipe.__name!!] = recipe;
                     break;
+                case 'sound':
+                    const sound = new SoundScript(bag);
+                    this.sounds[sound.__name!!] = sound;
+                    break;
             }
         }
     }

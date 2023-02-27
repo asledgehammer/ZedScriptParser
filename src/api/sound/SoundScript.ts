@@ -1,4 +1,4 @@
-import { ParseBag } from '../parser';
+import { ParseBag } from '../../parser';
 import {
     getBoolean,
     getInt,
@@ -7,7 +7,7 @@ import {
     ScriptBoolean,
     ScriptInt,
     ScriptString,
-} from './Script';
+} from '../Script';
 import { SoundClip } from './SoundClip';
 
 export type MasterVolume = 'Primary' | 'Ambient' | 'Music' | 'VehicleEngine';

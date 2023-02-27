@@ -41,8 +41,9 @@ export abstract class Script {
         bag: ParseBag,
         operator: '=' | ':',
         parseImmediately: boolean = true,
+        noName: boolean = false,
     ) {
-        this.__name = bag.next();
+        if (!noName) this.__name = bag.next();
         this.__operator = operator;
         this.ignoreProperties['__operator'] = true;
 
