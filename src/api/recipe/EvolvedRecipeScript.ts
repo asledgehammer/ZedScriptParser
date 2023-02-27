@@ -1,4 +1,4 @@
-import { ParseBag } from '../parser';
+import { ParseBag } from '../../Parser';
 import { ItemRecipe } from './ItemRecipe';
 import {
     getBoolean,

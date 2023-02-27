@@ -5,10 +5,10 @@ import {
     ScriptBoolean,
     ScriptInt,
     ScriptString,
-} from '../../Script';
+} from '../Script';
 import { ItemScript } from './ItemScript';
 import { EvolvedRecipe, ScriptEvolvedRecipeArray } from './EvolvedRecipe';
-import { ParseBag } from 'parser';
+import { ParseBag } from 'Parser';
 
 export class FoodItem extends ItemScript {
     alcoholic: ScriptBoolean;

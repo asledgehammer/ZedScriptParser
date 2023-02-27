@@ -1,6 +1,6 @@
-import { getBoolean, getInt, ScriptBoolean, ScriptInt } from '../../Script';
+import { getBoolean, getInt, ScriptBoolean, ScriptInt } from '../Script';
 import { ItemScript } from './ItemScript';
-import { ParseBag } from '../../parser';
+import { ParseBag } from '../../Parser';
 
 export class RadioItem extends ItemScript {
     acceptMediaType: ScriptInt;

@@ -1,13 +1,12 @@
 import { getInt, getString, ScriptInt, ScriptString } from '../Script';
-import { ParseBag } from '../parser';
+import { ParseBag } from '../../Parser';
 
-export type ScriptCopyFramesArray = CopyFrames[] | undefined;
+export type ScriptCopyFrameArray = CopyFrame[] | undefined;
 
-export class CopyFrames {
+export class CopyFrame {
     frame: ScriptInt;
     source: ScriptString;
-    sourceFrame1: ScriptInt;
-    sourceFrame2: ScriptInt;
+    sourceFrame: ScriptInt;
 
     parse(bag: ParseBag) {
         while (!bag.isEOF()) {
@@ -24,11 +23,8 @@ export class CopyFrames {
                 case 'source':
                     this.source = getString(value);
                     break;
-                case 'sourceframe1':
-                    this.sourceFrame1 = getInt(value);
-                    break;
-                case 'sourceframe2':
-                    this.sourceFrame2 = getInt(value);
+                case 'sourceframe':
+                    this.sourceFrame = getInt(value);
                     break;
             }
         }

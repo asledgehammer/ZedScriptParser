@@ -1,4 +1,4 @@
-import { Script } from '../Script';
+import { Script } from './Script';
 import { ParseBag } from '../parser';
 
 export class VehicleScript extends Script {

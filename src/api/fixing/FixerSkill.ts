@@ -1,5 +1,3 @@
-import { Fixer } from './Fixer';
-
 export class FixerSkill {
     readonly skill: string;
     readonly level: number;

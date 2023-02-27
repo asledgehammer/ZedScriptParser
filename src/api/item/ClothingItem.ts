@@ -7,9 +7,9 @@ import {
     ScriptFloat,
     ScriptInt,
     ScriptString,
-} from '../../Script';
+} from '../Script';
 import { ItemScript } from './ItemScript';
-import { ParseBag } from '../../parser';
+import { ParseBag } from '../../Parser';
 
 export class ClothingItem extends ItemScript {
     biteDefense: ScriptFloat;

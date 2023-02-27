@@ -1,11 +1,11 @@
-import { ParseBag } from 'parser';
+import { ParseBag } from 'Parser';
 import {
     getBoolean,
     getString,
     Script,
     ScriptBoolean,
     ScriptString,
-} from '../Script';
+} from './Script';
 
 export class MannequinScript extends Script {
     animSet: ScriptString;

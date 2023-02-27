@@ -1,9 +1,9 @@
-import { ParseBag } from '../parser';
-import { Script } from '../Script';
+import { ParseBag } from 'Parser';
+import { Script } from 'api/Script';
 
-export class SoundTimelineScript extends Script {
+export class UniqueRecipeScript extends Script {
     constructor(bag: ParseBag) {
-        super(bag, '=');
+        super(bag, ':');
     }
 
     onPropertyObject(bag: ParseBag, property: string): boolean {

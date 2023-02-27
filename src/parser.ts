@@ -1,4 +1,4 @@
-import { ModuleScript } from './api/ModuleScript';
+import { ModuleScript } from './api/Module';
 
 export class ParseError extends Error {
     constructor(message: string) {

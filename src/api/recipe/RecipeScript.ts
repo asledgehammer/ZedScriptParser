@@ -1,4 +1,4 @@
-import { ParseBag } from '../parser';
+import { ParseBag } from '../../Parser';
 import { Script } from '../Script';
 import { RecipeSource } from './RecipeSource';
 import { RecipeSourceItem } from './RecipeSourceItem';

@@ -1,6 +1,6 @@
-import { AnimationScript } from './AnimationScript';
-import { EvolvedRecipeScript } from './EvolvedRecipeScript';
-import { FixingScript } from './FixingScript';
+import { AnimationScript } from './animation/AnimationScript';
+import { EvolvedRecipeScript } from './recipe/EvolvedRecipeScript';
+import { FixingScript } from './fixing/FixingScript';
 import { AlarmClockClothingItem } from './item/AlarmClockClothingItem';
 import { AlarmClockItem } from './item/AlarmClockItem';
 import { ClothingItem } from './item/ClothingItem';
@@ -18,17 +18,16 @@ import { RadioItem } from './item/RadioItem';
 import { WeaponItem } from './item/WeaponItem';
 import { WeaponPartItem } from './item/WeaponPartItem';
 import { MannequinScript } from './MannequinScript';
-import { ModelScript } from './ModelScript';
-import { RecipeScript } from './RecipeScript';
-import { RuntimeAnimationScript } from './RuntimeAnimationScript';
-import { SoundScript } from './SoundScript';
-import { SoundTimelineScript } from './SoundTimelineScript';
-import { UniqueRecipeScript } from './UniqueRecipeScript';
-import { VehicleEngineScript } from './VehicleEngineScript';
-import { VehicleScript } from './VehicleScript';
-import { VehicleTemplateScript } from './VehicleTemplateScript';
-import { ParseBag, ParseError } from '../parser';
-import { Script } from '../Script';
+import { ModelScript } from './model/ModelScript';
+import { RecipeScript } from './recipe/RecipeScript';
+import { RuntimeAnimationScript } from './animation/RuntimeAnimationScript';
+import { SoundScript } from './sound/SoundScript';
+import { SoundTimelineScript } from './sound/SoundTimelineScript';
+import { UniqueRecipeScript } from './recipe/UniqueRecipeScript';
+import { VehicleEngineScript } from './vehicle/VehicleEngineScript';
+import { VehicleScript } from './vehicle/VehicleScript';
+import { VehicleTemplateScript } from './vehicle/VehicleTemplateScript';
+import { ParseBag, ParseError } from '../Parser';
 
 export class ModuleScript {
     readonly animations: { [name: string]: AnimationScript } = {};

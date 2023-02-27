@@ -1,9 +1,9 @@
 /** NOTE: Do not consider this to be final, acceptable code. This is the initial code to get a working AST export. */
 
 import * as fs from 'fs';
-import { scanDir } from './utils';
-import { LexerOptions, tokenize } from './lexer';
-import { parse } from './parser';
+import { scanDir } from './ZedScriptUtils';
+import { LexerOptions, tokenize } from './Lexer';
+import { parse } from './Parser';
 
 const doFile = (path: string, options: LexerOptions) => {
     console.log(`[ZedScriptParse] :: Parsing '${path}'`);

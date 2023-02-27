@@ -1,4 +1,4 @@
-import { ParseBag } from 'parser';
+import { ParseBag } from 'Parser';
 import {
     getBoolean,
     getFloat,
@@ -10,7 +10,7 @@ import {
     ScriptInt,
     ScriptString,
     ScriptStringArray,
-} from '../../Script';
+} from '../Script';
 import {
     BloodClothingType,
     ScriptBloodClothingTypes,

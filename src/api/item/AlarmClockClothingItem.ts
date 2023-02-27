@@ -1,6 +1,6 @@
-import { getInt, getString, ScriptInt, ScriptString } from '../../Script';
+import { getInt, getString, ScriptInt, ScriptString } from '../Script';
 import { ClothingItem } from './ClothingItem';
-import { ParseBag } from '../../parser';
+import { ParseBag } from '../../Parser';
 
 export class AlarmClockClothingItem extends ClothingItem {
     alarmSound: ScriptString;

@@ -1,4 +1,4 @@
-import { ParseBag, ParseError } from './parser';
+import { ParseBag, ParseError } from '../Parser';
 
 export type ScriptBoolean = boolean | undefined;
 export type ScriptFloat = number | undefined;

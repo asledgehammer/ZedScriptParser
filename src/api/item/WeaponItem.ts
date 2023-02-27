@@ -8,10 +8,10 @@ import {
     ScriptInt,
     ScriptString,
     ScriptStringArray,
-} from '../../Script';
+} from '../Script';
 import { ItemScript } from './ItemScript';
 import { ModelWeaponPart, ScriptModelWeaponPartArray } from './ModelWeaponPart';
-import { ParseBag } from '../../parser';
+import { ParseBag } from '../../Parser';
 
 export class WeaponItem extends ItemScript {
     aimingMod: ScriptFloat;

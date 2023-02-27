@@ -7,7 +7,7 @@ import {
     ScriptStringArray,
 } from '../Script';
 import { FixerSkill } from './FixerSkill';
-import { ParseBag } from '../parser';
+import { ParseBag } from '../../Parser';
 
 export class FixingScript extends Script {
     require: ScriptStringArray;

@@ -1,6 +1,6 @@
-import { getString, ScriptString } from '../../Script';
+import { getString, ScriptString } from '../Script';
 import { ItemScript } from './ItemScript';
-import { ParseBag } from '../../parser';
+import { ParseBag } from '../../Parser';
 
 export class MapItem extends ItemScript {
     map: ScriptString;

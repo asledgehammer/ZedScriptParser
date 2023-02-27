@@ -1,6 +1,6 @@
-import { getBoolean, ScriptBoolean } from '../../Script';
+import { getBoolean, ScriptBoolean } from '../Script';
 import { ItemScript } from './ItemScript';
-import { ParseBag } from '../../parser';
+import { ParseBag } from '../../Parser';
 
 export class KeyItem extends ItemScript {
     digitalPadlock: ScriptBoolean;

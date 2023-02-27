@@ -1,9 +1,9 @@
-import { ParseBag } from '../parser';
+import { ParseBag } from '../../Parser';
 import { Script } from '../Script';
 
-export class VehicleTemplateScript extends Script {
+export class VehicleEngineScript extends Script {
     constructor(bag: ParseBag) {
-        super(bag, '=');
+        super(bag, ':');
     }
 
     onPropertyObject(bag: ParseBag, property: string): boolean {

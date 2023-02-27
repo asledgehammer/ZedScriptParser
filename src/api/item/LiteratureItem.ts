@@ -6,9 +6,9 @@ import {
     ScriptInt,
     ScriptString,
     ScriptStringArray,
-} from '../../Script';
+} from '../Script';
 import { ItemScript } from './ItemScript';
-import { ParseBag } from '../../parser';
+import { ParseBag } from '../../Parser';
 
 export class LiteratureItem extends ItemScript {
     canBeWrite: ScriptBoolean;

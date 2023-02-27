@@ -1,4 +1,4 @@
-import { ParseBag, ParseError } from '../parser';
+import { ParseBag, ParseError } from '../../Parser';
 import { getString, Script, ScriptString, ScriptStringArray } from '../Script';
 import { CopyFrame, ScriptCopyFrameArray } from './CopyFrame';
 import { CopyFrames, ScriptCopyFramesArray } from './CopyFrames';
