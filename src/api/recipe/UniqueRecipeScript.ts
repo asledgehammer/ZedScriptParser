@@ -1,5 +1,5 @@
-import { ParseBag } from 'Parser';
-import { Script } from 'api/Script';
+import { ParseBag } from '../../Parser';
+import { Script } from '../Script';
 
 export class UniqueRecipeScript extends Script {
     constructor(bag: ParseBag) {

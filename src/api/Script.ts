@@ -13,7 +13,7 @@ export function getString(value: string): string {
     return value;
 }
 
-export function getInt(value: string): ScriptInt {
+export function getInt(value: string): number {
     const val = parseInt(value);
     if (isNaN(val)) throw new Error();
     else if (!isFinite(val)) throw new Error();
@@ -79,7 +79,7 @@ export abstract class Script {
             }
         } else {
             if (!this.onPropertyToken(bag, curr)) {
-                throw new ParseError(`Unknown property object: ${curr}`);
+                throw new ParseError(`${this.__name} :: Unknown property object: ${curr}`);
             }
         }
     }

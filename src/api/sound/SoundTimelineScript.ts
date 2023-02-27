@@ -1,5 +1,5 @@
-import { ParseBag } from '../parser';
-import { Script } from './Script';
+import { ParseBag } from '../../Parser';
+import { Script } from '../Script';
 
 export class SoundTimelineScript extends Script {
     constructor(bag: ParseBag) {

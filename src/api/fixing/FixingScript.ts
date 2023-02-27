@@ -16,11 +16,7 @@ export class FixingScript extends Script {
     conditionModifier: ScriptFloat;
 
     constructor(bag: ParseBag) {
-        super(bag, '=');
-    }
-
-    onPropertyToken(bag: ParseBag, property: string): boolean {
-        return false;
+        super(bag, ':');
     }
 
     onPropertyValue(property: string, value: string): boolean {

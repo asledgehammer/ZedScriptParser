@@ -160,6 +160,8 @@ function stepInOpenBracket(bag: LexerBag): string {
 function stepInObjectName(bag: LexerBag): string {
     const start = bag.cursor();
     const value = bag.until(['{', '\n'])!!.trim();
+    if(value === '') bag.error("Name is empty.");
+
     const stop = bag.cursor(bag.offset - 1);
     const token: LexerToken = { value };
     if (bag.options.location) token.loc = { start, stop };
@@ -377,6 +379,7 @@ function stepInModule(bag: LexerBag) {
             case 'fixing':
             case 'multistagebuild':
                 stepInDefinition(bag, module, wordLower, ':');
+                break;
 
             /* (Recipe Definitions) */
             case 'evolvedrecipe':

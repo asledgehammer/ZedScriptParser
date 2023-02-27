@@ -8,6 +8,10 @@ import { parse } from './Parser';
 const doFile = (path: string, options: LexerOptions) => {
     console.log(`[ZedScriptParse] :: Parsing '${path}'`);
     const tokens = tokenize(path, options);
+    fs.writeFileSync(
+        path.replace('.txt', '.tokens.json'),
+        JSON.stringify({tokens: tokens.tokens}, null, 4),
+    );
     const parsed = parse(tokens.tokens as string[]);
     fs.writeFileSync(
         path.replace('.txt', '.json'),

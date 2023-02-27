@@ -28,9 +28,12 @@ import { VehicleEngineScript } from './vehicle/VehicleEngineScript';
 import { VehicleScript } from './vehicle/VehicleScript';
 import { VehicleTemplateScript } from './vehicle/VehicleTemplateScript';
 import { ParseBag, ParseError } from '../Parser';
+import { AnimationsMeshScript } from './animation/AnimationsMeshScript';
+import { MultiStageBuildScript } from './multistagebuild/MultiStageBuildScript';
 
 export class ModuleScript {
     readonly animations: { [name: string]: AnimationScript } = {};
+    readonly animationsMeshes: { [name: string]: AnimationsMeshScript } = {};
     readonly evolvedRecipes: { [name: string]: EvolvedRecipeScript } = {};
     readonly fixings: { [name: string]: FixingScript } = {};
     readonly imports: { [name: string]: string } = {};
@@ -38,6 +41,7 @@ export class ModuleScript {
     readonly items: { [name: string]: ItemScript } = {};
     readonly mannequins: { [name: string]: MannequinScript } = {};
     readonly models: { [name: string]: ModelScript } = {};
+    readonly multiStageBuilds: { [name: string]: MultiStageBuildScript } = {};
     readonly recipes: { [name: string]: RecipeScript } = {};
     readonly runtimeAnimations: { [name: string]: RuntimeAnimationScript } = {};
     readonly sounds: { [name: string]: SoundScript } = {};
@@ -84,13 +88,30 @@ export class ModuleScript {
                     const animation = new AnimationScript(bag);
                     this.animations[animation.__name!!] = animation;
                     break;
+                case 'animationsmesh':
+                    const animationsMesh = new AnimationsMeshScript(bag);
+                    this.animationsMeshes[animationsMesh.__name!!] =
+                        animationsMesh;
+                    break;
                 case 'evolvedrecipe':
                     const evolvedRecipe = new EvolvedRecipeScript(bag);
                     this.evolvedRecipes[evolvedRecipe.__name!!] = evolvedRecipe;
                     break;
+                case 'fixing':
+                    const fixing = new FixingScript(bag);
+                    this.fixings[fixing.__name!!] = fixing;
+                    break;
                 case 'item':
                     const item = ModuleScript.createItem(bag);
                     this.items[item.__name!!] = item;
+                    break;
+                case 'mannequin':
+                    const mannequin = new MannequinScript(bag);
+                    this.mannequins[mannequin.__name!!] = mannequin;
+                    break;
+                case 'multistagebuild':
+                    const multiStageBuild = new MultiStageBuildScript(bag);
+                    this.multiStageBuilds[multiStageBuild.__name!!] = multiStageBuild;
                     break;
                 case 'recipe':
                     const recipe = new RecipeScript(bag);
@@ -100,6 +121,16 @@ export class ModuleScript {
                     const sound = new SoundScript(bag);
                     this.sounds[sound.__name!!] = sound;
                     break;
+                case 'soundtimeline':
+                    const soundTimeline = new SoundTimelineScript(bag);
+                    this.soundTimelines[soundTimeline.__name!!] = soundTimeline;
+                    break;
+                case 'uniquerecipe':
+                    const uniqueRecipe = new UniqueRecipeScript(bag);
+                    this.uniqueRecipes[uniqueRecipe.__name!!] = uniqueRecipe;
+                    break;
+                default:
+                    console.warn('Unknown category: ' + curr);
             }
         }
     }
@@ -121,11 +152,13 @@ export class ModuleScript {
         };
 
         o.animations = toArray(this.animations);
+        o.animationsMeshes = toArray(this.animationsMeshes);
         o.evolvedRecipes = toArray(this.evolvedRecipes);
         o.fixings = toArray(this.fixings);
         o.items = toArray(this.items);
         o.mannequins = toArray(this.mannequins);
         o.models = toArray(this.models);
+        o.multiStageBuilds = toArray(this.multiStageBuilds);
         o.recipes = toArray(this.recipes);
         o.sounds = toArray(this.sounds);
 
