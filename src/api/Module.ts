@@ -109,6 +109,10 @@ export class ModuleScript {
                     const mannequin = new MannequinScript(bag);
                     this.mannequins[mannequin.__name!!] = mannequin;
                     break;
+                case 'model':
+                    const model = new ModelScript(bag);
+                    this.models[model.__name!!] = model;
+                    break;
                 case 'multistagebuild':
                     const multiStageBuild = new MultiStageBuildScript(bag);
                     this.multiStageBuilds[multiStageBuild.__name!!] = multiStageBuild;

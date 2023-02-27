@@ -4,28 +4,38 @@ import {
     getBoolean,
     getFloat,
     getString,
+    getURI,
     Script,
     ScriptBoolean,
     ScriptFloat,
     ScriptString,
     ScriptStringArray,
 } from '../Script';
+import { ModelAttachment } from './ModelAttachment';
 
 export class ModelScript extends Script {
     animationsMesh: ScriptString;
+    attachments: ModelAttachment[] | undefined;
     boneWeight: ScriptBoneWeightArray;
     invertX: ScriptBoolean;
-    mesh: ScriptStringArray;
+    mesh: ScriptString;
     scale: ScriptFloat;
     shader: ScriptString;
     static: ScriptBoolean;
-    texture: ScriptStringArray;
+    texture: ScriptString;
 
     constructor(bag: ParseBag) {
         super(bag, '=');
     }
 
     onPropertyToken(bag: ParseBag, property: string): boolean {
+        switch (property.toLowerCase()) {
+            case 'attachment':
+                if (this.attachments == null) this.attachments = [];
+                this.attachments.push(new ModelAttachment(bag));
+
+                return true;
+        }
         return false;
     }
 
@@ -54,23 +64,19 @@ export class ModelScript extends Script {
                 this.invertX = getBoolean(value);
                 return true;
             case 'mesh':
-                this.mesh = getString(value)?.split('/');
+                this.mesh = getURI(value);
                 return true;
             case 'scale':
                 this.scale = getFloat(value);
                 return true;
             case 'shader':
-                this.shader = getString(value);
+                this.shader = getURI(value);
                 return true;
             case 'static':
                 this.static = getBoolean(value);
                 return true;
             case 'texture':
-                this.texture = getString(value)
-                    ?.split('/')
-                    .map((a) => {
-                        return a.trim();
-                    });
+                this.texture = getURI(value);
                 return true;
         }
         return false;

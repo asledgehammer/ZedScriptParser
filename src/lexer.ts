@@ -160,7 +160,7 @@ function stepInOpenBracket(bag: LexerBag): string {
 function stepInObjectName(bag: LexerBag): string {
     const start = bag.cursor();
     const value = bag.until(['{', '\n'])!!.trim();
-    if(value === '') bag.error("Name is empty.");
+    if (value === '') bag.error('Name is empty.');
 
     const stop = bag.cursor(bag.offset - 1);
     const token: LexerToken = { value };
@@ -178,13 +178,29 @@ function stepInProperty(
     definition: string,
     property: string,
     operator: '=' | ':',
+    removeWhitespace: boolean = true,
 ) {
     const propLower = property.toLowerCase();
-    bag.token(
-        propLower,
-        bag.cursor(bag.offset - propLower.length),
-        bag.cursor(),
-    );
+
+    if (property.indexOf(' ') !== -1) {
+        const [cat, name] = property.split(' ');
+        bag.token(
+            cat,
+            bag.cursor(),
+            bag.cursor(bag.offset - (property.length - cat.length)),
+        );
+        bag.token(
+            name,
+            bag.cursor(bag.offset - (property.length - cat.length) + 1),
+            bag.cursor(),
+        );
+    } else {
+        bag.token(
+            propLower,
+            bag.cursor(bag.offset - propLower.length),
+            bag.cursor(),
+        );
+    }
 
     stepInOpenBracket(bag);
 
@@ -212,7 +228,9 @@ function stepInProperty(
             );
         }
 
-        bag.token(line.replace(/\,/g, '').replace(/\s/g, ''), start, stop);
+        let l = line.replace(/\,/g, '');
+        if (removeWhitespace) l = l.replace(/\s/g, '');
+        bag.token(l, start, stop);
     }
 }
 
@@ -255,17 +273,17 @@ function stepInDefinition(
             if (typeof categories === 'string') categories = [categories];
             for (const catExp of categories) {
                 const catExpLower = catExp.toLowerCase();
-                if (categoryGiven !== catExpLower) {
-                    const cats = `[${categories
-                        .map((o) => {
-                            return o.toLowerCase();
-                        })
-                        .join(', ')}]`;
-                    bag.error(
-                        `Cannot define ${property} in '${catLower}'. It is only allowed in ${cats}'.`,
-                    );
+                if (catLower === catExpLower) {
+                    return;
                 }
             }
+
+            const cats = `[${categories
+                .map((o) => o.toLowerCase())
+                .join(', ')}]`;
+            bag.error(
+                `Cannot define ${property} in '${catLower}'. It is only allowed in ${cats}'.`,
+            );
         }
 
         if (line.indexOf(operator) !== -1) {
@@ -308,7 +326,34 @@ function stepInDefinition(
                     stepInProperty(bag, module, name, propertyLower, '=');
                     break;
                 default:
-                    bag.error(`Illegal line in '${module}.${name}': ${line}`);
+                    let brk = false;
+                    if (line.indexOf(' ') !== -1) {
+                        const [propCategory] = line.split(' ');
+                        switch (propCategory.toLowerCase()) {
+                            case 'attachment':
+                                brk = true;
+                                checkProperty(
+                                    propertyLower,
+                                    ['model', 'vehicle'],
+                                    category,
+                                );
+
+                                stepInProperty(
+                                    bag,
+                                    module,
+                                    name,
+                                    propertyLower,
+                                    '=',
+                                    false,
+                                );
+                                break;
+                        }
+                    }
+                    if (!brk) {
+                        bag.error(
+                            `Illegal line in '${module}.${name}': ${line}`,
+                        );
+                    }
             }
         }
     }
@@ -368,6 +413,7 @@ function stepInModule(bag: LexerBag) {
             case 'animationsmesh':
             case 'item':
             case 'mannequin':
+            case 'model':
             case 'sound':
             case 'soundtimeline':
             case 'vehicle':

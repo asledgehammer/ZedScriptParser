@@ -1,5 +1,4 @@
 import { ParseBag, ParseError } from '../Parser';
-import { EvolvedRecipeScript } from './recipe/EvolvedRecipeScript';
 
 export type ScriptBoolean = boolean | undefined;
 export type ScriptFloat = number | undefined;
@@ -9,8 +8,15 @@ export type ScriptIntArray = number[] | undefined;
 export type ScriptFloatArray = number[] | undefined;
 export type ScriptStringArray = string[] | undefined;
 
+export type Vector3 = { x: number; y: number; z: number };
+export type ScriptVector3 = Vector3 | undefined;
+
 export function getString(value: string): string {
     return value;
+}
+
+export function getURI(value: string): string {
+    return getString(value).replace(/\\/g, '/');
 }
 
 export function getInt(value: string): number {
@@ -79,7 +85,9 @@ export abstract class Script {
             }
         } else {
             if (!this.onPropertyToken(bag, curr)) {
-                throw new ParseError(`${this.__name} :: Unknown property object: ${curr}`);
+                throw new ParseError(
+                    `${this.__name} :: Unknown property object: ${curr}`,
+                );
             }
         }
     }
