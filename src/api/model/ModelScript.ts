@@ -11,11 +11,11 @@ import {
     ScriptString,
     ScriptStringArray,
 } from '../Script';
-import { ModelAttachment } from './ModelAttachment';
+import { Attachment } from '../Attachment';
 
 export class ModelScript extends Script {
     animationsMesh: ScriptString;
-    attachments: ModelAttachment[] | undefined;
+    attachments: Attachment[] | undefined;
     boneWeight: ScriptBoneWeightArray;
     invertX: ScriptBoolean;
     mesh: ScriptString;
@@ -32,7 +32,7 @@ export class ModelScript extends Script {
         switch (property.toLowerCase()) {
             case 'attachment':
                 if (this.attachments == null) this.attachments = [];
-                this.attachments.push(new ModelAttachment(bag));
+                this.attachments.push(new Attachment(bag));
 
                 return true;
         }

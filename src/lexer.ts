@@ -242,6 +242,7 @@ function stepInDefinition(
     module: string,
     category: string,
     operator: '=' | ':',
+    removeWhitespace: boolean = true,
 ) {
     const catLower = category.toLowerCase();
     bag.token(catLower, bag.cursor(bag.offset - catLower.length), bag.cursor());
@@ -287,20 +288,20 @@ function stepInDefinition(
         }
 
         if (line.indexOf(operator) !== -1) {
-            bag.token(line.replace(/\,/g, '').replace(/\s/g, ''), start, stop);
+            if (removeWhitespace) {
+                bag.token(
+                    line.replace(/\,/g, '').replace(/\s/g, ''),
+                    start,
+                    stop,
+                );
+            } else {
+                bag.token(line.replace(/\,/g, '').trim(), start, stop);
+            }
         } else if (line === ',') {
             continue;
         } else {
             const propertyLower = line.toLowerCase();
             switch (propertyLower) {
-                case 'attachment':
-                    checkProperty(
-                        propertyLower,
-                        ['model', 'vehicle'],
-                        category,
-                    );
-                    stepInProperty(bag, module, name, propertyLower, '=');
-                    break;
                 case 'copyframe':
                     checkProperty(propertyLower, 'animation', category);
                     stepInProperty(bag, module, name, propertyLower, '=');
@@ -315,7 +316,14 @@ function stepInDefinition(
                     break;
                 case 'model':
                     checkProperty(propertyLower, 'vehicle', category);
-                    stepInProperty(bag, module, name, propertyLower, '=');
+                    stepInProperty(
+                        bag,
+                        module,
+                        name,
+                        propertyLower,
+                        '=',
+                        false,
+                    );
                     break;
                 case 'skin':
                     checkProperty(propertyLower, 'vehicle', category);
@@ -385,6 +393,32 @@ function stepInRecipe(bag: LexerBag, module: string, category: string) {
     }
 }
 
+function stepInImports(bag: LexerBag, module: string) {
+    bag.token(
+        'imports',
+        bag.cursor(bag.offset - 'imports'.length),
+        bag.cursor(),
+    );
+    stepInOpenBracket(bag);
+    while (!bag.isEOF()) {
+        const start = bag.cursor();
+        const line = bag.until([',', '\n', '}'])?.trim();
+        const stop = bag.cursor(bag.offset - 1);
+
+        if (line == undefined) {
+            bag.error(`EOF in imports: ${module}`);
+            return;
+        } else if (line === '') {
+            continue;
+        } else if (line === '}') {
+            bag.token('}', bag.cursor(bag.offset - 1), bag.cursor());
+            break;
+        }
+
+        bag.token(line, start, stop);
+    }
+}
+
 ////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////
 
@@ -394,7 +428,7 @@ function stepInModule(bag: LexerBag) {
 
     let brk = false;
     while (!brk && !bag.isEOF()) {
-        const word = bag.until([' ', '}'])?.trim();
+        const word = bag.until([' ', '\n', '}'])?.trim();
         if (word === undefined) {
             bag.error(`EOF in module: ${module}`);
             return;
@@ -407,6 +441,8 @@ function stepInModule(bag: LexerBag) {
                 bag.token('}', bag.cursor(bag.offset - 1), bag.cursor());
                 brk = true;
                 break;
+            case '':
+                continue;
 
             /* (Definitions using '=' assignments) */
             case 'animation':
@@ -416,9 +452,13 @@ function stepInModule(bag: LexerBag) {
             case 'model':
             case 'sound':
             case 'soundtimeline':
+                stepInDefinition(bag, module, wordLower, '=');
+                break;
+
+            /* (Vehicles) */
             case 'vehicle':
             case 'vehicleenginerpm':
-                stepInDefinition(bag, module, wordLower, '=');
+                stepInDefinition(bag, module, wordLower, '=', false);
                 break;
 
             /* (Definitions using ':' assignments) */
@@ -433,6 +473,13 @@ function stepInModule(bag: LexerBag) {
             case 'uniquerecipe':
                 stepInRecipe(bag, module, wordLower);
                 break;
+
+            case 'imports':
+                stepInImports(bag, module);
+                break;
+
+            default:
+                bag.error('Unknown category: "' + wordLower + '"');
         }
     }
 }

@@ -36,7 +36,7 @@ export class ModuleScript {
     readonly animationsMeshes: { [name: string]: AnimationsMeshScript } = {};
     readonly evolvedRecipes: { [name: string]: EvolvedRecipeScript } = {};
     readonly fixings: { [name: string]: FixingScript } = {};
-    readonly imports: { [name: string]: string } = {};
+    readonly imports: string[] = [];
     readonly importedModules: { [name: string]: ModuleScript } = {};
     readonly items: { [name: string]: ItemScript } = {};
     readonly mannequins: { [name: string]: MannequinScript } = {};
@@ -74,6 +74,30 @@ export class ModuleScript {
         }
     }
 
+    onImports(bag: ParseBag) {
+        if (bag.next() !== '{') {
+            new ParseError(
+                `Expected '{' near 'imports' for module '${this.__name}'.`,
+            );
+        }
+
+        while (!bag.isEOF()) {
+            const line = bag.next().trim().replace(/\,/g, '');
+
+            if (line === undefined) {
+                throw new ParseError(
+                    `Unexpected EOF near 'imports' for module '${this.__name}'.`,
+                );
+            } else if (line === '') {
+                continue;
+            } else if (line === '}') {
+                return;
+            }
+
+            this.imports.push(line);
+        }
+    }
+
     onParse(bag: ParseBag) {
         while (!bag.isEOF()) {
             const curr = bag.next();
@@ -101,6 +125,9 @@ export class ModuleScript {
                     const fixing = new FixingScript(bag);
                     this.fixings[fixing.__name!!] = fixing;
                     break;
+                case 'imports':
+                    this.onImports(bag);
+                    break;
                 case 'item':
                     const item = ModuleScript.createItem(bag);
                     this.items[item.__name!!] = item;
@@ -115,7 +142,8 @@ export class ModuleScript {
                     break;
                 case 'multistagebuild':
                     const multiStageBuild = new MultiStageBuildScript(bag);
-                    this.multiStageBuilds[multiStageBuild.__name!!] = multiStageBuild;
+                    this.multiStageBuilds[multiStageBuild.__name!!] =
+                        multiStageBuild;
                     break;
                 case 'recipe':
                     const recipe = new RecipeScript(bag);
@@ -132,6 +160,10 @@ export class ModuleScript {
                 case 'uniquerecipe':
                     const uniqueRecipe = new UniqueRecipeScript(bag);
                     this.uniqueRecipes[uniqueRecipe.__name!!] = uniqueRecipe;
+                    break;
+                case 'vehicle':
+                    const vehicle = new VehicleScript(bag);
+                    this.vehicles[vehicle.__name!!] = vehicle;
                     break;
                 default:
                     console.warn('Unknown category: ' + curr);
@@ -159,6 +191,7 @@ export class ModuleScript {
         o.animationsMeshes = toArray(this.animationsMeshes);
         o.evolvedRecipes = toArray(this.evolvedRecipes);
         o.fixings = toArray(this.fixings);
+        o.imports = this.imports;
         o.items = toArray(this.items);
         o.mannequins = toArray(this.mannequins);
         o.models = toArray(this.models);

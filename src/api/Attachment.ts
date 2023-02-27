@@ -1,7 +1,7 @@
-import { ParseBag } from '../../Parser';
-import { getString, Script, ScriptVector3 } from '../Script';
+import { ParseBag } from '../Parser';
+import { getString, Script, ScriptVector3 } from './Script';
 
-export class ModelAttachment extends Script {
+export class Attachment extends Script {
     offset: ScriptVector3;
     rotate: ScriptVector3;
 

@@ -26,7 +26,7 @@ export function getInt(value: string): number {
     return val;
 }
 
-export function getFloat(value: string): ScriptFloat {
+export function getFloat(value: string): number {
     const val = parseFloat(value);
     if (isNaN(val)) throw new Error();
     else if (!isFinite(val)) throw new Error();
@@ -77,9 +77,11 @@ export abstract class Script {
     }
 
     onParse(bag: ParseBag): void {
-        const curr = bag.next();
+        const curr = bag.next().trim();
         if (curr.indexOf(this.__operator) !== -1) {
-            const [property, value] = curr.split(this.__operator);
+            const [property, value] = curr.split(this.__operator).map((o) => {
+                return o.trim();
+            });
             if (!this.onPropertyValue(property, value)) {
                 this.addCustomProperty(property, value);
             }

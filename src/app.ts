@@ -1,31 +1,45 @@
-/** NOTE: Do not consider this to be final, acceptable code. This is the initial code to get a working AST export. */
-
 import * as fs from 'fs';
 import { scanDir } from './ZedScriptUtils';
 import { LexerOptions, tokenize } from './Lexer';
 import { parse } from './Parser';
 
-const doFile = (path: string, options: LexerOptions) => {
+function getParentFolder(path: string): string {
+    const a = path.replace(/\\/g, '/').split('/');
+    a.pop();
+    return a.join('/');
+}
+
+const doFile = (path: string, out: string, options: LexerOptions) => {
     console.log(`[ZedScriptParse] :: Parsing '${path}'`);
+
+    const folder = getParentFolder(out);
+    if (!fs.existsSync(folder)) fs.mkdirSync(folder);
+
+    /* Tokens. */
     const tokens = tokenize(path, options);
     fs.writeFileSync(
-        path.replace('.txt', '.tokens.json'),
-        JSON.stringify({tokens: tokens.tokens}, null, 4),
+        out.replace('.txt', '.tokens.json'),
+        JSON.stringify({ tokens: tokens.tokens }, null, 4),
     );
+
+    /* Parsed API */
     const parsed = parse(tokens.tokens as string[]);
     fs.writeFileSync(
-        path.replace('.txt', '.json'),
-        JSON.stringify({modules: parsed}, null, 4),
+        out.replace('.txt', '.json'),
+        JSON.stringify({ modules: parsed }, null, 4),
     );
 };
 
-const doFolder = (path: string, options: LexerOptions) => {
+const doFolder = (path: string, out: string, options: LexerOptions) => {
     const files: string[] = [];
     scanDir(path, '.txt', files);
     files.sort((a, b) => a.localeCompare(b));
     for (const file of files) {
-        doFile(file, options);
+        doFile(file, file.replace(path, out), options);
     }
 };
 
-doFolder('./assets/media/scripts', { comments: false, location: false });
+doFolder('./assets/media/scripts', './assets/media/scripts_json', {
+    comments: false,
+    location: false,
+});

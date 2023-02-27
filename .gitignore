@@ -11,3 +11,4 @@ coverage
 
 assets/media/scripts/**/**
 test.json
+assets/media/scripts_json/
