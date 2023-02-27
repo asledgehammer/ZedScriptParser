@@ -1,30 +1,24 @@
-import { getString, ScriptString } from '../ScriptObject';
-import { AssignmentStatement, ObjectStatement } from 'ast';
+import { getString, ScriptString } from '../../Script';
 import { ItemScript } from './ItemScript';
+import { ParseBag } from '../../parser';
 
 export class MapItem extends ItemScript {
-
     map: ScriptString;
 
-    constructor(statement: ObjectStatement) {
-        super(statement);
+    constructor(bag: ParseBag) {
+        super(bag, '=', 'Map');
     }
 
-    onStatement(statement: AssignmentStatement): boolean {
-        const property = statement.id.value;
+    onPropertyObject(_: ParseBag, __: string): boolean {
+        return super.onPropertyObject(_, __);
+    }
+
+    onPropertyValue(property: string, value: string): boolean {
         switch (property.toLowerCase()) {
             case 'map':
-                this.map = getString(statement);
+                this.map = getString(value);
                 return true;
         }
-        return super.onStatement(statement);
-    }
-
-    allowCustomProperties(): boolean {
-        return true;
-    }
-
-    getType(): String {
-        return 'Map';
+        return super.onPropertyValue(property, value);
     }
 }

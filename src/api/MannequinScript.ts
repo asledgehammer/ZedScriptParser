@@ -1,13 +1,13 @@
-import { AssignmentStatement, ObjectStatement } from 'ast';
+import { ParseBag } from 'parser';
 import {
     getBoolean,
     getString,
+    Script,
     ScriptBoolean,
-    ScriptObject,
     ScriptString,
-} from './ScriptObject';
+} from '../Script';
 
-export class MannequinScript extends ScriptObject {
+export class MannequinScript extends Script {
     animSet: ScriptString;
     animState: ScriptString;
     female: ScriptBoolean;
@@ -16,39 +16,38 @@ export class MannequinScript extends ScriptObject {
     pose: ScriptString;
     texture: ScriptString;
 
-    constructor(statement: ObjectStatement) {
-        super(statement);
+    constructor(bag: ParseBag) {
+        super(bag, '=');
     }
 
-    onStatement(statement: AssignmentStatement): boolean {
-        const property = statement.id.value;
-        switch (property.toLowerCase()) {
-            case 'animset':
-                this.animSet = getString(statement);
-                return true;
-            case 'animstate':
-                this.animState = getString(statement);
-                return true;
-            case 'female':
-                this.female = getBoolean(statement);
-                return true;
-            case 'model':
-                this.model = getString(statement);
-                return true;
-            case 'outfit':
-                this.outfit = getString(statement);
-                return true;
-            case 'pose':
-                this.pose = getString(statement);
-                return true;
-            case 'texture':
-                this.texture = getString(statement);
-                return true;
-        }
+    onPropertyObject(bag: ParseBag, property: string): boolean {
         return false;
     }
 
-    allowCustomProperties(): boolean {
-        return true;
+    onPropertyValue(property: string, value: string): boolean {
+        switch (property.toLowerCase()) {
+            case 'animset':
+                this.animSet = getString(value);
+                return true;
+            case 'animstate':
+                this.animState = getString(value);
+                return true;
+            case 'female':
+                this.female = getBoolean(value);
+                return true;
+            case 'model':
+                this.model = getString(value);
+                return true;
+            case 'outfit':
+                this.outfit = getString(value);
+                return true;
+            case 'pose':
+                this.pose = getString(value);
+                return true;
+            case 'texture':
+                this.texture = getString(value);
+                return true;
+        }
+        return false;
     }
 }

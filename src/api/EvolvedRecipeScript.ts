@@ -1,18 +1,18 @@
-import { AssignmentStatement, ObjectStatement } from 'ast';
+import { ParseBag } from '../parser';
 import { ItemRecipe } from './ItemRecipe';
 import {
     getBoolean,
     getInt,
     getString,
+    Script,
     ScriptBoolean,
     ScriptInt,
-    ScriptObject,
     ScriptString,
-} from './ScriptObject';
+} from '../Script';
 
 export type ScriptItemRecipeMap = { [name: string]: ItemRecipe } | undefined;
 
-export class EvolvedRecipeScript extends ScriptObject {
+export class EvolvedRecipeScript extends Script {
     name: ScriptString;
     maxItems: ScriptInt;
     items: ScriptItemRecipeMap;
@@ -25,48 +25,62 @@ export class EvolvedRecipeScript extends ScriptObject {
     hidden: ScriptBoolean;
     allowFrozenItem: ScriptBoolean;
 
-    constructor(statement: ObjectStatement) {
-        super(statement);
+    constructor(bag: ParseBag) {
+        super(bag, ':');
     }
 
-    onStatement(statement: AssignmentStatement): boolean {
-        const property = statement.id.value;
+    onPropertyObject(bag: ParseBag, property: string): boolean {
+        return false;
+    }
+
+    onPropertyValue(property: string, value: string): boolean {
         switch (property.toLowerCase()) {
             case 'baseitem':
-                this.baseItem = getString(statement);
-                return true;
+                this.baseItem = getString(value);
+                break;
             case 'name':
-                this.name = getString(statement);
-                return true;
+                this.name = getString(value);
+                break;
             case 'resultitem':
-                this.resultItem = getString(statement);
-                return true;
+                this.resultItem = getString(value);
+                break;
             case 'cookable':
                 this.cookable = true; // Set to true regardless of flag set.
-                return true;
+                break;
             case 'maxitems':
-                this.maxItems = getInt(statement);
-                return true;
+                this.maxItems = getInt(value);
+                break;
             case 'addingredientifcooked':
-                this.addIngredientIfCooked = getBoolean(statement);
-                return true;
+                this.addIngredientIfCooked = getBoolean(value);
+                break;
             case 'addingredientsound':
-                this.addIngredientSound = getString(statement, true);
-                return true;
+                this.addIngredientSound = getString(value);
+                break;
             case 'canaddspicesempty':
-                this.canAddSpicesEmpty = getBoolean(statement);
-                return true;
+                this.canAddSpicesEmpty = getBoolean(value);
+                break;
             case 'ishidden':
-                this.hidden = getBoolean(statement);
-                return true;
+                this.hidden = getBoolean(value);
+                break;
             case 'allowfrozenitem':
-                this.allowFrozenItem = getBoolean(statement);
-                return true;
+                this.allowFrozenItem = getBoolean(value);
+                break;
         }
         return false;
     }
 
-    allowCustomProperties(): boolean {
-        return true;
+    parse(bag: ParseBag) {
+        while (!bag.isEOF()) {
+            const curr = bag.next();
+            if (curr === '}') return;
+
+            const split = curr.split(':');
+            const property = split[0];
+            const value = split[1];
+            const propLower = property.toLowerCase();
+
+            switch (propLower) {
+            }
+        }
     }
 }

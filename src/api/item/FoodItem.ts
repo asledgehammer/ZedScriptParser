@@ -5,10 +5,10 @@ import {
     ScriptBoolean,
     ScriptInt,
     ScriptString,
-} from '../ScriptObject';
-import { AssignmentStatement, ObjectStatement } from 'ast';
+} from '../../Script';
 import { ItemScript } from './ItemScript';
 import { EvolvedRecipe, ScriptEvolvedRecipeArray } from './EvolvedRecipe';
+import { ParseBag } from 'parser';
 
 export class FoodItem extends ItemScript {
     alcoholic: ScriptBoolean;
@@ -45,45 +45,48 @@ export class FoodItem extends ItemScript {
     thirstChange: ScriptInt;
     useForPoison: ScriptInt;
 
-    constructor(statement: ObjectStatement) {
-        super(statement);
+    constructor(bag: ParseBag) {
+        super(bag, '=', 'Food');
     }
 
-    onStatement(statement: AssignmentStatement): boolean {
-        const property = statement.id.value;
+    onPropertyObject(_: ParseBag, __: string): boolean {
+        return super.onPropertyObject(_, __);
+    }
+
+    onPropertyValue(property: string, value: string): boolean {
         switch (property.toLowerCase()) {
             case 'badcold':
-                this.badCold = getBoolean(statement);
+                this.badCold = getBoolean(value);
                 return true;
             case 'badinmicrowave':
-                this.badInMicrowave = getBoolean(statement);
+                this.badInMicrowave = getBoolean(value);
                 return true;
             case 'cannedfood':
-                this.cannedFood = getBoolean(statement);
+                this.cannedFood = getBoolean(value);
                 return true;
             case 'cantbefrozen':
-                this.cantBeFrozen = getBoolean(statement);
+                this.cantBeFrozen = getBoolean(value);
                 return true;
             case 'canteat':
-                this.cantEat = getBoolean(statement);
+                this.cantEat = getBoolean(value);
                 return true;
             case 'cookingsound':
-                this.cookingSound = getString(statement);
+                this.cookingSound = getString(value);
                 return true;
             case 'dangerousuncooked':
-                this.dangerousUncooked = getBoolean(statement);
+                this.dangerousUncooked = getBoolean(value);
                 return true;
             case 'daysfresh':
-                this.daysFresh = getInt(statement);
+                this.daysFresh = getInt(value);
                 return true;
             case 'daystotallyrotten':
-                this.daysTotallyRotten = getInt(statement);
+                this.daysTotallyRotten = getInt(value);
                 return true;
             case 'endurancechange':
-                this.enduranceChange = getInt(statement);
+                this.enduranceChange = getInt(value);
                 return true;
             case 'evolvedrecipe':
-                const split = getString(statement)
+                const split = getString(value)
                     ?.split(';')
                     .map((a) => {
                         return a.trim();
@@ -101,77 +104,69 @@ export class FoodItem extends ItemScript {
                 }
                 return true;
             case 'flureduction':
-                this.fluReduction = getInt(statement);
+                this.fluReduction = getInt(value);
                 return true;
             case 'goodhot':
-                this.goodHot = getBoolean(statement);
+                this.goodHot = getBoolean(value);
                 return true;
             case 'herbalisttype':
-                this.herbalistType = getString(statement);
+                this.herbalistType = getString(value);
                 return true;
             case 'hungerchange':
-                this.hungerChange = getInt(statement);
+                this.hungerChange = getInt(value);
                 return true;
             case 'iscookable':
-                this.isCookable = getBoolean(statement);
+                this.isCookable = getBoolean(value);
                 return true;
             case 'minutestoburn':
-                this.minutesToBurn = getInt(statement);
+                this.minutesToBurn = getInt(value);
                 return true;
             case 'minutestocook':
-                this.minutesToCook = getInt(statement);
+                this.minutesToCook = getInt(value);
                 return true;
             case 'oncooked':
-                this.onCooked = getString(statement);
+                this.onCooked = getString(value);
                 return true;
             case 'oneat':
-                this.onEat = getString(statement);
+                this.onEat = getString(value);
                 return true;
             case 'packaged':
-                this.packaged = getBoolean(statement);
+                this.packaged = getBoolean(value);
                 return true;
             case 'painreduction':
-                this.painReduction = getInt(statement);
+                this.painReduction = getInt(value);
                 return true;
             case 'poisondetectionlevel':
-                this.poisonDetectionLevel = getInt(statement);
+                this.poisonDetectionLevel = getInt(value);
                 return true;
             case 'poisonpower':
-                this.poisonPower = getInt(statement);
+                this.poisonPower = getInt(value);
                 return true;
             case 'reducefoodsickness':
-                this.reduceFoodSickness = getInt(statement);
+                this.reduceFoodSickness = getInt(value);
                 return true;
             case 'removenegativeeffectoncooked':
-                this.removeNegativeEffectOnCooked = getBoolean(statement);
+                this.removeNegativeEffectOnCooked = getBoolean(value);
                 return true;
             case 'removeunhappinesswhencooked':
-                this.removeUnhappinessWhenCooked = getBoolean(statement);
+                this.removeUnhappinessWhenCooked = getBoolean(value);
                 return true;
             case 'replaceoncooked':
-                this.replaceOnCooked = getString(statement);
+                this.replaceOnCooked = getString(value);
                 return true;
             case 'replaceonrotten':
-                this.replaceOnRotten = getString(statement);
+                this.replaceOnRotten = getString(value);
                 return true;
             case 'spice':
-                this.spice = getBoolean(statement);
+                this.spice = getBoolean(value);
                 return true;
             case 'thirstchange':
-                this.thirstChange = getInt(statement);
+                this.thirstChange = getInt(value);
                 return true;
             case 'useforpoison':
-                this.useForPoison = getInt(statement);
+                this.useForPoison = getInt(value);
                 return true;
         }
-        return super.onStatement(statement);
-    }
-
-    allowCustomProperties(): boolean {
-        return true;
-    }
-
-    getType(): String {
-        return 'Food';
+        return super.onPropertyValue(property, value);
     }
 }

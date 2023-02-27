@@ -1,18 +1,18 @@
-import { AssignmentStatement, ObjectStatement } from 'ast';
-import { ScriptObject } from './ScriptObject';
+import { ParseBag } from '../parser';
+import { Script } from '../Script';
 
-export class RuntimeAnimationScript extends ScriptObject {
-
-    constructor(statement: ObjectStatement) {
-        super(statement);
+export class RuntimeAnimationScript extends Script {
+    constructor(bag: ParseBag) {
+        super(bag, '=');
     }
 
-    onStatement(statement: AssignmentStatement): void {
-        const property = statement.id.value;
+    onPropertyObject(bag: ParseBag, property: string): boolean {
+        return false;
+    }
+
+    onPropertyValue(property: string, value: string): boolean {
         switch (property.toLowerCase()) {
-            default:
-                console.warn(`[${this.__id}] :: Unknown property: ${property}`);
-                break;
         }
+        return false;
     }
 }

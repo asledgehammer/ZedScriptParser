@@ -4,9 +4,9 @@ import {
     ScriptInt,
     ScriptString,
     ScriptStringArray,
-} from '../ScriptObject';
-import { AssignmentStatement, ObjectStatement } from 'ast';
+} from '../../Script';
 import { ItemScript } from './ItemScript';
+import { ParseBag } from '../../parser';
 
 export class ContainerItem extends ItemScript {
     canBeEquipped: ScriptString;
@@ -18,46 +18,41 @@ export class ContainerItem extends ItemScript {
     soundParameter: ScriptStringArray;
     weightReduction: ScriptInt;
 
-    constructor(statement: ObjectStatement) {
-        super(statement);
+    constructor(bag: ParseBag) {
+        super(bag, '=', 'Container');
     }
 
-    onStatement(statement: AssignmentStatement): boolean {
-        const property = statement.id.value;
+    onPropertyObject(bag: ParseBag, property: string): boolean {
+        return super.onPropertyObject(bag, property);
+    }
+
+    onPropertyValue(property: string, value: string): boolean {
         switch (property.toLowerCase()) {
             case 'canbeequipped':
-                this.canBeEquipped = getString(statement);
+                this.canBeEquipped = getString(value);
                 return true;
             case 'capacity':
-                this.capacity = getInt(statement);
+                this.capacity = getInt(value);
                 return true;
             case 'closesound':
-                this.closeSound = getString(statement);
+                this.closeSound = getString(value);
                 return true;
             case 'onlyacceptcategory':
-                this.onlyAcceptCategory = getString(statement);
+                this.onlyAcceptCategory = getString(value);
                 return true;
             case 'opensound':
-                this.openSound = getString(statement);
+                this.openSound = getString(value);
                 return true;
             case 'putinsound':
-                this.putInSound = getString(statement);
+                this.putInSound = getString(value);
                 return true;
             case 'soundparameter':
-                this.soundParameter = getString(statement)?.split(' ');
+                this.soundParameter = getString(value)?.split(' ');
                 return true;
             case 'weightreduction':
-                this.weightReduction = getInt(statement);
+                this.weightReduction = getInt(value);
                 return true;
         }
-        return super.onStatement(statement);
-    }
-
-    allowCustomProperties(): boolean {
-        return true;
-    }
-
-    getType(): String {
-        return 'Container';
+        return super.onPropertyValue(property, value);
     }
 }

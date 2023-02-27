@@ -1,19 +1,20 @@
-import { AssignmentStatement, ObjectStatement } from 'ast';
-import { ScriptObject } from './ScriptObject';
+import { Script } from '../Script';
+import { ParseBag } from '../parser';
 
-export class VehicleScript extends ScriptObject {
-    constructor(statement: ObjectStatement) {
-        super(statement);
+export class VehicleScript extends Script {
+    constructor(bag: ParseBag) {
+        super(bag, '=');
     }
 
-    onStatement(statement: AssignmentStatement): boolean {
-        const property = statement.id.value;
+    onPropertyObject(bag: ParseBag, property: string): boolean {
         switch (property.toLowerCase()) {
         }
         return false;
     }
 
-    allowCustomProperties(): boolean {
-        return true;
+    onPropertyValue(property: string, value: string): boolean {
+        switch (property.toLowerCase()) {
+        }
+        return false;
     }
 }

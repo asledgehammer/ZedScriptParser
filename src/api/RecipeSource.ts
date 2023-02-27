@@ -1,13 +1,12 @@
-import { RecipeAction } from 'ast';
-import { ScriptRecipeSourceItemArray } from './RecipeSourceItem';
+import { RecipeSourceItem } from "./RecipeSourceItem";
 
 export type ScriptRecipeSourceArray = RecipeSource[] | undefined;
 
 export class RecipeSource {
-    items: ScriptRecipeSourceItemArray[];
-    action: RecipeAction;
+    items: RecipeSourceItem[];
+    action: 'keep' | 'destroy' | 'none';
 
-    constructor(items: ScriptRecipeSourceItemArray[], action: RecipeAction) {
+    constructor(items: RecipeSourceItem[], action: 'keep' | 'destroy' | 'none') {
         this.items = items;
         this.action = action;
     }

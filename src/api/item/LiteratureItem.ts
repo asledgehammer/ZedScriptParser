@@ -6,9 +6,9 @@ import {
     ScriptInt,
     ScriptString,
     ScriptStringArray,
-} from '../ScriptObject';
-import { AssignmentStatement, ObjectStatement } from 'ast';
+} from '../../Script';
 import { ItemScript } from './ItemScript';
+import { ParseBag } from '../../parser';
 
 export class LiteratureItem extends ItemScript {
     canBeWrite: ScriptBoolean;
@@ -19,47 +19,43 @@ export class LiteratureItem extends ItemScript {
     skillTrained: ScriptString;
     teachedRecipes: ScriptStringArray;
 
-    constructor(statement: ObjectStatement) {
-        super(statement);
+    constructor(bag: ParseBag) {
+        super(bag, '=', 'Literature');
     }
 
-    onStatement(statement: AssignmentStatement): boolean {
-        const property = statement.id.value;
-        switch (property.toLowerCase()) {
+    onPropertyObject(_: ParseBag, __: string): boolean {
+        return super.onPropertyObject(_, __);
+    }
+
+    onPropertyValue(property: string, value: string): boolean {
+        switch(property.toLowerCase()) {
             case 'canbewrite':
-                this.canBeWrite = getBoolean(statement);
+                this.canBeWrite = getBoolean(value);
                 return true;
             case 'lvlskilltrained':
-                this.lvlSkillTrained = getInt(statement);
+                this.lvlSkillTrained = getInt(value);
                 return true;
             case 'numberofpages':
-                this.numberOfPages = getInt(statement);
+                this.numberOfPages = getInt(value);
                 return true;
             case 'numlevelstrained':
-                this.numLevelsTrained = getInt(statement);
+                this.numLevelsTrained = getInt(value);
                 return true;
             case 'pagetowrite':
-                this.pageToWrite = getInt(statement);
+                this.pageToWrite = getInt(value);
                 return true;
             case 'skilltrained':
-                this.skillTrained = getString(statement);
+                this.skillTrained = getString(value);
                 return true;
             case 'teachedrecipes':
-                this.teachedRecipes = getString(statement)
+                this.teachedRecipes = getString(value)
                     ?.split(';')
                     .map((a) => {
                         return a.trim();
                     });
                 return true;
+
         }
-        return super.onStatement(statement);
-    }
-
-    allowCustomProperties(): boolean {
-        return true;
-    }
-
-    getType(): String {
-        return 'Literature';
+        return super.onPropertyValue(property, value);
     }
 }

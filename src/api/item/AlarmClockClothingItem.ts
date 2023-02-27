@@ -1,35 +1,28 @@
-import { getInt, getString, ScriptInt, ScriptString } from '../ScriptObject';
-import { AssignmentStatement, ObjectStatement } from 'ast';
-import { ItemScript } from './ItemScript';
+import { getInt, getString, ScriptInt, ScriptString } from '../../Script';
 import { ClothingItem } from './ClothingItem';
+import { ParseBag } from '../../parser';
 
 export class AlarmClockClothingItem extends ClothingItem {
-
     alarmSound: ScriptString;
     soundRadius: ScriptInt;
 
-    constructor(statement: ObjectStatement) {
-        super(statement);
+    constructor(bag: ParseBag) {
+        super(bag, 'AlarmClockClothing');
     }
 
-    onStatement(statement: AssignmentStatement): boolean {
-        const property = statement.id.value;
+    onPropertyObject(bag: ParseBag, property: string): boolean {
+        return super.onPropertyObject(bag, property);
+    }
+
+    onPropertyValue(property: string, value: string): boolean {
         switch (property.toLowerCase()) {
             case 'alarmsound':
-                this.alarmSound = getString(statement);
+                this.alarmSound = getString(value);
                 return true;
             case 'soundradius':
-                this.soundRadius = getInt(statement);
+                this.soundRadius = getInt(value);
                 return true;
         }
-        return super.onStatement(statement);
-    }
-
-    allowCustomProperties(): boolean {
-        return true;
-    }
-
-    getType(): String {
-        return 'AlarmClockClothing';
+        return super.onPropertyValue(property, value);
     }
 }

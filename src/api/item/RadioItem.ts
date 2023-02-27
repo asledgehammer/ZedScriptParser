@@ -1,6 +1,6 @@
-import { getBoolean, getInt, ScriptBoolean, ScriptInt } from '../ScriptObject';
-import { AssignmentStatement, ObjectStatement } from 'ast';
+import { getBoolean, getInt, ScriptBoolean, ScriptInt } from '../../Script';
 import { ItemScript } from './ItemScript';
+import { ParseBag } from '../../parser';
 
 export class RadioItem extends ItemScript {
     acceptMediaType: ScriptInt;
@@ -16,58 +16,53 @@ export class RadioItem extends ItemScript {
     twoWay: ScriptBoolean;
     usesBattery: ScriptBoolean;
 
-    constructor(statement: ObjectStatement) {
-        super(statement);
+    constructor(bag: ParseBag) {
+        super(bag, '=', 'Radio');
     }
 
-    onStatement(statement: AssignmentStatement): boolean {
-        const property = statement.id.value;
-        switch (property.toLowerCase()) {
+    onPropertyObject(_: ParseBag, __: string): boolean {
+        return super.onPropertyObject(_, __);
+    }
+
+    onPropertyValue(property: string, value: string): boolean {
+        switch(property.toLowerCase()) {
             case 'acceptmediatype':
-                this.acceptMediaType = getInt(statement);
+                this.acceptMediaType = getInt(value);
                 return true;
             case 'basevolumerange':
-                this.baseVolumeRange = getInt(statement);
+                this.baseVolumeRange = getInt(value);
                 return true;
             case 'ishightier':
-                this.isHighTier = getBoolean(statement);
+                this.isHighTier = getBoolean(value);
                 return true;
             case 'isportable':
-                this.isPortable = getBoolean(statement);
+                this.isPortable = getBoolean(value);
                 return true;
             case 'istelevision':
-                this.isTelevision = getBoolean(statement);
+                this.isTelevision = getBoolean(value);
                 return true;
             case 'maxchannel':
-                this.maxChannel = getInt(statement);
+                this.maxChannel = getInt(value);
                 return true;
             case 'micrange':
-                this.micRange = getInt(statement);
+                this.micRange = getInt(value);
                 return true;
             case 'minchannel':
-                this.minChannel = getInt(statement);
+                this.minChannel = getInt(value);
                 return true;
             case 'notransmit':
-                this.noTransmit = getBoolean(statement);
+                this.noTransmit = getBoolean(value);
                 return true;
             case 'transmitrange':
-                this.transmitRange = getInt(statement);
+                this.transmitRange = getInt(value);
                 return true;
             case 'twoway':
-                this.twoWay = getBoolean(statement);
+                this.twoWay = getBoolean(value);
                 return true;
             case 'usesbattery':
-                this.usesBattery = getBoolean(statement);
+                this.usesBattery = getBoolean(value);
                 return true;
         }
-        return super.onStatement(statement);
-    }
-
-    allowCustomProperties(): boolean {
-        return true;
-    }
-
-    getType(): String {
-        return 'Radio';
+        return super.onPropertyValue(property, value);
     }
 }

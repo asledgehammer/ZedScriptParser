@@ -1,52 +1,97 @@
-import { AssignmentStatement, ObjectStatement } from 'ast';
+import { ParseBag, ParseError } from '../parser';
+import { getString, Script, ScriptString, ScriptStringArray } from '../Script';
 import { CopyFrame, ScriptCopyFrameArray } from './CopyFrame';
 import { CopyFrames, ScriptCopyFramesArray } from './CopyFrames';
-import {
-    getString,
-    ScriptObject,
-    ScriptString,
-    ScriptStringArray,
-} from './ScriptObject';
 
-export class AnimationScript extends ScriptObject {
-    meshFile: ScriptString;
+export class AnimationScript extends Script {
     animationDirectories: ScriptStringArray;
-
     copyFrame: ScriptCopyFrameArray;
     copyFrames: ScriptCopyFramesArray;
+    meshName: ScriptString;
 
-    constructor(statement: ObjectStatement) {
-        super(statement);
+    constructor(bag: ParseBag) {
+        super(bag, '=');
     }
 
-    onStatement(statement: AssignmentStatement): boolean {
-        const property = statement.id.value;
-        switch (property.toLowerCase()) {
+    onPropertyObject(bag: ParseBag, property: string): boolean {
+        switch(property.toLowerCase()) {
             case 'copyframe':
+                if (bag.next() !== '{') {
+                    throw new ParseError(`Expected '{'`);
+                }
                 if (this.copyFrame == null) this.copyFrame = [];
-                this.copyFrame.push(new CopyFrame(statement));
+                const copyFrame = new CopyFrame();
+                copyFrame.parse(bag);
+                this.copyFrame.push(copyFrame);
                 return true;
             case 'copyframes':
-                if (this.copyFrames == null) this.copyFrames = [];
-                this.copyFrames.push(new CopyFrames(statement));
-                return true;
-            case 'meshname':
-                this.meshFile = getString(statement);
-                return true;
-            case 'animationdirectory':
-                const value = getString(statement)!!;
-                if (value != null) {
-                    if (this.animationDirectories == null) {
-                        this.animationDirectories = [];
-                    }
-                    this.animationDirectories.push(value);
+                if (bag.next() !== '{') {
+                    throw new ParseError(`Expected '{'`);
                 }
+                if (this.copyFrames == null) this.copyFrames = [];
+                const copyFrames = new CopyFrames();
+                copyFrames.parse(bag);
+                this.copyFrames.push(copyFrames);
                 return true;
         }
         return false;
     }
 
-    allowCustomProperties(): boolean {
-        return true;
+    onPropertyValue(property: string, value: string): boolean {
+        switch (property.toLowerCase()) {
+            case 'animationdirectory':
+                if (this.animationDirectories == null) {
+                    this.animationDirectories = [];
+                }
+                this.animationDirectories.push(getString(value));
+                return true;
+            case 'meshname':
+                this.meshName = getString(value);
+                return true;
+        }        
+        return false;
+    }
+
+    parse(bag: ParseBag) {
+        while (!bag.isEOF()) {
+            const curr = bag.next();
+            if (curr === '}') return;
+
+            const split = curr.split('=');
+            const property = split[0];
+            const value = split[1];
+            const propLower = property.toLowerCase();
+
+            switch (propLower) {
+                case 'animationdirectory':
+                    if (this.animationDirectories == null) {
+                        this.animationDirectories = [];
+                    }
+                    this.animationDirectories.push(getString(value)!!);
+                    break;
+                case 'meshname':
+                    this.meshName = getString(value);
+                    break;
+                case 'copyframe':
+                    if (bag.next() !== '{') {
+                        throw new ParseError(`Expected '{'`);
+                    }
+                    if (this.copyFrame == null) this.copyFrame = [];
+                    const copyFrame = new CopyFrame();
+                    copyFrame.parse(bag);
+                    this.copyFrame.push(copyFrame);
+                    break;
+                case 'copyframes':
+                    if (bag.next() !== '{') {
+                        throw new ParseError(`Expected '{'`);
+                    }
+                    if (this.copyFrames == null) this.copyFrames = [];
+                    const copyFrames = new CopyFrames();
+                    copyFrames.parse(bag);
+                    this.copyFrames.push(copyFrames);
+                    break;
+                default:
+            }
+        }
     }
 }

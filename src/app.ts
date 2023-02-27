@@ -3,13 +3,15 @@
 import * as fs from 'fs';
 import { scanDir } from './utils';
 import { LexerOptions, tokenize } from './lexer';
+import { parse } from './parser';
 
 const doFile = (path: string, options: LexerOptions) => {
     console.log(`[ZedScriptParse] :: Parsing '${path}'`);
     const tokens = tokenize(path, options);
+    const parsed = parse(tokens.tokens as string[]);
     fs.writeFileSync(
-        path.replace('.txt', '.tokens.json'),
-        JSON.stringify(tokens, null, 4),
+        path.replace('.txt', '.json'),
+        JSON.stringify({modules: parsed}, null, 4),
     );
 };
 

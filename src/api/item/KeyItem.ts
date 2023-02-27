@@ -1,34 +1,28 @@
-import { getBoolean, ScriptBoolean } from '../../api/ScriptObject';
-import { AssignmentStatement, ObjectStatement } from 'ast';
+import { getBoolean, ScriptBoolean } from '../../Script';
 import { ItemScript } from './ItemScript';
+import { ParseBag } from '../../parser';
 
 export class KeyItem extends ItemScript {
-
     digitalPadlock: ScriptBoolean;
     padlock: ScriptBoolean;
 
-    constructor(statement: ObjectStatement) {
-        super(statement);
+    constructor(bag: ParseBag) {
+        super(bag, '=', 'Key');
     }
 
-    onStatement(statement: AssignmentStatement): boolean {
-        const property = statement.id.value;
+    onPropertyObject(_: ParseBag, __: string): boolean {
+        return super.onPropertyObject(_, __);
+    }
+
+    onPropertyValue(property: string, value: string): boolean {
         switch (property.toLowerCase()) {
             case 'digitalpadlock':
-                this.digitalPadlock = getBoolean(statement);
+                this.digitalPadlock = getBoolean(value);
                 return true;
             case 'padlock':
-                this.padlock = getBoolean(statement);
+                this.padlock = getBoolean(value);
                 return true;
         }
-        return super.onStatement(statement);
-    }
-
-    allowCustomProperties(): boolean {
-        return true;
-    }
-
-    getType(): String {
-        return 'Key';
+        return super.onPropertyValue(property, value);
     }
 }

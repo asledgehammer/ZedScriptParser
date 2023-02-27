@@ -1,23 +1,16 @@
-import { AssignmentStatement, ObjectStatement } from 'ast';
+import { ParseBag } from '../../parser';
 import { ItemScript } from './ItemScript';
 
 export class MoveableItem extends ItemScript {
-    constructor(statement: ObjectStatement) {
-        super(statement);
+    constructor(bag: ParseBag) {
+        super(bag, '=', 'Moveable');
     }
 
-    onStatement(statement: AssignmentStatement): boolean {
-        const property = statement.id.value;
-        switch (property.toLowerCase()) {
-        }
-        return super.onStatement(statement);
+    onPropertyObject(_: ParseBag, __: string): boolean {
+        return super.onPropertyObject(_, __);
     }
 
-    allowCustomProperties(): boolean {
-        return true;
-    }
-
-    getType(): String {
-        return 'Moveable';
+    onPropertyValue(property: string, value: string): boolean {
+        return super.onPropertyValue(property, value);
     }
 }

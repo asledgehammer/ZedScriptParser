@@ -3,12 +3,11 @@ import {
     getInt,
     getString,
     ScriptBoolean,
-    ScriptFloat,
     ScriptInt,
     ScriptString,
-} from '../ScriptObject';
-import { AssignmentStatement, ObjectStatement } from 'ast';
+} from '../../Script';
 import { ItemScript } from './ItemScript';
+import { ParseBag } from '../../parser';
 
 export class DrainableItem extends ItemScript {
     cantBeConsolided: ScriptBoolean;
@@ -22,52 +21,47 @@ export class DrainableItem extends ItemScript {
     useWhileUnequipped: ScriptBoolean;
     vehicleType: ScriptInt;
 
-    constructor(statement: ObjectStatement) {
-        super(statement);
+    constructor(bag: ParseBag) {
+        super(bag, '=', 'Drainable');
     }
 
-    onStatement(statement: AssignmentStatement): boolean {
-        const property = statement.id.value;
+    onPropertyObject(bag: ParseBag, property: string): boolean {
+        return super.onPropertyObject(bag, property);
+    }
+
+    onPropertyValue(property: string, value: string): boolean {
         switch (property.toLowerCase()) {
             case 'cantbeconsolided':
-                this.cantBeConsolided = getBoolean(statement);
+                this.cantBeConsolided = getBoolean(value);
                 return true;
             case 'consolidateoption':
-                this.consolidateOption = getString(statement);
+                this.consolidateOption = getString(value);
                 return true;
             case 'fillfromdispensersound':
-                this.fillFromDispenserSound = getString(statement);
+                this.fillFromDispenserSound = getString(value);
                 return true;
             case 'fillfromtapsound':
-                this.fillFromTapSound = getString(statement);
+                this.fillFromTapSound = getString(value);
                 return true;
             case 'hairdye':
-                this.hairDye = getBoolean(statement);
+                this.hairDye = getBoolean(value);
                 return true;
             case 'mechanicsitem':
-                this.mechanicsItem = getBoolean(statement);
+                this.mechanicsItem = getBoolean(value);
                 return true;
             case 'replaceondeplete':
-                this.replaceOnDeplete = getString(statement);
+                this.replaceOnDeplete = getString(value);
                 return true;
             case 'ticksperequipuse':
-                this.ticksPerEquipUse = getInt(statement);
+                this.ticksPerEquipUse = getInt(value);
                 return true;
             case 'usewhileunequipped':
-                this.useWhileUnequipped = getBoolean(statement);
+                this.useWhileUnequipped = getBoolean(value);
                 return true;
             case 'vehicletype':
-                this.vehicleType = getInt(statement);
+                this.vehicleType = getInt(value);
                 return true;
         }
-        return super.onStatement(statement);
-    }
-
-    allowCustomProperties(): boolean {
-        return true;
-    }
-
-    getType(): String {
-        return 'Draining';
+        return super.onPropertyValue(property, value);
     }
 }

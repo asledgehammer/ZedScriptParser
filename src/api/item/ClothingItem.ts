@@ -7,9 +7,9 @@ import {
     ScriptFloat,
     ScriptInt,
     ScriptString,
-} from '../ScriptObject';
-import { AssignmentStatement, ObjectStatement } from 'ast';
+} from '../../Script';
 import { ItemScript } from './ItemScript';
+import { ParseBag } from '../../parser';
 
 export class ClothingItem extends ItemScript {
     biteDefense: ScriptFloat;
@@ -32,79 +32,74 @@ export class ClothingItem extends ItemScript {
     windResistance: ScriptFloat;
     worldRender: ScriptBoolean;
 
-    constructor(statement: ObjectStatement) {
-        super(statement);
+    constructor(bag: ParseBag, type: string = 'Clothing') {
+        super(bag, '=', type);
     }
 
-    onStatement(statement: AssignmentStatement): boolean {
-        const property = statement.id.value;
+    onPropertyObject(bag: ParseBag, property: string): boolean {
+        return super.onPropertyObject(bag, property);
+    }
+
+    onPropertyValue(property: string, value: string): boolean {
         switch (property.toLowerCase()) {
             case 'bitedefense':
-                this.biteDefense = getFloat(statement);
+                this.biteDefense = getFloat(value);
                 return true;
             case 'bulletdefense':
-                this.bulletDefense = getFloat(statement);
+                this.bulletDefense = getFloat(value);
                 return true;
             case 'canhaveholes':
-                this.canHaveHoles = getBoolean(statement);
+                this.canHaveHoles = getBoolean(value);
                 return true;
             case 'chancetofall':
-                this.chanceToFall = getInt(statement);
+                this.chanceToFall = getInt(value);
                 return true;
             case 'combatspeedmodifier':
-                this.combatSpeedModifier = getFloat(statement);
+                this.combatSpeedModifier = getFloat(value);
                 return true;
             case 'conditionlowerchanceonein':
-                this.conditionLowerChanceOneIn = getInt(statement);
+                this.conditionLowerChanceOneIn = getInt(value);
                 return true;
             case 'cosmetic':
-                this.cosmetic = getBoolean(statement);
+                this.cosmetic = getBoolean(value);
                 return true;
             case 'neckprotectionmodifier':
-                this.neckProtectionModifier = getFloat(statement);
+                this.neckProtectionModifier = getFloat(value);
                 return true;
             case 'removeonbroken':
-                this.removeOnBroken = getBoolean(statement);
+                this.removeOnBroken = getBoolean(value);
                 return true;
             case 'runspeedmodifier':
-                this.runSpeedModifier = getFloat(statement);
+                this.runSpeedModifier = getFloat(value);
                 return true;
             case 'scratchdefense':
-                this.scratchDefense = getFloat(statement);
+                this.scratchDefense = getFloat(value);
                 return true;
             case 'spritename':
-                this.spriteName = getString(statement);
+                this.spriteName = getString(value);
                 return true;
             case 'stomppower':
-                this.stompPower = getFloat(statement);
+                this.stompPower = getFloat(value);
                 return true;
             case 'temperature':
-                this.temperature = getFloat(statement);
+                this.temperature = getFloat(value);
                 return true;
             case 'insulation':
-                this.insulation = getFloat(statement);
+                this.insulation = getFloat(value);
                 return true;
             case 'waterresistance':
-                this.waterResistance = getFloat(statement);
+                this.waterResistance = getFloat(value);
                 return true;
             case 'weightwet':
-                this.weightWet = getFloat(statement);
+                this.weightWet = getFloat(value);
                 return true;
             case 'windresistance':
-                this.windResistance = getFloat(statement);
+                this.windResistance = getFloat(value);
                 return true;
             case 'worldrender':
-                this.worldRender = getBoolean(statement);
+                this.worldRender = getBoolean(value);
                 return true;
         }
-        return super.onStatement(statement);
-    }
-
-    allowCustomProperties(): boolean {
-        return true;
-    }
-
-    getType(): String {
-        return 'Clothing';
+        return super.onPropertyValue(property, value);
     }
 }

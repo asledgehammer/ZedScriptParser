@@ -6,9 +6,9 @@ import {
     ScriptInt,
     ScriptString,
     ScriptStringArray,
-} from '../ScriptObject';
-import { AssignmentStatement, ObjectStatement } from 'ast';
+} from '../../Script';
 import { ItemScript } from './ItemScript';
+import { ParseBag } from '../../parser';
 
 export class WeaponPartItem extends ItemScript {
     aimingTimeModifier: ScriptInt;
@@ -23,59 +23,54 @@ export class WeaponPartItem extends ItemScript {
     reloadTimeModifier: ScriptInt;
     weightModifier: ScriptFloat;
 
-    constructor(statement: ObjectStatement) {
-        super(statement);
+    constructor(bag: ParseBag) {
+        super(bag, '=', 'WeaponPart');
     }
 
-    onStatement(statement: AssignmentStatement): boolean {
-        const property = statement.id.value;
+    onPropertyObject(_: ParseBag, __: string): boolean {
+        return super.onPropertyObject(_, __);
+    }
+
+    onPropertyValue(property: string, value: string): boolean {
         switch (property.toLowerCase()) {
             case 'aimingtimemodifier':
-                this.aimingTimeModifier = getInt(statement);
+                this.aimingTimeModifier = getInt(value);
                 return true;
             case 'anglemodifier':
-                this.angleModifier = getFloat(statement);
+                this.angleModifier = getFloat(value);
                 return true;
             case 'damagemodifier':
-                this.damageModifier = getFloat(statement);
+                this.damageModifier = getFloat(value);
                 return true;
             case 'hitchancemodifier':
-                this.hitChanceModifier = getInt(statement);
+                this.hitChanceModifier = getInt(value);
                 return true;
             case 'maxrangemodifier':
-                this.maxRangeModifier = getInt(statement);
+                this.maxRangeModifier = getInt(value);
                 return true;
             case 'minrangemodifier':
-                this.minRangeModifier = getInt(statement);
+                this.minRangeModifier = getInt(value);
                 return true;
             case 'mounton':
-                this.mountOn = getString(statement)
+                this.mountOn = getString(value)
                     ?.split(';')
                     .map((a) => {
                         return a.trim();
                     });
                 return true;
             case 'parttype':
-                this.partType = getString(statement);
+                this.partType = getString(value);
                 return true;
             case 'recoildelaymodifier':
-                this.recoilDelayModifier = getInt(statement);
+                this.recoilDelayModifier = getInt(value);
                 return true;
             case 'reloadtimemodifier':
-                this.reloadTimeModifier = getInt(statement);
+                this.reloadTimeModifier = getInt(value);
                 return true;
             case 'weightmodifier':
-                this.weightModifier = getFloat(statement);
+                this.weightModifier = getFloat(value);
                 return true;
         }
-        return super.onStatement(statement);
-    }
-
-    allowCustomProperties(): boolean {
-        return true;
-    }
-
-    getType(): String {
-        return 'WeaponPart';
+        return super.onPropertyValue(property, value);
     }
 }

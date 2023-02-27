@@ -1,20 +1,20 @@
-import { AssignmentStatement, ObjectStatement } from 'ast';
+import { ParseBag } from '../parser';
 import {
     getBoolean,
     getInt,
     getString,
+    Script,
     ScriptBoolean,
     ScriptInt,
-    ScriptObject,
     ScriptString,
-} from './ScriptObject';
+} from '../Script';
 import { SoundClip } from './SoundClip';
 
 export type MasterVolume = 'Primary' | 'Ambient' | 'Music' | 'VehicleEngine';
 export type ScriptMasterVolume = MasterVolume | undefined;
 export type ScriptSoundClip = SoundClip | undefined;
 
-export class SoundScript extends ScriptObject {
+export class SoundScript extends Script {
     category: ScriptString;
     is3D: ScriptBoolean;
     loop: ScriptBoolean;
@@ -22,31 +22,35 @@ export class SoundScript extends ScriptObject {
     maxInstancesPerEmitter: ScriptInt;
     clip: ScriptSoundClip;
 
-    constructor(statement: ObjectStatement) {
-        super(statement);
-        this.ignoreProperties['__id'] = true;
+    constructor(bag: ParseBag) {
+        super(bag, '=');
     }
 
-    onStatement(statement: AssignmentStatement): boolean {
-        const property = statement.id.value;
+    onPropertyObject(bag: ParseBag, property: string): boolean {
+        switch (property.toLowerCase()) {
+            case 'clip':
+                this.clip = new SoundClip(bag);
+                return true;
+        }
+        return false;
+    }
+
+    onPropertyValue(property: string, value: string): boolean {
         switch (property.toLowerCase()) {
             case 'category':
-                this.category = getString(statement);
+                this.category = getString(value);
                 return true;
             case 'is3d':
-                this.is3D = getBoolean(statement);
+                this.is3D = getBoolean(value);
                 return true;
             case 'loop':
-                this.loop = getBoolean(statement);
+                this.loop = getBoolean(value);
                 return true;
             case 'master':
-                this.master = getString(statement) as MasterVolume;
+                this.master = getString(value) as MasterVolume;
                 return true;
             case 'maxinstancesperemitter':
-                this.maxInstancesPerEmitter = getInt(statement);
-                return true;
-            case 'clip':
-                this.clip = new SoundClip(statement);
+                this.maxInstancesPerEmitter = getInt(value);
                 return true;
         }
         return false;
@@ -68,7 +72,7 @@ export class SoundScript extends ScriptObject {
             /* (Only add custom properties if populated) */
             if (
                 key === 'customProperties' &&
-                Object.keys(this.customProperties!!).length === 0
+                Object.keys(this.__properties!!).length === 0
             ) {
                 continue;
             }
@@ -81,9 +85,5 @@ export class SoundScript extends ScriptObject {
             o[key as string] = (this as any)[key];
         }
         return o;
-    }
-
-    allowCustomProperties(): boolean {
-        return true;
     }
 }

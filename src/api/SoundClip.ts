@@ -1,17 +1,16 @@
-import { AssignmentStatement } from 'ast';
+import { ParseBag } from '../parser';
 import {
     getFloat,
     getInt,
     getString,
+    Script,
     ScriptFloat,
     ScriptInt,
     ScriptString,
     ScriptStringArray,
-} from './ScriptObject';
+} from '../Script';
 
-export class SoundClip {
-    __id: string;
-
+export class SoundClip extends Script {
     distanceMin: ScriptInt;
     distanceMax: ScriptInt;
     event: ScriptStringArray;
@@ -21,64 +20,45 @@ export class SoundClip {
     reverbFactor: ScriptFloat;
     reverbMaxRange: ScriptFloat;
 
-    constructor(statement: AssignmentStatement) {
-        if (statement.value.type !== 'ObjectConstructor') {
-            throw new Error();
-        }
-
-        this.__id = statement.id.value;
-        if (this.__id == null || this.__id === '') {
-            throw new Error();
-        }
-
-        for (const s of statement.value.body) {
-            this.onStatement(s);
-        }
+    constructor(bag: ParseBag) {
+        super(bag, '=');
     }
 
-    onStatement(statement: AssignmentStatement): boolean {
-        const property = statement.id.value;
+    onPropertyObject(bag: ParseBag, property: string): boolean {
+        return false;
+    }
+
+    onPropertyValue(property: string, value: string): boolean {
         switch (property.toLowerCase()) {
             case 'distancemin':
-                this.distanceMin = getInt(statement);
+                this.distanceMin = getInt(value);
                 return true;
             case 'distancemax':
-                this.distanceMax = getInt(statement);
+                this.distanceMax = getInt(value);
                 return true;
             case 'event':
-                this.event = getString(statement)
+                this.event = getString(value)
                     ?.split('/')
                     .map((a) => {
                         return a.trim();
                     });
                 return true;
             case 'file':
-                this.file = getString(statement);
+                this.file = getString(value);
                 return true;
             case 'pitch':
-                this.pitch = getFloat(statement);
+                this.pitch = getFloat(value);
                 return true;
             case 'volume':
-                this.volume = getFloat(statement);
+                this.volume = getFloat(value);
                 return true;
             case 'reverbfactor':
-                this.reverbFactor = getFloat(statement);
+                this.reverbFactor = getFloat(value);
                 return true;
             case 'reverbmaxrange':
-                this.reverbMaxRange = getFloat(statement);
+                this.reverbMaxRange = getFloat(value);
                 return true;
-            default:
-                console.warn(`[${this.__id}] :: Unknown property: ${property}`);
-                return false;
         }
-    }
-
-    
-
-    toJSON(): any {
-        const o = { ...this };
-        // @ts-ignore
-        o.__id = undefined;
-        return o;
+        return false;
     }
 }

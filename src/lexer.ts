@@ -57,8 +57,8 @@ export class LexerBag {
 
     cursor(o: number = this.offset, force: boolean = false): LexerCursor {
         const c = { row: 1, column: 1 };
-        if(!this.options.location && !force) {
-            return { row: -1, column: -1};
+        if (!this.options.location && !force) {
+            return { row: -1, column: -1 };
         }
         for (let i = 0; i < o; i++) {
             const char = this.raw[i];
@@ -109,7 +109,10 @@ export class LexerBag {
         console.log(`[${cursor.row}:${cursor.column}] :: ${message}`);
     }
 
-    error(message: string, cursor: LexerCursor = this.cursor(this.offset, true)): void {
+    error(
+        message: string,
+        cursor: LexerCursor = this.cursor(this.offset, true),
+    ): void {
         throw new LexerError(cursor, message);
     }
 
@@ -201,7 +204,7 @@ function stepInProperty(
         }
 
         if (line.indexOf(operator) === -1) {
-            if(line === ',') continue;
+            if (line === ',') continue;
             bag.error(
                 `Illegal line in ${module}.${definition}.${property}: ${line}`,
             );
@@ -265,7 +268,7 @@ function stepInDefinition(
 
         if (line.indexOf(operator) !== -1) {
             bag.token(line.replace(/\,/g, '').replace(/\s/g, ''), start, stop);
-        } else if(line === ',') {
+        } else if (line === ',') {
             continue;
         } else {
             const propertyLower = line.toLowerCase();

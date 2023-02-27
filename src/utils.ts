@@ -24,8 +24,6 @@ export const removeComments = (t: string): string => {
 };
 
 export function tokenizeScript(text: string): string[] {
-    
-
     const lines = removeSyntaxErrors(removeComments(text)).split(/\r\n/g);
 
     let tokens: string[] = [];

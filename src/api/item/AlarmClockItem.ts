@@ -1,23 +1,16 @@
-import { AssignmentStatement, ObjectStatement } from 'ast';
+import { ParseBag } from '../../parser';
 import { ItemScript } from './ItemScript';
 
 export class AlarmClockItem extends ItemScript {
-    constructor(statement: ObjectStatement) {
-        super(statement);
+    constructor(bag: ParseBag) {
+        super(bag, '=', 'AlarmClock');
     }
 
-    onStatement(statement: AssignmentStatement): boolean {
-        const property = statement.id.value;
-        switch (property.toLowerCase()) {
-        }
-        return super.onStatement(statement);
+    onPropertyObject(bag: ParseBag, property: string): boolean {
+        return super.onPropertyObject(bag, property);
     }
 
-    allowCustomProperties(): boolean {
-        return true;
-    }
-
-    getType(): String {
-        return 'AlarmClock';
+    onPropertyValue(property: string, value: string): boolean {
+        return super.onPropertyValue(property, value);
     }
 }

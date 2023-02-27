@@ -1,38 +1,41 @@
-import { AssignmentStatement, ObjectStatement } from 'ast';
 import { Fixer, ScriptFixer, ScriptFixerArray } from './Fixer';
 import {
     getFloat,
     getString,
-    getStringArray,
+    Script,
     ScriptFloat,
-    ScriptObject,
     ScriptStringArray,
-} from './ScriptObject';
+} from '../Script';
 import { FixerSkill } from './FixerSkill';
+import { ParseBag } from '../parser';
 
-export class FixingScript extends ScriptObject {
+export class FixingScript extends Script {
     require: ScriptStringArray;
     fixers: ScriptFixerArray;
     globalItem: ScriptFixer;
     conditionModifier: ScriptFloat;
 
-    constructor(statement: ObjectStatement) {
-        super(statement);
+    constructor(bag: ParseBag) {
+        super(bag, '=');
     }
 
-    onStatement(statement: AssignmentStatement): boolean {
-        const property = statement.id.value;
+    onPropertyObject(bag: ParseBag, property: string): boolean {
+        return false;
+    }
+
+    onPropertyValue(property: string, value: string): boolean {
         let raw: string | null | undefined;
         let split: string[] = [];
+
         switch (property.toLowerCase()) {
             case 'require':
-                this.require = getString(statement)?.split(';');
+                this.require = getString(value)?.split(';');
                 return true;
             case 'conditionmodifier':
-                this.conditionModifier = getFloat(statement);
+                this.conditionModifier = getFloat(value);
                 return true;
             case 'globalitem':
-                raw = getString(statement)!!;
+                raw = getString(value)!!;
                 if (raw.indexOf('=') !== -1) {
                     const split = raw.split('=');
                     const item = split[0];
@@ -44,7 +47,7 @@ export class FixingScript extends ScriptObject {
                 return true;
             case 'fixer':
                 if (this.fixers == null) this.fixers = [];
-                raw = getString(statement);
+                raw = getString(value);
                 if (raw == null) return true;
 
                 if (raw.indexOf(';') !== -1) {
@@ -60,7 +63,6 @@ export class FixingScript extends ScriptObject {
                             this.fixers.push(new Fixer(entry.trim(), 1));
                         }
                     }
-
                 } else {
                     split = raw.split(';');
 
@@ -92,9 +94,5 @@ export class FixingScript extends ScriptObject {
                 return true;
         }
         return false;
-    }
-
-    allowCustomProperties(): boolean {
-        return true;
     }
 }

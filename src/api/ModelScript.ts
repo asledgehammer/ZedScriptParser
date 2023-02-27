@@ -1,17 +1,17 @@
-import { AssignmentStatement, ObjectStatement } from 'ast';
+import { ParseBag } from '../parser';
 import { BoneWeight, ScriptBoneWeightArray } from './BoneWeight';
 import {
     getBoolean,
     getFloat,
     getString,
+    Script,
     ScriptBoolean,
     ScriptFloat,
-    ScriptObject,
     ScriptString,
     ScriptStringArray,
-} from './ScriptObject';
+} from '../Script';
 
-export class ModelScript extends ScriptObject {
+export class ModelScript extends Script {
     animationsMesh: ScriptString;
     boneWeight: ScriptBoneWeightArray;
     invertX: ScriptBoolean;
@@ -21,21 +21,24 @@ export class ModelScript extends ScriptObject {
     static: ScriptBoolean;
     texture: ScriptStringArray;
 
-    constructor(statement: ObjectStatement) {
-        super(statement);
+    constructor(bag: ParseBag) {
+        super(bag, '=');
     }
 
-    onStatement(statement: AssignmentStatement): boolean {
-        const property = statement.id.value;
+    onPropertyObject(bag: ParseBag, property: string): boolean {
+        return false;
+    }
+
+    onPropertyValue(property: string, value: string): boolean {
         switch (property.toLowerCase()) {
             case 'animationsmesh':
-                this.animationsMesh = getString(statement);
+                this.animationsMesh = getString(value);
                 return true;
             case 'boneweight':
                 if (this.boneWeight == null) {
                     this.boneWeight = [];
                 }
-                const raw = getString(statement)?.trim();
+                const raw = getString(value)?.trim();
                 if (raw == null) return true;
 
                 if (raw.indexOf(' ') !== -1) {
@@ -48,22 +51,22 @@ export class ModelScript extends ScriptObject {
                 }
                 return true;
             case 'invertx':
-                this.invertX = getBoolean(statement);
+                this.invertX = getBoolean(value);
                 return true;
             case 'mesh':
-                this.mesh = getString(statement)?.split('/');
+                this.mesh = getString(value)?.split('/');
                 return true;
             case 'scale':
-                this.scale = getFloat(statement);
+                this.scale = getFloat(value);
                 return true;
             case 'shader':
-                this.shader = getString(statement);
+                this.shader = getString(value);
                 return true;
             case 'static':
-                this.static = getBoolean(statement);
+                this.static = getBoolean(value);
                 return true;
             case 'texture':
-                this.texture = getString(statement)
+                this.texture = getString(value)
                     ?.split('/')
                     .map((a) => {
                         return a.trim();
@@ -71,9 +74,5 @@ export class ModelScript extends ScriptObject {
                 return true;
         }
         return false;
-    }
-
-    allowCustomProperties(): boolean {
-        return true;
     }
 }
