@@ -393,6 +393,189 @@ function stepInRecipe(bag: LexerBag, module: string, category: string) {
     }
 }
 
+function stepInVehicleTemplate(bag: LexerBag, module: string) {
+    let until = bag.until([' ', '\n', '{'], true);
+    if (until !== 'vehicle') {
+        bag.error(`Expected 'vehicle'`);
+        return;
+    }
+
+    const catToken = 'template vehicle';
+    bag.token(catToken, bag.cursor(bag.offset - catToken.length), bag.cursor());
+    const name = stepInObjectName(bag);
+    stepInOpenBracket(bag);
+
+    let brk = false;
+    while (!brk && !bag.isEOF()) {
+        const start = bag.cursor();
+        const line = bag.until([',', '\n', '}'])?.trim();
+        const stop = bag.cursor(bag.offset - 1);
+
+        if (line == undefined) {
+            bag.error(`EOF in ${catToken}: ${module}.${name}`);
+            return;
+        } else if (line === '') {
+            continue;
+        } else if (line === '}') {
+            bag.token('}', bag.cursor(bag.offset - 1), bag.cursor());
+            break;
+        }
+
+        if (line.indexOf('=') !== -1) {
+            bag.token(line.replace(/\,/g, '').replace(/\s/g, ''), start, stop);
+        } else if (line === ',') {
+            continue;
+        } else {
+            if (line.indexOf(' ') !== -1) {
+                const [propCategory, propName] = line.split(' ');
+                // console.log(propCategory);
+                switch (propCategory.toLowerCase()) {
+                    case 'part':
+                        stepInVehiclePart(bag, module, name, propName);
+                        break;
+                }
+            }
+        }
+    }
+}
+
+function stepInVehiclePart(
+    bag: LexerBag,
+    module: string,
+    template: string,
+    name: string,
+) {
+    bag.token(
+        'part',
+        bag.cursor(bag.offset - (name.length + 5)),
+        bag.cursor(bag.offset - (name.length + 1)),
+    );
+    bag.token(name, bag.cursor(bag.offset - name.length), bag.cursor());
+
+    stepInOpenBracket(bag);
+
+    while (!bag.isEOF()) {
+        const start = bag.cursor();
+        const line = bag.until([',', '\n', '}'])?.trim();
+        const stop = bag.cursor(bag.offset - 1);
+
+        if (line == undefined) {
+            bag.error(`EOF in part: ${module}.${name}`);
+            return;
+        } else if (line === '') {
+            continue;
+        } else if (line === '}') {
+            bag.token('}', bag.cursor(bag.offset - 1), bag.cursor());
+            break;
+        }
+
+        if (line.indexOf('=') !== -1) {
+            bag.token(line.replace(/\,/g, '').replace(/\s/g, ''), start, stop);
+        } else if (line === ',') {
+            continue;
+        } else {
+            if (line.indexOf(' ') !== -1) {
+                const [propCategory, propName] = line.split(' ');
+                switch (propCategory.toLowerCase()) {
+                    case 'table':
+                        stepInVehiclePartTable(bag, module, name, propName);
+                        break;
+                }
+            } else {
+                const lineLower = line.toLowerCase();
+                switch (lineLower) {
+                    case 'lua':
+                        stepInProperty(bag, module, name, lineLower, '=');
+                        break;
+                }
+            }
+        }
+    }
+}
+
+function stepInVehiclePartTable(
+    bag: LexerBag,
+    module: string,
+    template: string,
+    name: string,
+) {
+    bag.token(
+        'table',
+        bag.cursor(bag.offset - (name.length + 6)),
+        bag.cursor(bag.offset - (name.length + 1)),
+    );
+    bag.token(name, bag.cursor(bag.offset - name.length), bag.cursor());
+
+    stepInOpenBracket(bag);
+
+    let brk = false;
+    while (!brk && !bag.isEOF()) {
+        const start = bag.cursor();
+        const line = bag.until([',', '\n', '}'])?.trim();
+        const stop = bag.cursor(bag.offset - 1);
+
+        if (line == undefined) {
+            bag.error(`EOF in part: ${module}.${name}`);
+            return;
+        } else if (line === '' || line === ',') {
+            continue;
+        } else if (line === '}') {
+            bag.token('}', bag.cursor(bag.offset - 1), bag.cursor());
+            break;
+        }
+
+        if (line.indexOf('=') !== -1) {
+            bag.token(line.replace(/\,/g, '').replace(/\s/g, ''), start, stop);
+        } else {
+            const propertyLower = line.toLowerCase();
+            if (line.indexOf(' ') !== -1) {
+                const [propCategory] = line.split(' ');
+                switch (propCategory.toLowerCase()) {
+                }
+            } else {
+                switch (propertyLower) {
+                    case 'items':
+                        stepInVehiclePartTableItems(
+                            bag,
+                            module,
+                            `${template}.${name}`,
+                        );
+                }
+            }
+        }
+    }
+}
+
+function stepInVehiclePartTableItems(
+    bag: LexerBag,
+    module: string,
+    name: string,
+) {
+    bag.token(
+        'items',
+        bag.cursor(bag.offset - (name.length + 6)),
+        bag.cursor(bag.offset - (name.length + 1)),
+    );
+
+    stepInOpenBracket(bag);
+
+    let brk = false;
+    while (!brk && !bag.isEOF()) {
+        const line = bag.until([',', '\n', '}'])?.trim();
+        if (line == undefined) {
+            bag.error(`EOF in part: ${module}.${name}`);
+            return;
+        } else if (line === '') {
+            continue;
+        } else if (line === '}') {
+            bag.token('}', bag.cursor(bag.offset - 1), bag.cursor());
+            break;
+        }
+
+        stepInProperty(bag, module, `${name}.items`, line.trim(), '=');
+    }
+}
+
 function stepInImports(bag: LexerBag, module: string) {
     bag.token(
         'imports',
@@ -443,6 +626,9 @@ function stepInModule(bag: LexerBag) {
                 break;
             case '':
                 continue;
+            case 'imports':
+                stepInImports(bag, module);
+                break;
 
             /* (Definitions using '=' assignments) */
             case 'animation':
@@ -474,8 +660,8 @@ function stepInModule(bag: LexerBag) {
                 stepInRecipe(bag, module, wordLower);
                 break;
 
-            case 'imports':
-                stepInImports(bag, module);
+            case 'template': // "template vehicle {name}"
+                stepInVehicleTemplate(bag, module);
                 break;
 
             default:

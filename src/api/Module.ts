@@ -198,6 +198,7 @@ export class ModuleScript {
         o.multiStageBuilds = toArray(this.multiStageBuilds);
         o.recipes = toArray(this.recipes);
         o.sounds = toArray(this.sounds);
+        o.vehicles = toArray(this.vehicles);
 
         return o;
     }

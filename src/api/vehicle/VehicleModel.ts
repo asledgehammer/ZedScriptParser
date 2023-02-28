@@ -23,6 +23,7 @@ export class VehicleModel extends Script {
             case 'offset': {
                 const [x, y, z] = getString(value).split(' ').map(o=>{ return getFloat(o.trim())});
                 this.offset = {x, y, z};
+                return true;
             }
         }
         return false;

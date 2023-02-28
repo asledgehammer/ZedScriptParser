@@ -1,9 +1,10 @@
 import { ParseBag } from '../Parser';
-import { getString, Script, ScriptVector3 } from './Script';
+import { getInt, getString, Script, ScriptInt, ScriptVector3 } from './Script';
 
 export class Attachment extends Script {
     offset: ScriptVector3;
     rotate: ScriptVector3;
+    zOffset: ScriptInt;
 
     constructor(bag: ParseBag) {
         super(bag, '=');
@@ -29,6 +30,10 @@ export class Attachment extends Script {
                         return parseFloat(o);
                     });
                 this.rotate = { x, y, z };
+                return true;
+            }
+            case 'zoffset': {
+                this.zOffset = getInt(value);
                 return true;
             }
         }

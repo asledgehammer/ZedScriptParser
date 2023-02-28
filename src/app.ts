@@ -39,7 +39,16 @@ const doFolder = (path: string, out: string, options: LexerOptions) => {
     }
 };
 
-doFolder('./assets/media/scripts', './assets/media/scripts_json', {
-    comments: false,
-    location: false,
-});
+// doFolder('./assets/media/scripts', './assets/media/scripts_json', {
+//     comments: false,
+//     location: false,
+// });
+
+doFile(
+    './assets/media/scripts/vehicles/template_battery.txt',
+    './assets/media/scripts_json/vehicles/template_battery.txt',
+    {
+        comments: false,
+        location: false,
+    },
+);
