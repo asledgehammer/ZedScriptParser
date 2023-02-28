@@ -41,7 +41,7 @@ export abstract class Script {
     __properties: { [name: string]: string } | undefined;
     protected readonly ignoreProperties: { [name: string]: boolean } = {};
 
-    readonly __name: string | undefined;
+    __name: string | undefined;
     readonly __operator: '=' | ':';
 
     constructor(
@@ -88,7 +88,7 @@ export abstract class Script {
         } else {
             if (!this.onPropertyToken(bag, curr)) {
                 throw new ParseError(
-                    `${this.__name} :: Unknown property object: ${curr}`,
+                    `${this.__name} :: Unknown property object: '${curr}'`,
                 );
             }
         }

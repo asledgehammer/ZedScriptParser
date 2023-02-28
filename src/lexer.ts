@@ -301,6 +301,7 @@ function stepInDefinition(
             continue;
         } else {
             const propertyLower = line.toLowerCase();
+            console.log({ propertyLower });
             switch (propertyLower) {
                 case 'copyframe':
                     checkProperty(propertyLower, 'animation', category);
@@ -325,7 +326,20 @@ function stepInDefinition(
                         false,
                     );
                     break;
+
                 case 'skin':
+                    checkProperty(propertyLower, 'vehicle', category);
+                    stepInProperty(bag, module, name, propertyLower, '=');
+                    break;
+                case 'sound':
+                    checkProperty(propertyLower, 'vehicle', category);
+                    stepInProperty(bag, module, name, propertyLower, '=');
+                    break;
+                case 'wheel':
+                    checkProperty(propertyLower, 'vehicle', category);
+                    stepInProperty(bag, module, name, propertyLower, '=');
+                    break;
+                case 'lightbar':
                     checkProperty(propertyLower, 'vehicle', category);
                     stepInProperty(bag, module, name, propertyLower, '=');
                     break;
@@ -337,8 +351,91 @@ function stepInDefinition(
                     let brk = false;
                     if (line.indexOf(' ') !== -1) {
                         const [propCategory] = line.split(' ');
+                        console.log({ propCategory });
                         switch (propCategory.toLowerCase()) {
+                            case 'anim':
+                                brk = true;
+                                checkProperty(
+                                    propertyLower,
+                                    ['vehicle'],
+                                    category,
+                                );
+
+                                stepInProperty(
+                                    bag,
+                                    module,
+                                    name,
+                                    propertyLower,
+                                    '=',
+                                    false,
+                                );
+                                break;
+                            case 'area':
+                                brk = true;
+                                checkProperty(
+                                    propertyLower,
+                                    ['vehicle'],
+                                    category,
+                                );
+
+                                stepInProperty(
+                                    bag,
+                                    module,
+                                    name,
+                                    propertyLower,
+                                    '=',
+                                    false,
+                                );
+                                break;
                             case 'attachment':
+                                brk = true;
+                                checkProperty(
+                                    propertyLower,
+                                    ['model', 'vehicle'],
+                                    category,
+                                );
+
+                                stepInProperty(
+                                    bag,
+                                    module,
+                                    name,
+                                    propertyLower,
+                                    '=',
+                                    false,
+                                );
+                                break;
+                            case 'part':
+                                brk = true;
+                                checkProperty(
+                                    propertyLower,
+                                    ['vehicle'],
+                                    category,
+                                );
+
+                                stepInVehiclePart(
+                                    bag,
+                                    module,
+                                    name,
+                                    propertyLower,
+                                );
+                                break;
+                            case 'passenger':
+                                brk = true;
+                                console.log(true);
+                                checkProperty(
+                                    propertyLower,
+                                    ['vehicle'],
+                                    category,
+                                );
+
+                                stepInVehiclePassenger(
+                                    bag,
+                                    module,
+                                    name,
+                                    propertyLower,
+                                );
+                                break;
+                            case 'wheel':
                                 brk = true;
                                 checkProperty(
                                     propertyLower,
@@ -362,6 +459,7 @@ function stepInDefinition(
                             `Illegal line in '${module}.${name}': ${line}`,
                         );
                     }
+                    break;
             }
         }
     }
@@ -396,7 +494,7 @@ function stepInRecipe(bag: LexerBag, module: string, category: string) {
 function stepInVehicleTemplate(bag: LexerBag, module: string) {
     let until = bag.until([' ', '\n', '{'], true);
     if (until !== 'vehicle') {
-        bag.error(`Expected 'vehicle'`);
+        bag.error(`Expected 'vehicle' '${bag.until(['\n'])}'`);
         return;
     }
 
@@ -428,11 +526,43 @@ function stepInVehicleTemplate(bag: LexerBag, module: string) {
         } else {
             if (line.indexOf(' ') !== -1) {
                 const [propCategory, propName] = line.split(' ');
-                // console.log(propCategory);
+                console.log({ propCategory2: propCategory, propName });
                 switch (propCategory.toLowerCase()) {
+                    case 'attachment':
+                        stepInProperty(bag, module, name, line, '=');
+                        break;
+                    case 'area':
+                        stepInProperty(bag, module, name, line, '=');
+                        break;
                     case 'part':
                         stepInVehiclePart(bag, module, name, propName);
                         break;
+                    case 'passenger':
+                        stepInVehiclePassenger(bag, module, name, propName);
+                        break;
+                    case 'wheel':
+                        stepInProperty(bag, module, name, line, '=');
+                        break;
+                }
+            } else {
+                let brk = false;
+                const lineLower = line.toLowerCase();
+                switch (lineLower) {
+                    case 'lightbar':
+                        brk = true;
+                        stepInProperty(bag, module, name, lineLower, '=');
+                        break;
+                    case 'skin':
+                        brk = true;
+                        stepInProperty(bag, module, name, lineLower, '=');
+                        break;
+                    case 'sound':
+                        brk = true;
+                        stepInProperty(bag, module, name, lineLower, '=');
+                        break;
+                }
+                if (!brk) {
+                    bag.error(lineLower + ' ' + bag.peek(-2));
                 }
             }
         }
@@ -476,16 +606,116 @@ function stepInVehiclePart(
         } else {
             if (line.indexOf(' ') !== -1) {
                 const [propCategory, propName] = line.split(' ');
+                console.log({ propCategory, propName });
                 switch (propCategory.toLowerCase()) {
+                    case 'anim':
+                        bag.token(
+                            'anim',
+                            bag.cursor(bag.offset - (name.length + 5)),
+                            bag.cursor(bag.offset - (name.length + 1)),
+                        );
+                        stepInProperty(bag, module, name, propName, '=');
+                        break;
                     case 'table':
                         stepInVehiclePartTable(bag, module, name, propName);
                         break;
                 }
             } else {
                 const lineLower = line.toLowerCase();
+                console.log({ lineLower });
                 switch (lineLower) {
+                    case 'container':
+                        stepInProperty(bag, module, name, lineLower, '=');
+                        break;
+                    case 'door':
+                        stepInProperty(bag, module, name, lineLower, '=');
+                        break;
+                    case 'install':
+                        stepInProperty(bag, module, name, lineLower, '=');
+                        break;
                     case 'lua':
                         stepInProperty(bag, module, name, lineLower, '=');
+                        break;
+                    case 'uninstall':
+                        stepInProperty(bag, module, name, lineLower, '=');
+                        break;
+                    case 'window':
+                        stepInProperty(bag, module, name, lineLower, '=');
+                        break;
+                }
+            }
+        }
+    }
+}
+
+function stepInVehiclePassenger(
+    bag: LexerBag,
+    module: string,
+    template: string,
+    name: string,
+) {
+    bag.token(
+        'passenger',
+        bag.cursor(bag.offset - (name.length + 1 + 'passenger'.length)),
+        bag.cursor(bag.offset - (name.length + 1)),
+    );
+    bag.token(name, bag.cursor(bag.offset - name.length), bag.cursor());
+
+    stepInOpenBracket(bag);
+
+    while (!bag.isEOF()) {
+        const start = bag.cursor();
+        const line = bag.until([',', '\n', '}'])?.trim();
+        const stop = bag.cursor(bag.offset - 1);
+
+        if (line == undefined) {
+            bag.error(`EOF in part: ${module}.${name}`);
+            return;
+        } else if (line === '') {
+            continue;
+        } else if (line === '}') {
+            bag.token('}', bag.cursor(bag.offset - 1), bag.cursor());
+            break;
+        }
+
+        if (line.indexOf('=') !== -1) {
+            bag.token(line.replace(/\,/g, '').replace(/\s/g, ''), start, stop);
+        } else if (line === ',') {
+            continue;
+        } else {
+            if (line.indexOf(' ') !== -1) {
+                const [propCategory, propName] = line.split(' ');
+                console.log({ propCategory, propName });
+                switch (propCategory.toLowerCase()) {
+                    case 'anim':
+                        bag.token(
+                            'anim',
+                            bag.cursor(bag.offset - (name.length + 5)),
+                            bag.cursor(bag.offset - (name.length + 1)),
+                        );
+                        stepInProperty(bag, module, name, propName, '=');
+                        break;
+                    case 'position':
+                        bag.token(
+                            'position',
+                            bag.cursor(
+                                bag.offset -
+                                    (name.length + 1 + 'position'.length),
+                            ),
+                            bag.cursor(bag.offset - (name.length + 1)),
+                        );
+                        stepInProperty(bag, module, name, propName, '=', false);
+                        break;
+                    case 'switchseat':
+                        bag.token(
+                            'switchseat',
+                            bag.cursor(
+                                bag.offset -
+                                    (name.length + 1 + 'switchseat'.length),
+                            ),
+                            bag.cursor(bag.offset - (name.length + 1)),
+                        );
+                        stepInProperty(bag, module, name, propName, '=');
                         break;
                 }
             }
@@ -679,37 +909,53 @@ export const tokenize = (
 ): { tokens: LexerToken[] | string[]; comments?: LexerToken[] | string[] } => {
     const bag = new LexerBag(path, options);
 
-    while (!bag.isEOF()) {
-        const start = bag.cursor();
-        const word = bag.until([' '])?.trim();
-        const stop = bag.cursor(bag.offset - 1);
+    try {
+        while (!bag.isEOF()) {
+            const start = bag.cursor();
+            const word = bag.until([' '])?.trim();
+            const stop = bag.cursor(bag.offset - 1);
 
-        if (word == undefined) break;
-        const wordLower = word.toLowerCase();
+            if (word == undefined) break;
+            const wordLower = word.toLowerCase();
 
-        switch (wordLower) {
-            case 'module':
-                bag.token('module', start, stop);
-                stepInModule(bag);
-                break;
+            switch (wordLower) {
+                case 'module':
+                    bag.token('module', start, stop);
+                    stepInModule(bag);
+                    break;
+            }
         }
-    }
 
-    if (options.location) {
-        return {
-            tokens: bag.tokens,
-            comments: options?.comments ? bag.comments : undefined,
-        };
-    } else {
-        return {
-            tokens: bag.tokens.map((o) => {
-                return o.value;
-            }),
-            comments: options.comments
-                ? bag.comments.map((o) => {
-                      return o.value;
-                  })
-                : undefined,
-        };
+        if (options.location) {
+            return {
+                tokens: bag.tokens,
+                comments: options?.comments ? bag.comments : undefined,
+            };
+        } else {
+            return {
+                tokens: bag.tokens.map((o) => {
+                    return o.value;
+                }),
+                comments: options.comments
+                    ? bag.comments.map((o) => {
+                          return o.value;
+                      })
+                    : undefined,
+            };
+        }
+    } catch (e) {
+        fs.writeFileSync(
+            'error.json',
+            JSON.stringify(
+                {
+                    tokens: bag.tokens.map((o) => {
+                        return o.value;
+                    }),
+                },
+                null,
+                4,
+            ),
+        );
+        throw e;
     }
 };

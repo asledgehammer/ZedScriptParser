@@ -24,7 +24,7 @@ import { RuntimeAnimationScript } from './animation/RuntimeAnimationScript';
 import { SoundScript } from './sound/SoundScript';
 import { SoundTimelineScript } from './sound/SoundTimelineScript';
 import { UniqueRecipeScript } from './recipe/UniqueRecipeScript';
-import { VehicleEngineScript } from './vehicle/VehicleEngineScript';
+import { VehicleEngineRPMScript as VehicleEngineRPMScript } from './vehicle/VehicleEngineRPMScript';
 import { VehicleScript } from './vehicle/VehicleScript';
 import { VehicleTemplateScript } from './vehicle/VehicleTemplateScript';
 import { ParseBag, ParseError } from '../Parser';
@@ -49,7 +49,7 @@ export class ModuleScript {
     readonly uniqueRecipes: { [name: string]: UniqueRecipeScript } = {};
     readonly vehicles: { [name: string]: VehicleScript } = {};
     readonly vehicleTemplates: { [name: string]: VehicleTemplateScript } = {};
-    readonly vehicleEngines: { [name: string]: VehicleEngineScript } = {};
+    readonly vehicleEngines: { [name: string]: VehicleEngineRPMScript } = {};
 
     readonly __name: string;
 
@@ -165,8 +165,17 @@ export class ModuleScript {
                     const vehicle = new VehicleScript(bag);
                     this.vehicles[vehicle.__name!!] = vehicle;
                     break;
+                case 'vehicleenginerpm':
+                    const vehicleEngineRPM = new VehicleEngineRPMScript(bag);
+                    this.vehicleEngines[vehicleEngineRPM.__name!!] = vehicleEngineRPM;
+                    break;
+                case 'template vehicle':
+                    const vehicleTemplate = new VehicleTemplateScript(bag);
+                    this.vehicleTemplates[vehicleTemplate.__name!!] =
+                        vehicleTemplate;
+                    break;
                 default:
-                    console.warn('Unknown category: ' + curr);
+                    console.warn('Unknown Module category: ' + curr);
             }
         }
     }
@@ -191,7 +200,7 @@ export class ModuleScript {
         o.animationsMeshes = toArray(this.animationsMeshes);
         o.evolvedRecipes = toArray(this.evolvedRecipes);
         o.fixings = toArray(this.fixings);
-        o.imports = this.imports;
+        if (this.imports.length) o.imports = this.imports;
         o.items = toArray(this.items);
         o.mannequins = toArray(this.mannequins);
         o.models = toArray(this.models);
@@ -199,6 +208,7 @@ export class ModuleScript {
         o.recipes = toArray(this.recipes);
         o.sounds = toArray(this.sounds);
         o.vehicles = toArray(this.vehicles);
+        o.vehicleTemplates = toArray(this.vehicleTemplates);
 
         return o;
     }

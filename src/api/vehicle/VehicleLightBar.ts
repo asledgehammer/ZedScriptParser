@@ -1,19 +1,18 @@
-import { ParseBag } from '../../Parser';
 import { Script } from '../Script';
+import { ParseBag } from '../../Parser';
 
-export class VehicleEngineScript extends Script {
+export class VehicleLightBar extends Script {
     constructor(bag: ParseBag) {
-        super(bag, ':');
+        super(bag, '=', false, true);
+        this.parse(bag);
     }
 
     onPropertyToken(bag: ParseBag, property: string): boolean {
-        switch (property.toLowerCase()) {
-        }
         return false;
     }
 
     onPropertyValue(property: string, value: string): boolean {
-        switch (property.toLowerCase()) {
+        switch (property.toLowerCase().trim()) {
         }
         return false;
     }
