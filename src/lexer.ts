@@ -1,4 +1,5 @@
 import * as fs from 'fs';
+import { stepInVehicle } from './LexerVehicle';
 
 export type LexerCursor = { row: number; column: number };
 export type LexerLocation = { start: LexerCursor; stop: LexerCursor };
@@ -124,7 +125,7 @@ export class LexerBag {
 ////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////
 
-function stepInOpenBracket(bag: LexerBag): string {
+export function stepInOpenBracket(bag: LexerBag): string {
     if (bag.peek() === '{') {
         const start = bag.cursor();
         bag.next();
@@ -157,7 +158,7 @@ function stepInOpenBracket(bag: LexerBag): string {
     return '{';
 }
 
-function stepInObjectName(bag: LexerBag): string {
+export function stepInObjectName(bag: LexerBag): string {
     const start = bag.cursor();
     const value = bag.until(['{', '\n'])!!.trim();
     if (value === '') bag.error('Name is empty.');
@@ -172,7 +173,7 @@ function stepInObjectName(bag: LexerBag): string {
 ////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////
 
-function stepInProperty(
+export function stepInProperty(
     bag: LexerBag,
     module: string,
     definition: string,
@@ -301,7 +302,6 @@ function stepInDefinition(
             continue;
         } else {
             const propertyLower = line.toLowerCase();
-            console.log({ propertyLower });
             switch (propertyLower) {
                 case 'copyframe':
                     checkProperty(propertyLower, 'animation', category);
@@ -351,7 +351,6 @@ function stepInDefinition(
                     let brk = false;
                     if (line.indexOf(' ') !== -1) {
                         const [propCategory] = line.split(' ');
-                        console.log({ propCategory });
                         switch (propCategory.toLowerCase()) {
                             case 'anim':
                                 brk = true;
@@ -388,54 +387,6 @@ function stepInDefinition(
                                 );
                                 break;
                             case 'attachment':
-                                brk = true;
-                                checkProperty(
-                                    propertyLower,
-                                    ['model', 'vehicle'],
-                                    category,
-                                );
-
-                                stepInProperty(
-                                    bag,
-                                    module,
-                                    name,
-                                    propertyLower,
-                                    '=',
-                                    false,
-                                );
-                                break;
-                            case 'part':
-                                brk = true;
-                                checkProperty(
-                                    propertyLower,
-                                    ['vehicle'],
-                                    category,
-                                );
-
-                                stepInVehiclePart(
-                                    bag,
-                                    module,
-                                    name,
-                                    propertyLower,
-                                );
-                                break;
-                            case 'passenger':
-                                brk = true;
-                                console.log(true);
-                                checkProperty(
-                                    propertyLower,
-                                    ['vehicle'],
-                                    category,
-                                );
-
-                                stepInVehiclePassenger(
-                                    bag,
-                                    module,
-                                    name,
-                                    propertyLower,
-                                );
-                                break;
-                            case 'wheel':
                                 brk = true;
                                 checkProperty(
                                     propertyLower,
@@ -491,321 +442,6 @@ function stepInRecipe(bag: LexerBag, module: string, category: string) {
     }
 }
 
-function stepInVehicleTemplate(bag: LexerBag, module: string) {
-    let until = bag.until([' ', '\n', '{'], true);
-    if (until !== 'vehicle') {
-        bag.error(`Expected 'vehicle' '${bag.until(['\n'])}'`);
-        return;
-    }
-
-    const catToken = 'template vehicle';
-    bag.token(catToken, bag.cursor(bag.offset - catToken.length), bag.cursor());
-    const name = stepInObjectName(bag);
-    stepInOpenBracket(bag);
-
-    let brk = false;
-    while (!brk && !bag.isEOF()) {
-        const start = bag.cursor();
-        const line = bag.until([',', '\n', '}'])?.trim();
-        const stop = bag.cursor(bag.offset - 1);
-
-        if (line == undefined) {
-            bag.error(`EOF in ${catToken}: ${module}.${name}`);
-            return;
-        } else if (line === '') {
-            continue;
-        } else if (line === '}') {
-            bag.token('}', bag.cursor(bag.offset - 1), bag.cursor());
-            break;
-        }
-
-        if (line.indexOf('=') !== -1) {
-            bag.token(line.replace(/\,/g, '').replace(/\s/g, ''), start, stop);
-        } else if (line === ',') {
-            continue;
-        } else {
-            if (line.indexOf(' ') !== -1) {
-                const [propCategory, propName] = line.split(' ');
-                console.log({ propCategory2: propCategory, propName });
-                switch (propCategory.toLowerCase()) {
-                    case 'attachment':
-                        stepInProperty(bag, module, name, line, '=');
-                        break;
-                    case 'area':
-                        stepInProperty(bag, module, name, line, '=');
-                        break;
-                    case 'part':
-                        stepInVehiclePart(bag, module, name, propName);
-                        break;
-                    case 'passenger':
-                        stepInVehiclePassenger(bag, module, name, propName);
-                        break;
-                    case 'wheel':
-                        stepInProperty(bag, module, name, line, '=');
-                        break;
-                }
-            } else {
-                let brk = false;
-                const lineLower = line.toLowerCase();
-                switch (lineLower) {
-                    case 'lightbar':
-                        brk = true;
-                        stepInProperty(bag, module, name, lineLower, '=');
-                        break;
-                    case 'skin':
-                        brk = true;
-                        stepInProperty(bag, module, name, lineLower, '=');
-                        break;
-                    case 'sound':
-                        brk = true;
-                        stepInProperty(bag, module, name, lineLower, '=');
-                        break;
-                }
-                if (!brk) {
-                    bag.error(lineLower + ' ' + bag.peek(-2));
-                }
-            }
-        }
-    }
-}
-
-function stepInVehiclePart(
-    bag: LexerBag,
-    module: string,
-    template: string,
-    name: string,
-) {
-    bag.token(
-        'part',
-        bag.cursor(bag.offset - (name.length + 5)),
-        bag.cursor(bag.offset - (name.length + 1)),
-    );
-    bag.token(name, bag.cursor(bag.offset - name.length), bag.cursor());
-
-    stepInOpenBracket(bag);
-
-    while (!bag.isEOF()) {
-        const start = bag.cursor();
-        const line = bag.until([',', '\n', '}'])?.trim();
-        const stop = bag.cursor(bag.offset - 1);
-
-        if (line == undefined) {
-            bag.error(`EOF in part: ${module}.${name}`);
-            return;
-        } else if (line === '') {
-            continue;
-        } else if (line === '}') {
-            bag.token('}', bag.cursor(bag.offset - 1), bag.cursor());
-            break;
-        }
-
-        if (line.indexOf('=') !== -1) {
-            bag.token(line.replace(/\,/g, '').replace(/\s/g, ''), start, stop);
-        } else if (line === ',') {
-            continue;
-        } else {
-            if (line.indexOf(' ') !== -1) {
-                const [propCategory, propName] = line.split(' ');
-                console.log({ propCategory, propName });
-                switch (propCategory.toLowerCase()) {
-                    case 'anim':
-                        bag.token(
-                            'anim',
-                            bag.cursor(bag.offset - (name.length + 5)),
-                            bag.cursor(bag.offset - (name.length + 1)),
-                        );
-                        stepInProperty(bag, module, name, propName, '=');
-                        break;
-                    case 'table':
-                        stepInVehiclePartTable(bag, module, name, propName);
-                        break;
-                }
-            } else {
-                const lineLower = line.toLowerCase();
-                console.log({ lineLower });
-                switch (lineLower) {
-                    case 'container':
-                        stepInProperty(bag, module, name, lineLower, '=');
-                        break;
-                    case 'door':
-                        stepInProperty(bag, module, name, lineLower, '=');
-                        break;
-                    case 'install':
-                        stepInProperty(bag, module, name, lineLower, '=');
-                        break;
-                    case 'lua':
-                        stepInProperty(bag, module, name, lineLower, '=');
-                        break;
-                    case 'uninstall':
-                        stepInProperty(bag, module, name, lineLower, '=');
-                        break;
-                    case 'window':
-                        stepInProperty(bag, module, name, lineLower, '=');
-                        break;
-                }
-            }
-        }
-    }
-}
-
-function stepInVehiclePassenger(
-    bag: LexerBag,
-    module: string,
-    template: string,
-    name: string,
-) {
-    bag.token(
-        'passenger',
-        bag.cursor(bag.offset - (name.length + 1 + 'passenger'.length)),
-        bag.cursor(bag.offset - (name.length + 1)),
-    );
-    bag.token(name, bag.cursor(bag.offset - name.length), bag.cursor());
-
-    stepInOpenBracket(bag);
-
-    while (!bag.isEOF()) {
-        const start = bag.cursor();
-        const line = bag.until([',', '\n', '}'])?.trim();
-        const stop = bag.cursor(bag.offset - 1);
-
-        if (line == undefined) {
-            bag.error(`EOF in part: ${module}.${name}`);
-            return;
-        } else if (line === '') {
-            continue;
-        } else if (line === '}') {
-            bag.token('}', bag.cursor(bag.offset - 1), bag.cursor());
-            break;
-        }
-
-        if (line.indexOf('=') !== -1) {
-            bag.token(line.replace(/\,/g, '').replace(/\s/g, ''), start, stop);
-        } else if (line === ',') {
-            continue;
-        } else {
-            if (line.indexOf(' ') !== -1) {
-                const [propCategory, propName] = line.split(' ');
-                console.log({ propCategory, propName });
-                switch (propCategory.toLowerCase()) {
-                    case 'anim':
-                        bag.token(
-                            'anim',
-                            bag.cursor(bag.offset - (name.length + 5)),
-                            bag.cursor(bag.offset - (name.length + 1)),
-                        );
-                        stepInProperty(bag, module, name, propName, '=');
-                        break;
-                    case 'position':
-                        bag.token(
-                            'position',
-                            bag.cursor(
-                                bag.offset -
-                                    (name.length + 1 + 'position'.length),
-                            ),
-                            bag.cursor(bag.offset - (name.length + 1)),
-                        );
-                        stepInProperty(bag, module, name, propName, '=', false);
-                        break;
-                    case 'switchseat':
-                        bag.token(
-                            'switchseat',
-                            bag.cursor(
-                                bag.offset -
-                                    (name.length + 1 + 'switchseat'.length),
-                            ),
-                            bag.cursor(bag.offset - (name.length + 1)),
-                        );
-                        stepInProperty(bag, module, name, propName, '=');
-                        break;
-                }
-            }
-        }
-    }
-}
-
-function stepInVehiclePartTable(
-    bag: LexerBag,
-    module: string,
-    template: string,
-    name: string,
-) {
-    bag.token(
-        'table',
-        bag.cursor(bag.offset - (name.length + 6)),
-        bag.cursor(bag.offset - (name.length + 1)),
-    );
-    bag.token(name, bag.cursor(bag.offset - name.length), bag.cursor());
-
-    stepInOpenBracket(bag);
-
-    let brk = false;
-    while (!brk && !bag.isEOF()) {
-        const start = bag.cursor();
-        const line = bag.until([',', '\n', '}'])?.trim();
-        const stop = bag.cursor(bag.offset - 1);
-
-        if (line == undefined) {
-            bag.error(`EOF in part: ${module}.${name}`);
-            return;
-        } else if (line === '' || line === ',') {
-            continue;
-        } else if (line === '}') {
-            bag.token('}', bag.cursor(bag.offset - 1), bag.cursor());
-            break;
-        }
-
-        if (line.indexOf('=') !== -1) {
-            bag.token(line.replace(/\,/g, '').replace(/\s/g, ''), start, stop);
-        } else {
-            const propertyLower = line.toLowerCase();
-            if (line.indexOf(' ') !== -1) {
-                const [propCategory] = line.split(' ');
-                switch (propCategory.toLowerCase()) {
-                }
-            } else {
-                switch (propertyLower) {
-                    case 'items':
-                        stepInVehiclePartTableItems(
-                            bag,
-                            module,
-                            `${template}.${name}`,
-                        );
-                }
-            }
-        }
-    }
-}
-
-function stepInVehiclePartTableItems(
-    bag: LexerBag,
-    module: string,
-    name: string,
-) {
-    bag.token(
-        'items',
-        bag.cursor(bag.offset - (name.length + 6)),
-        bag.cursor(bag.offset - (name.length + 1)),
-    );
-
-    stepInOpenBracket(bag);
-
-    let brk = false;
-    while (!brk && !bag.isEOF()) {
-        const line = bag.until([',', '\n', '}'])?.trim();
-        if (line == undefined) {
-            bag.error(`EOF in part: ${module}.${name}`);
-            return;
-        } else if (line === '') {
-            continue;
-        } else if (line === '}') {
-            bag.token('}', bag.cursor(bag.offset - 1), bag.cursor());
-            break;
-        }
-
-        stepInProperty(bag, module, `${name}.items`, line.trim(), '=');
-    }
-}
-
 function stepInImports(bag: LexerBag, module: string) {
     bag.token(
         'imports',
@@ -847,6 +483,7 @@ function stepInModule(bag: LexerBag) {
             return;
         }
 
+        let isTemplate = false;
         const wordLower = word.toLowerCase();
         switch (wordLower) {
             /* (TERMINATOR) */
@@ -890,8 +527,10 @@ function stepInModule(bag: LexerBag) {
                 stepInRecipe(bag, module, wordLower);
                 break;
 
-            case 'template': // "template vehicle {name}"
-                stepInVehicleTemplate(bag, module);
+            case 'template':
+                isTemplate = true;
+            case 'vehicle':
+                stepInVehicle(bag, module, true, isTemplate);
                 break;
 
             default:
