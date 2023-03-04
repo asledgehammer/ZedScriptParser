@@ -4,6 +4,8 @@ import {
     getString,
     Script,
     ScriptFloat,
+    ScriptString,
+    ScriptStringArray,
     ScriptVector3,
 } from '../Script';
 import { ParseBag } from '../../Parser';
@@ -33,6 +35,8 @@ export class VehicleScript extends Script {
     skin: VehicleSkin | undefined;
     sound: VehicleSound | undefined;
     spawnOffsetY: ScriptFloat;
+    'template!': ScriptString;
+    templates: ScriptStringArray;
     wheels: VehicleWheel[] | undefined;
 
     constructor(bag: ParseBag) {
@@ -122,6 +126,13 @@ export class VehicleScript extends Script {
                 this.spawnOffsetY = getFloat(value);
                 return true;
             }
+            case 'template':
+                if(this.templates == null) this.templates = [];
+                this.templates.push(getString(value));
+                return true;
+            case 'template!':
+                this['template!'] = getString(value);
+                return true;
         }
         return false;
     }

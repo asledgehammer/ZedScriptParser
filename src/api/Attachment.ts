@@ -1,7 +1,8 @@
 import { ParseBag } from '../Parser';
-import { getInt, getString, Script, ScriptInt, ScriptVector3 } from './Script';
+import { getInt, getString, Script, ScriptInt, ScriptString, ScriptVector3 } from './Script';
 
 export class Attachment extends Script {
+    bone: ScriptString;
     offset: ScriptVector3;
     rotate: ScriptVector3;
     zOffset: ScriptInt;
@@ -14,6 +15,9 @@ export class Attachment extends Script {
         property = property.trim();
         value = value.trim();
         switch (property.toLowerCase()) {
+            case 'bone':
+                this.bone = getString(value);
+                return true;
             case 'offset': {
                 const [x, y, z] = getString(value)
                     .split(' ')

@@ -1,4 +1,4 @@
-import { Script } from '../Script';
+import { getBoolean, getString, Script, ScriptBoolean, ScriptString } from '../Script';
 import { ParseBag } from '../../Parser';
 import { VehiclePosition } from './VehiclePosition';
 import { VehicleSwitchSeat } from './VehicleSwitchSeat';
@@ -6,6 +6,9 @@ import { VehicleAnim } from './VehicleAnim';
 
 export class VehiclePassenger extends Script {
     anims: VehicleAnim[] | undefined;
+    area: ScriptString;
+    door: ScriptString;
+    hasRoof: ScriptBoolean;
     positions: VehiclePosition[] | undefined;
     switchSeats: VehicleSwitchSeat[] | undefined;
 
@@ -34,6 +37,15 @@ export class VehiclePassenger extends Script {
 
     onPropertyValue(property: string, value: string): boolean {
         switch (property.toLowerCase().trim()) {
+            case 'area': 
+                this.area = getString(value);
+                return true;
+            case 'door': 
+                this.door = getString(value);
+                return true;
+            case 'hasroof':
+                this.hasRoof = getBoolean(value);
+                return true;
         }
         return false;
     }

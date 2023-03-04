@@ -1,13 +1,26 @@
-import { getInt, getString, Script, ScriptInt, ScriptString } from "../Script";
-import { ParseBag } from "../../Parser";
-import { VehicleItems } from "./VehicleItems";
-import { VehicleItem } from "./VehicleItem";
+import {
+    getBoolean,
+    getInt,
+    getString,
+    Script,
+    ScriptBoolean,
+    ScriptInt,
+    ScriptString,
+    ScriptStringArray,
+} from '../Script';
+import { ParseBag } from '../../Parser';
+import { VehicleItems } from './VehicleItems';
+import { VehicleItem } from './VehicleItem';
 
 export class VehicleTable extends Script {
+    complete: ScriptString;
     door: ScriptString;
     items: VehicleItem[] | undefined;
     professions: ScriptString;
     recipes: ScriptString;
+    requireEmpty: ScriptBoolean;
+    requireInstalled: ScriptStringArray;
+    requireUninstalled: ScriptStringArray;
     skills: ScriptString;
     test: ScriptString;
     time: ScriptInt;
@@ -28,7 +41,10 @@ export class VehicleTable extends Script {
     }
 
     onPropertyValue(property: string, value: string): boolean {
-        switch(property.toLowerCase().trim()) {
+        switch (property.toLowerCase().trim()) {
+            case 'complete':
+                this.complete = getString(value);
+                return true;
             case 'door':
                 this.door = getString(value);
                 return true;
@@ -37,6 +53,23 @@ export class VehicleTable extends Script {
                 return true;
             case 'recipes':
                 this.recipes = getString(value);
+                return true;
+            case 'requireempty':
+                this.requireEmpty = getBoolean(value);
+                return true;
+            case 'requireinstalled':
+                this.requireInstalled = getString(value)
+                    .split(';')
+                    .map((o) => {
+                        return o.trim();
+                    });
+                return true;
+            case 'requireuninstalled':
+                this.requireUninstalled = getString(value)
+                    .split(';')
+                    .map((o) => {
+                        return o.trim();
+                    });
                 return true;
             case 'skills':
                 this.skills = getString(value);

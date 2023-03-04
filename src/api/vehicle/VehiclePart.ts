@@ -24,16 +24,19 @@ export class VehiclePart extends Script {
     category: ScriptString;
     containers: VehicleContainer[] | undefined;
     doors: VehicleDoor[] | undefined;
+    install: VehicleInstall | undefined;
     itemType: ScriptString;
     lua: VehicleLua | undefined;
     mechanicRequireKey: ScriptBoolean;
     models: VehiclePartModel[] | undefined;
+    parent: ScriptString;
     passengers: VehiclePassenger[] | undefined;
+    repairMechanic: ScriptBoolean;
+    specificItem: ScriptBoolean;
     tables: VehicleTable[] | undefined;
-    windows: VehicleWindow[] | undefined;
-
-    install: VehicleInstall | undefined;
     uninstall: VehicleUninstall | undefined;
+    wheel: ScriptString;
+    windows: VehicleWindow[] | undefined;
 
     constructor(bag: ParseBag) {
         super(bag, '=', false);
@@ -88,14 +91,26 @@ export class VehiclePart extends Script {
             case 'area':
                 this.area = getString(value);
                 return true;
+            case 'category':
+                this.category = getString(value);
+                return true;
             case 'itemtype':
                 this.itemType = getString(value);
                 return true;
             case 'mechanicrequirekey':
                 this.mechanicRequireKey = getBoolean(value);
                 return true;
-            case 'category':
-                this.category = getString(value);
+            case 'parent':
+                this.parent = getString(value);
+                return true;
+            case 'repairmechanic':
+                this.repairMechanic = getBoolean(value);
+                return true;
+            case 'specificitem':
+                this.specificItem = getBoolean(value);
+                return true;
+            case 'wheel':
+                this.wheel = getString(value);
                 return true;
         }
         return false;

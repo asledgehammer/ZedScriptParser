@@ -1,5 +1,5 @@
 import { ParseBag } from '../../Parser';
-import { getInt, getString, Script, ScriptInt, ScriptVector3 } from '../Script';
+import { getInt, getString, Script, ScriptInt, ScriptString, ScriptVector3 } from '../Script';
 
 export class VehicleAttachment extends Script {
     offset: ScriptVector3;
