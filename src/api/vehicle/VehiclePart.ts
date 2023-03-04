@@ -11,6 +11,8 @@ import { VehicleContainer } from './VehicleContainer';
 import { VehicleDoor } from './VehicleDoor';
 import { VehicleInstall } from './VehicleInstall';
 import { VehicleLua } from './VehicleLua';
+import { VehicleModel } from './VehicleModel';
+import { VehiclePartModel } from './VehiclePartModel';
 import { VehiclePassenger } from './VehiclePassenger';
 import { VehicleTable } from './VehicleTable';
 import { VehicleUninstall } from './VehicleUninstall';
@@ -25,6 +27,7 @@ export class VehiclePart extends Script {
     itemType: ScriptString;
     lua: VehicleLua | undefined;
     mechanicRequireKey: ScriptBoolean;
+    models: VehiclePartModel[] | undefined;
     passengers: VehiclePassenger[] | undefined;
     tables: VehicleTable[] | undefined;
     windows: VehicleWindow[] | undefined;
@@ -53,6 +56,10 @@ export class VehiclePart extends Script {
                 return true;
             case 'install':
                 this.install = new VehicleInstall(bag);
+                return true;
+            case 'model':
+                if (this.models === undefined) this.models = [];
+                this.models.push(new VehiclePartModel(bag));
                 return true;
             case 'passenger':
                 if (this.passengers === undefined) this.passengers = [];

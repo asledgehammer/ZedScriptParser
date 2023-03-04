@@ -4,7 +4,6 @@ import {
     getString,
     Script,
     ScriptFloat,
-    ScriptInt,
     ScriptVector3,
 } from '../Script';
 import { ParseBag } from '../../Parser';
@@ -17,8 +16,7 @@ import { VehiclePassenger } from './VehiclePassenger';
 import { VehicleSound } from './VehicleSound';
 import { VehicleArea } from './VehicleArea';
 import { VehiclePart } from './VehiclePart';
-import { VehicleInstall } from './VehicleInstall';
-import { VehicleUninstall } from './VehicleUninstall';
+import { VehiclePhysics } from './VehiclePhysics';
 
 export class VehicleScript extends Script {
     areas: VehicleArea[] | undefined;
@@ -31,6 +29,7 @@ export class VehicleScript extends Script {
     parts: VehiclePart[] | undefined;
     passengers: VehiclePassenger[] | undefined;
     physicsChassisShape: ScriptVector3;
+    physics: VehiclePhysics[] | undefined;
     skin: VehicleSkin | undefined;
     sound: VehicleSound | undefined;
     spawnOffsetY: ScriptFloat;
@@ -63,6 +62,10 @@ export class VehicleScript extends Script {
             case 'passenger':
                 if (this.passengers === undefined) this.passengers = [];
                 this.passengers.push(new VehiclePassenger(bag));
+                return true;
+            case 'physics':
+                if (this.physics === undefined) this.physics = [];
+                this.physics.push(new VehiclePhysics(bag));
                 return true;
             case 'skin':
                 this.skin = new VehicleSkin(bag);

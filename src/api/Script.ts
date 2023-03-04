@@ -58,7 +58,9 @@ export abstract class Script {
             throw new Error(`Name is empty.`);
         }
 
+        
         if (bag.next() !== '{') {
+            // console.log({__name: this.__name});
             throw new ParseError(`Expected '{'`);
         }
 

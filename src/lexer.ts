@@ -508,8 +508,6 @@ function stepInModule(bag: LexerBag) {
                 stepInDefinition(bag, module, wordLower, '=');
                 break;
 
-            /* (Vehicles) */
-            case 'vehicle':
             case 'vehicleenginerpm':
                 stepInDefinition(bag, module, wordLower, '=', false);
                 break;
@@ -527,10 +525,12 @@ function stepInModule(bag: LexerBag) {
                 stepInRecipe(bag, module, wordLower);
                 break;
 
+            /* (Vehicles) */
             case 'template':
-                isTemplate = true;
+                stepInVehicle(bag, module, true, true);
+                break;
             case 'vehicle':
-                stepInVehicle(bag, module, true, isTemplate);
+                stepInVehicle(bag, module, true, false);
                 break;
 
             default:

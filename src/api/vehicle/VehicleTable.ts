@@ -1,10 +1,11 @@
 import { getInt, getString, Script, ScriptInt, ScriptString } from "../Script";
 import { ParseBag } from "../../Parser";
 import { VehicleItems } from "./VehicleItems";
+import { VehicleItem } from "./VehicleItem";
 
 export class VehicleTable extends Script {
     door: ScriptString;
-    items: VehicleItems[] | undefined;
+    items: VehicleItem[] | undefined;
     professions: ScriptString;
     recipes: ScriptString;
     skills: ScriptString;
@@ -20,8 +21,7 @@ export class VehicleTable extends Script {
     onPropertyToken(bag: ParseBag, property: string): boolean {
         switch (property.toLowerCase().trim()) {
             case 'items':
-                if(this.items === undefined) this.items = [];
-                this.items.push(new VehicleItems(bag));
+                this.items = new VehicleItems(bag).items;
                 return true;
         }
         return false;
