@@ -527,10 +527,10 @@ function stepInModule(bag: LexerBag) {
 
             /* (Vehicles) */
             case 'template':
-                stepInVehicle(bag, module, true, true);
+                stepInVehicle(bag, module, true);
                 break;
             case 'vehicle':
-                stepInVehicle(bag, module, true, false);
+                stepInVehicle(bag, module, false);
                 break;
 
             default:

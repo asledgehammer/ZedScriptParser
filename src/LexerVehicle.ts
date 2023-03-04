@@ -23,7 +23,6 @@ export function checkProperty(
 export function stepInVehicle(
     bag: LexerBag,
     module: string,
-    removeWhitespace: boolean = true,
     isTemplate: boolean,
 ) {
     let name = '';
@@ -111,12 +110,7 @@ export function stepInVehicle(
 
         /* (If the line is a classic 'property = value') */
         if (line.indexOf('=') !== -1) {
-            if (removeWhitespace) {
-                const lineNoSpace = line.replace(/\,/g, '').replace(/\s/g, '');
-                bag.token(lineNoSpace, start, stop);
-            } else {
-                bag.token(line.replace(/\,/g, '').trim(), start, stop);
-            }
+            bag.token(line.replace(/\,/g, '').trim(), start, stop);
             continue;
         } else if (line === ',') continue;
 
@@ -196,14 +190,7 @@ export function stepInVehicle(
 
             /* (If the line is a classic 'property = value') */
             if (line.indexOf('=') !== -1) {
-                if (removeWhitespace) {
-                    const lineNoSpace = line
-                        .replace(/\,/g, '')
-                        .replace(/\s/g, '');
-                    bag.token(lineNoSpace, start, stop);
-                } else {
-                    bag.token(line.replace(/\,/g, '').trim(), start, stop);
-                }
+                bag.token(line.replace(/\,/g, '').trim(), start, stop);
                 continue;
             } else if (line === ',') continue;
 
@@ -290,14 +277,7 @@ export function stepInVehicle(
 
             /* (If the line is a classic 'property = value') */
             if (line.indexOf('=') !== -1) {
-                if (removeWhitespace) {
-                    const lineNoSpace = line
-                        .replace(/\,/g, '')
-                        .replace(/\s/g, '');
-                    bag.token(lineNoSpace, start, stop);
-                } else {
-                    bag.token(line.replace(/\,/g, '').trim(), start, stop);
-                }
+                bag.token(line.replace(/\,/g, '').trim(), start, stop);
                 continue;
             } else if (line === ',') continue;
 
@@ -846,14 +826,7 @@ export function stepInVehicle(
 
             /* (If the line is a classic 'property = value') */
             if (line.indexOf('=') !== -1) {
-                if (removeWhitespace) {
-                    const lineNoSpace = line
-                        .replace(/\,/g, '')
-                        .replace(/\s/g, '');
-                    bag.token(lineNoSpace, start, stop);
-                } else {
-                    bag.token(line.replace(/\,/g, '').trim(), start, stop);
-                }
+                bag.token(line.replace(/\,/g, '').trim(), start, stop);
                 continue;
             } else if (line === ',') continue;
 
@@ -920,14 +893,7 @@ export function stepInVehicle(
 
             /* (If the line is a classic 'property = value') */
             if (line.indexOf('=') !== -1) {
-                if (removeWhitespace) {
-                    const lineNoSpace = line
-                        .replace(/\,/g, '')
-                        .replace(/\s/g, '');
-                    bag.token(lineNoSpace, start, stop);
-                } else {
-                    bag.token(line.replace(/\,/g, '').trim(), start, stop);
-                }
+                bag.token(line.replace(/\,/g, '').trim(), start, stop);
                 continue;
             } else if (line === ',') continue;
 
@@ -963,14 +929,7 @@ export function stepInVehicle(
 
             /* (If the line is a classic 'property = value') */
             if (line.indexOf('=') !== -1) {
-                if (removeWhitespace) {
-                    const lineNoSpace = line
-                        .replace(/\,/g, '')
-                        .replace(/\s/g, '');
-                    bag.token(lineNoSpace, start, stop);
-                } else {
-                    bag.token(line.replace(/\,/g, '').trim(), start, stop);
-                }
+                bag.token(line.replace(/\,/g, '').trim(), start, stop);
                 continue;
             } else if (line === ',') continue;
 
@@ -1003,14 +962,7 @@ export function stepInVehicle(
 
             /* (If the line is a classic 'property = value') */
             if (line.indexOf('=') !== -1) {
-                if (removeWhitespace) {
-                    const lineNoSpace = line
-                        .replace(/\,/g, '')
-                        .replace(/\s/g, '');
-                    bag.token(lineNoSpace, start, stop);
-                } else {
-                    bag.token(line.replace(/\,/g, '').trim(), start, stop);
-                }
+                bag.token(line.replace(/\,/g, '').trim(), start, stop);
                 continue;
             } else if (line === ',') continue;
 
@@ -1052,14 +1004,7 @@ export function stepInVehicle(
 
             /* (If the line is a classic 'property = value') */
             if (line.indexOf('=') !== -1) {
-                if (removeWhitespace) {
-                    const lineNoSpace = line
-                        .replace(/\,/g, '')
-                        .replace(/\s/g, '');
-                    bag.token(lineNoSpace, start, stop);
-                } else {
-                    bag.token(line.replace(/\,/g, '').trim(), start, stop);
-                }
+                bag.token(line.replace(/\,/g, '').trim(), start, stop);
                 continue;
             } else if (line === ',') continue;
 
@@ -1173,14 +1118,7 @@ export function stepInVehicle(
 
             /* (If the line is a classic 'property = value') */
             if (line.indexOf('=') !== -1) {
-                if (removeWhitespace) {
-                    const lineNoSpace = line
-                        .replace(/\,/g, '')
-                        .replace(/\s/g, '');
-                    bag.token(lineNoSpace, start, stop);
-                } else {
-                    bag.token(line.replace(/\,/g, '').trim(), start, stop);
-                }
+                bag.token(line.replace(/\,/g, '').trim(), start, stop);
                 continue;
             } else if (line === ',') continue;
 

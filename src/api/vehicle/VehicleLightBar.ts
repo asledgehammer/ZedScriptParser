@@ -1,7 +1,17 @@
-import { Script } from '../Script';
+import {
+    getFloat,
+    getString,
+    Script,
+    ScriptFloatArray,
+    ScriptString,
+} from '../Script';
 import { ParseBag } from '../../Parser';
 
 export class VehicleLightBar extends Script {
+    leftCol: ScriptFloatArray;
+    rightCol: ScriptFloatArray;
+    soundSiren: ScriptString;
+
     constructor(bag: ParseBag) {
         super(bag, '=', false, true);
         this.parse(bag);
@@ -13,6 +23,23 @@ export class VehicleLightBar extends Script {
 
     onPropertyValue(property: string, value: string): boolean {
         switch (property.toLowerCase().trim()) {
+            case 'leftcol':
+                this.leftCol = getString(value)
+                    .split(';')
+                    .map((o) => {
+                        return getFloat(o.trim());
+                    });
+                return true;
+            case 'rightcol':
+                this.leftCol = getString(value)
+                    .split(';')
+                    .map((o) => {
+                        return getFloat(o.trim());
+                    });
+                return true;
+            case 'soundsiren':
+                this.soundSiren = getString(value);
+                return true;
         }
         return false;
     }

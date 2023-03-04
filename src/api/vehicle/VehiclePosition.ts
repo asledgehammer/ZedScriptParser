@@ -1,7 +1,14 @@
-import { getFloat, getString, Script, ScriptVector3 } from '../Script';
+import {
+    getFloat,
+    getString,
+    Script,
+    ScriptString,
+    ScriptVector3,
+} from '../Script';
 import { ParseBag } from '../../Parser';
 
 export class VehiclePosition extends Script {
+    area: ScriptString;
     offset: ScriptVector3;
     rotate: ScriptVector3;
 
@@ -16,6 +23,9 @@ export class VehiclePosition extends Script {
 
     onPropertyValue(property: string, value: string): boolean {
         switch (property.toLowerCase().trim()) {
+            case 'area':
+                this.area = getString(value);
+                return true;
             case 'offset': {
                 const [x, y, z] = getString(value)
                     .split(' ')

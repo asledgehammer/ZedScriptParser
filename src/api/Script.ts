@@ -27,7 +27,7 @@ export function getInt(value: string): number {
 }
 
 export function getFloat(value: string): number {
-    const val = parseFloat(value);
+    const val = parseFloat(value.replace(/f/g, ''));
     if (isNaN(val)) throw new Error();
     else if (!isFinite(val)) throw new Error();
     return val;
@@ -58,7 +58,6 @@ export abstract class Script {
             throw new Error(`Name is empty.`);
         }
 
-        
         if (bag.next() !== '{') {
             // console.log({__name: this.__name});
             throw new ParseError(`Expected '{'`);
