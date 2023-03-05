@@ -1,4 +1,4 @@
-import { ParseBag, ParseError } from '../../Parser';
+import { ParseBag } from '../../Parser';
 import { ItemRecipe } from './ItemRecipe';
 import {
     getBoolean,

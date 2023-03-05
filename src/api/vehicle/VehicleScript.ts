@@ -15,7 +15,6 @@ import {
 import { ParseBag } from '../../Parser';
 import { VehicleModel } from './VehicleModel';
 import { VehicleSkin } from './VehicleSkin';
-import { Attachment } from '../model/ModelAttachment';
 import { VehicleLightBar } from './VehicleLightBar';
 import { VehicleWheel } from './VehicleWheel';
 import { VehiclePassenger } from './VehiclePassenger';

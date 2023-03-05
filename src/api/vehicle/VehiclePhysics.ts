@@ -2,10 +2,8 @@ import { ParseBag } from 'Parser';
 import {
     getFloat,
     getString,
-    getURI,
     Script,
     ScriptFloat,
-    ScriptString,
     ScriptVector3,
 } from '../Script';
 

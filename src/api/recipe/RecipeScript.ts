@@ -17,9 +17,9 @@ import { RecipeProp } from './RecipeProp';
 
 /**
  * **RecipeScript**
- * 
+ *
  * TODO: Document. -Jab, 3/5/2023
- * 
+ *
  * @author Jab
  */
 export class RecipeScript extends Script {

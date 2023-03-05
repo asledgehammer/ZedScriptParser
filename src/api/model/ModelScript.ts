@@ -9,7 +9,6 @@ import {
     ScriptBoolean,
     ScriptFloat,
     ScriptString,
-    ScriptStringArray,
 } from '../Script';
 import { Attachment } from './ModelAttachment';
 
