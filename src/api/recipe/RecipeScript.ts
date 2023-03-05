@@ -12,6 +12,8 @@ import {
 } from '../Script';
 import { SkillRequirement } from './SkillRequirement';
 import { RecipeAction } from './RecipeAction';
+import { RecipeResult } from './RecipeResult';
+import { RecipeProp } from './RecipeProp';
 
 export class RecipeScript extends Script {
     allowDestroyedItem: ScriptBoolean;
@@ -31,10 +33,10 @@ export class RecipeScript extends Script {
     onCreate: ScriptString;
     onGiveXP: ScriptString;
     onTest: ScriptString;
-    prop1: ScriptString;
-    prop2: ScriptString;
+    prop1: RecipeProp | undefined;
+    prop2: RecipeProp | undefined;
     removeResultItem: ScriptBoolean;
-    result: ScriptString;
+    result: RecipeResult | undefined;
     sound: ScriptString;
     stopOnWalk: ScriptBoolean;
     time: ScriptInt;
@@ -51,17 +53,21 @@ export class RecipeScript extends Script {
     }
 
     onPropertyToken(bag: ParseBag, property: string): boolean {
-        const onSource = (
-            tokens: string[],
-            action: RecipeAction,
-        ): void => {
+        const onSource = (tokens: string[], action: RecipeAction): void => {
             const sourceItems: RecipeSourceItem[] = [];
 
             for (const token of tokens) {
                 let name = token;
                 let amount = 1;
+
+                // NOTE: I don't understand what's going on here. Both ';' and '=' delimit item amounts.
+                //     - Jab, 3/5/2023
                 if (token.indexOf('=') !== -1) {
                     const split = token.split('=');
+                    name = split[0];
+                    amount = parseInt(split[1]);
+                } else if (token.indexOf(';') !== -1) {
+                    const split = token.split(';');
                     name = split[0];
                     amount = parseInt(split[1]);
                 }
@@ -163,17 +169,54 @@ export class RecipeScript extends Script {
             case 'ontest':
                 this.onTest = getString(value);
                 return true;
-            case 'prop1':
-                this.prop1 = getString(value);
+            case 'prop1': {
+                const raw = getString(value);
+                let item = raw.trim();
+                let amount = 1;
+                if (raw.indexOf('=') !== -1) {
+                    const [sItem, sAmount] = raw.split('=').map((o) => {
+                        return o.trim();
+                    });
+                    item = sItem;
+                    amount = getInt(sAmount);
+                }
+                this.prop1 = new RecipeProp(item, amount);
                 return true;
-            case 'prop2':
-                this.prop2 = getString(value);
+            }
+            case 'prop2': {
+                const raw = getString(value);
+                let item = raw.trim();
+                let amount = 1;
+                if (raw.indexOf('=') !== -1) {
+                    const [sItem, sAmount] = raw.split('=').map((o) => {
+                        return o.trim();
+                    });
+                    item = sItem;
+                    amount = getInt(sAmount);
+                }
+                this.prop2 = new RecipeProp(item, amount);
                 return true;
+            }
             case 'removeresultitem':
                 this.removeResultItem = getBoolean(value);
                 return true;
             case 'result':
-                this.result = getString(value);
+                const raw = getString(value);
+                if (raw.indexOf(';') !== -1) {
+                    const [item, sAmount] = raw.split(';');
+                    this.result = new RecipeResult(
+                        item.trim(),
+                        getInt(sAmount),
+                    );
+                } else if (raw.indexOf('=') !== -1) {
+                    const [item, sAmount] = raw.split('=');
+                    this.result = new RecipeResult(
+                        item.trim(),
+                        getInt(sAmount),
+                    );
+                } else {
+                    this.result = new RecipeResult(raw.trim(), 1);
+                }
                 return true;
             case 'skillrequired':
                 this.skillsRequired = [];

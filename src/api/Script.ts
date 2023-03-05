@@ -22,14 +22,14 @@ export function getURI(value: string): string {
 }
 
 export function getInt(value: string): number {
-    const val = parseInt(value);
+    const val = parseInt(value.trim());
     if (isNaN(val)) throw new Error();
     else if (!isFinite(val)) throw new Error();
     return val;
 }
 
 export function getFloat(value: string): number {
-    const val = parseFloat(value.replace(/f/g, ''));
+    const val = parseFloat(value.replace(/f/g, '').trim());
     if (isNaN(val)) throw new Error();
     else if (!isFinite(val)) throw new Error();
     return val;

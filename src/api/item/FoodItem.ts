@@ -5,6 +5,7 @@ import {
     ScriptBoolean,
     ScriptInt,
     ScriptString,
+    ScriptStringArray,
 } from '../Script';
 import { ItemScript } from './ItemScript';
 import { EvolvedRecipe, ScriptEvolvedRecipeArray } from './EvolvedRecipe';
@@ -39,7 +40,7 @@ export class FoodItem extends ItemScript {
     reduceFoodSickness: ScriptInt;
     removeNegativeEffectOnCooked: ScriptBoolean;
     removeUnhappinessWhenCooked: ScriptBoolean;
-    replaceOnCooked: ScriptString;
+    replaceOnCooked: ScriptStringArray;
     replaceOnRotten: ScriptString;
     spice: ScriptBoolean;
     thirstChange: ScriptInt;
@@ -152,7 +153,7 @@ export class FoodItem extends ItemScript {
                 this.removeUnhappinessWhenCooked = getBoolean(value);
                 return true;
             case 'replaceoncooked':
-                this.replaceOnCooked = getString(value);
+                this.replaceOnCooked = getString(value).split(';');
                 return true;
             case 'replaceonrotten':
                 this.replaceOnRotten = getString(value);

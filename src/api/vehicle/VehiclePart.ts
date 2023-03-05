@@ -26,7 +26,7 @@ export class VehiclePart extends Script {
     doors: VehicleDoor[] | undefined;
     hasLightsRear: ScriptBoolean;
     install: VehicleInstall | undefined;
-    itemType: ScriptString;
+    itemType: ScriptStringArray;
     lua: VehicleLua | undefined;
     mechanicRequireKey: ScriptBoolean;
     models: VehiclePartModel[] | undefined;
@@ -104,7 +104,11 @@ export class VehiclePart extends Script {
                 this.hasLightsRear = getBoolean(value);
                 return true;
             case 'itemtype':
-                this.itemType = getString(value);
+                this.itemType = getString(value)
+                .split(';')
+                .map((o) => {
+                    return o.trim();
+                });
                 return true;
             case 'mechanicrequirekey':
                 this.mechanicRequireKey = getBoolean(value);

@@ -44,8 +44,8 @@ export abstract class ItemScript extends Script {
     closeKillMove: ScriptString;
     clothingExtraSubmenu: ScriptString;
     clothingItem: ScriptString;
-    clothingItemExtra: ScriptString;
-    clothingItemExtraOption: ScriptString;
+    clothingItemExtra: ScriptStringArray;
+    clothingItemExtraOption: ScriptStringArray;
     colorBlue: ScriptInt;
     colorGreen: ScriptInt;
     colorRed: ScriptInt;
@@ -191,10 +191,18 @@ export abstract class ItemScript extends Script {
                 this.clothingItem = getString(value);
                 return true;
             case 'clothingitemextra':
-                this.clothingItemExtra = getString(value);
+                this.clothingItemExtra = getString(value)
+                    .split(';')
+                    .map((o) => {
+                        return o.trim();
+                    });
                 return true;
             case 'clothingitemextraoption':
-                this.clothingItemExtraOption = getString(value);
+                this.clothingItemExtraOption = getString(value)
+                .split(';')
+                .map((o) => {
+                    return o.trim();
+                });
                 return true;
             case 'conditionaffectscapacity':
                 this.conditionAffectsCapacity = getBoolean(value);
