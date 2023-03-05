@@ -1,6 +1,28 @@
+/**
+ * *ScriptEvolvedRecipe*
+ *
+ * TODO: Document. -Jab, 3/5/2023
+ *
+ * @author Jab
+ */
 export type ScriptEvolvedRecipe = EvolvedRecipe | undefined;
+
+/**
+ * *ScriptEvolvedRecipeArray*
+ *
+ * TODO: Document. -Jab, 3/5/2023
+ *
+ * @author Jab
+ */
 export type ScriptEvolvedRecipeArray = EvolvedRecipe[] | undefined;
 
+/**
+ * **EvolvedRecipe**
+ *
+ * TODO: Document. -Jab, 3/5/2023
+ *
+ * @author Jab
+ */
 export class EvolvedRecipe {
     name: string;
     amount: number;

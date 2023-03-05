@@ -2,6 +2,13 @@ import { getBoolean, getInt, ScriptBoolean, ScriptInt } from '../Script';
 import { ItemScript } from './ItemScript';
 import { ParseBag } from '../../Parser';
 
+/**
+ * **RadioItem**
+ *
+ * TODO: Document. -Jab, 3/5/2023
+ *
+ * @author Jab
+ */
 export class RadioItem extends ItemScript {
     acceptMediaType: ScriptInt;
     baseVolumeRange: ScriptInt;
@@ -25,7 +32,7 @@ export class RadioItem extends ItemScript {
     }
 
     onPropertyValue(property: string, value: string): boolean {
-        switch(property.toLowerCase()) {
+        switch (property.toLowerCase()) {
             case 'acceptmediatype':
                 this.acceptMediaType = getInt(value);
                 return true;

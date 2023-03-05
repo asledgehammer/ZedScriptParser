@@ -1,9 +1,15 @@
-import { ParseBag } from "../../Parser";
-import { Script } from "../Script";
-import { VehicleItem } from "./VehicleItem";
+import { ParseBag } from '../../Parser';
+import { Script } from '../Script';
+import { VehicleItem } from './VehicleItem';
 
+/**
+ * **VehicleItems**
+ *
+ * TODO: Document. -Jab, 3/5/2023
+ *
+ * @author Jab
+ */
 export class VehicleItems extends Script {
-
     items: VehicleItem[] | undefined;
 
     constructor(bag: ParseBag) {
@@ -12,7 +18,7 @@ export class VehicleItems extends Script {
     }
 
     onPropertyToken(bag: ParseBag, property: string): boolean {
-        if(this.items === undefined) this.items = [];
+        if (this.items === undefined) this.items = [];
         this.items.push(new VehicleItem(bag, property));
         return true;
     }

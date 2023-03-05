@@ -1,6 +1,20 @@
-import { ParseBag } from '../Parser';
-import { getInt, getString, Script, ScriptInt, ScriptString, ScriptVector3 } from './Script';
+import { ParseBag } from '../../Parser';
+import {
+    getInt,
+    getString,
+    Script,
+    ScriptInt,
+    ScriptString,
+    ScriptVector3,
+} from '../Script';
 
+/**
+ * **ModelAttachment**
+ *
+ * TODO: Document. -Jab, 3/5/2023
+ *
+ * @author Jab
+ */
 export class Attachment extends Script {
     bone: ScriptString;
     offset: ScriptVector3;
@@ -40,7 +54,6 @@ export class Attachment extends Script {
                 this.zOffset = getInt(value);
                 return true;
             }
-            
         }
         return false;
     }

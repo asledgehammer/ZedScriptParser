@@ -1,6 +1,13 @@
 import { getBoolean, Script, ScriptBoolean } from '../Script';
 import { ParseBag } from '../../Parser';
 
+/**
+ * **VehicleWindow**
+ *
+ * TODO: Document. -Jab, 3/5/2023
+ *
+ * @author Jab
+ */
 export class VehicleWindow extends Script {
     openable: ScriptBoolean;
 

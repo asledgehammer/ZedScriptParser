@@ -1,3 +1,4 @@
+import { SandBoxScript } from './api/sandbox/SandBoxOption';
 import { ModuleScript } from './api/Module';
 
 export class ParseError extends Error {
@@ -28,25 +29,40 @@ export class ParseBag {
     }
 }
 
-export function parse(tokens: string[]): ModuleScript[] {
+export function parse(tokens: string[]): {
+    modules?: ModuleScript[];
+    options?: SandBoxScript[];
+    version?: string;
+} {
     const bag = new ParseBag(tokens);
 
-    const modules: { [name: string]: ModuleScript } = {};
+    const o: any = {};
 
     while (!bag.isEOF()) {
         const curr = bag.next();
         if (curr === 'module') {
-            const module = new ModuleScript(bag);
-            modules[module.__name] = module;
+            if (o.modules === undefined) o.modules = [];
+            o.modules.push(new ModuleScript(bag));
+        } else if (curr === 'version') {
+            bag.next();
+            o.version = bag.next();
+        } else if (curr === 'option') {
+            if (o.options === undefined) o.options = [];
+            o.options.push(new SandBoxScript(bag));
         }
     }
 
-    const array: ModuleScript[] = [];
-    const keys = Object.keys(modules);
-    keys.sort((a, b) => a.localeCompare(b));
-    for (const key of keys) {
-        array.push(modules[key]);
+    if (o.modules && o.options) {
+        throw new ParseError(
+            `'module' cannot be in the same file as 'option'.`,
+        );
     }
 
-    return array;
+    if (!o.version && o.options) {
+        throw new ParseError(
+            `'version' is not defined in the same file where 'option' is used.`,
+        );
+    }
+
+    return o;
 }

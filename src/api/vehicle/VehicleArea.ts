@@ -1,8 +1,22 @@
 import { getFloat, getString, Script } from '../Script';
 import { ParseBag } from '../../Parser';
 
+/**
+ * *XYWH*
+ *
+ * TODO: Document. -Jab, 3/5/2023
+ *
+ * @author Jab
+ */
 export type XYWH = { x: number; y: number; w: number; h: number };
 
+/**
+ * **VehicleArea**
+ *
+ * TODO: Document. -Jab, 3/5/2023
+ *
+ * @author Jab
+ */
 export class VehicleArea extends Script {
     xywh: XYWH | undefined;
 

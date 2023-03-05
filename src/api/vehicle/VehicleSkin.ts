@@ -1,6 +1,13 @@
 import { ParseBag } from 'Parser';
 import { getURI, Script, ScriptString } from '../Script';
 
+/**
+ * **VehicleSkin**
+ *
+ * TODO: Document. -Jab, 3/5/2023
+ *
+ * @author Jab
+ */
 export class VehicleSkin extends Script {
     texture: ScriptString;
 

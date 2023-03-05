@@ -7,6 +7,13 @@ import {
     ScriptString,
 } from './Script';
 
+/**
+ * **MannequinScript**
+ *
+ * TODO: Document. -Jab, 3/5/2023
+ *
+ * @author Jab
+ */
 export class MannequinScript extends Script {
     animSet: ScriptString;
     animState: ScriptString;

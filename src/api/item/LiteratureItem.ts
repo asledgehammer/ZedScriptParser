@@ -10,6 +10,13 @@ import {
 import { ItemScript } from './ItemScript';
 import { ParseBag } from '../../Parser';
 
+/**
+ * **LiteratureItem**
+ *
+ * TODO: Document. -Jab, 3/5/2023
+ *
+ * @author Jab
+ */
 export class LiteratureItem extends ItemScript {
     canBeWrite: ScriptBoolean;
     lvlSkillTrained: ScriptInt;
@@ -28,7 +35,7 @@ export class LiteratureItem extends ItemScript {
     }
 
     onPropertyValue(property: string, value: string): boolean {
-        switch(property.toLowerCase()) {
+        switch (property.toLowerCase()) {
             case 'canbewrite':
                 this.canBeWrite = getBoolean(value);
                 return true;
@@ -54,7 +61,6 @@ export class LiteratureItem extends ItemScript {
                         return a.trim();
                     });
                 return true;
-
         }
         return super.onPropertyValue(property, value);
     }

@@ -10,6 +10,13 @@ import {
 import { ItemScript } from './ItemScript';
 import { ParseBag } from '../../Parser';
 
+/**
+ * **WeaponPartItem**
+ *
+ * TODO: Document. -Jab, 3/5/2023
+ *
+ * @author Jab
+ */
 export class WeaponPartItem extends ItemScript {
     aimingTimeModifier: ScriptInt;
     angleModifier: ScriptFloat;

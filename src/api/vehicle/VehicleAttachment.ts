@@ -1,6 +1,23 @@
 import { ParseBag } from '../../Parser';
-import { getBoolean, getFloat, getInt, getString, Script, ScriptBoolean, ScriptInt, ScriptString, ScriptVector3 } from '../Script';
+import {
+    getBoolean,
+    getFloat,
+    getInt,
+    getString,
+    Script,
+    ScriptBoolean,
+    ScriptInt,
+    ScriptString,
+    ScriptVector3,
+} from '../Script';
 
+/**
+ * **VehicleAttachment**
+ *
+ * TODO: Document. -Jab, 3/5/2023
+ *
+ * @author Jab
+ */
 export class VehicleAttachment extends Script {
     canAttach: ScriptString;
     offset: ScriptVector3;

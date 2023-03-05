@@ -1,7 +1,20 @@
-import { getInt, getString, Script, ScriptInt, ScriptStringArray } from '../Script';
+import {
+    getInt,
+    getString,
+    Script,
+    ScriptInt,
+    ScriptStringArray,
+} from '../Script';
 import { ParseBag } from '../../Parser';
 import { VehicleSkill } from './VehicleSkill';
 
+/**
+ * **VehicleUninstall**
+ *
+ * TODO: Document. -Jab, 3/5/2023
+ *
+ * @author Jab
+ */
 export class VehicleUninstall extends Script {
     recipes: ScriptStringArray;
     skills: VehicleSkill[] | undefined;

@@ -1,8 +1,22 @@
-import { getBoolean, getInt, getString, Script, ScriptBoolean, ScriptInt, ScriptString } from '../Script';
+import {
+    getBoolean,
+    getInt,
+    getString,
+    Script,
+    ScriptBoolean,
+    ScriptInt,
+    ScriptString,
+} from '../Script';
 import { ParseBag } from '../../Parser';
 
+/**
+ * **VehicleContainer**
+ *
+ * TODO: Document. -Jab, 3/5/2023
+ *
+ * @author Jab
+ */
 export class VehicleContainer extends Script {
-
     capacity: ScriptInt;
     conditionAffectsCapacity: ScriptBoolean;
     contentType: ScriptString;

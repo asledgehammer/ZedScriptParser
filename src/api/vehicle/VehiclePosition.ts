@@ -7,6 +7,13 @@ import {
 } from '../Script';
 import { ParseBag } from '../../Parser';
 
+/**
+ * **VehiclePosition**
+ *
+ * TODO: Document. -Jab, 3/5/2023
+ *
+ * @author Jab
+ */
 export class VehiclePosition extends Script {
     area: ScriptString;
     offset: ScriptVector3;

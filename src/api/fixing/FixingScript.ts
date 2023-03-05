@@ -9,6 +9,13 @@ import {
 import { FixerSkill } from './FixerSkill';
 import { ParseBag } from '../../Parser';
 
+/**
+ * **FixingScript**
+ *
+ * TODO: Document. -Jab, 3/5/2023
+ *
+ * @author Jab
+ */
 export class FixingScript extends Script {
     require: ScriptStringArray;
     fixers: ScriptFixerArray;

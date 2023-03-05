@@ -8,6 +8,13 @@ import {
 import { ItemScript } from './ItemScript';
 import { ParseBag } from '../../Parser';
 
+/**
+ * **ContainerItem**
+ *
+ * TODO: Document. -Jab, 3/5/2023
+ *
+ * @author Jab
+ */
 export class ContainerItem extends ItemScript {
     canBeEquipped: ScriptString;
     capacity: ScriptInt;

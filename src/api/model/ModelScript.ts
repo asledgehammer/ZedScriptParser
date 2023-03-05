@@ -11,8 +11,15 @@ import {
     ScriptString,
     ScriptStringArray,
 } from '../Script';
-import { Attachment } from '../Attachment';
+import { Attachment } from './ModelAttachment';
 
+/**
+ * **ModelScript**
+ *
+ * TODO: Document. -Jab, 3/5/2023
+ *
+ * @author Jab
+ */
 export class ModelScript extends Script {
     animationsMesh: ScriptString;
     attachments: Attachment[] | undefined;

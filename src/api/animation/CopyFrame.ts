@@ -1,8 +1,22 @@
 import { getInt, getString, ScriptInt, ScriptString } from '../Script';
 import { ParseBag } from '../../Parser';
 
+/**
+ * *ScriptCopyFrameArray*
+ *
+ * TODO: Document. -Jab, 3/5/2023
+ *
+ * @author Jab
+ */
 export type ScriptCopyFrameArray = CopyFrame[] | undefined;
 
+/**
+ * **CopyFrame**
+ *
+ * TODO: Document. -Jab, 3/5/2023
+ *
+ * @author Jab
+ */
 export class CopyFrame {
     frame: ScriptInt;
     source: ScriptString;

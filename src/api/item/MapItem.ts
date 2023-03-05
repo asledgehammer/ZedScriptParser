@@ -2,6 +2,13 @@ import { getString, ScriptString } from '../Script';
 import { ItemScript } from './ItemScript';
 import { ParseBag } from '../../Parser';
 
+/**
+ * **MapItem**
+ *
+ * TODO: Document. -Jab, 3/5/2023
+ *
+ * @author Jab
+ */
 export class MapItem extends ItemScript {
     map: ScriptString;
 

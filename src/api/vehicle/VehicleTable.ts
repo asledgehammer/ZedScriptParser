@@ -12,6 +12,13 @@ import { ParseBag } from '../../Parser';
 import { VehicleItems } from './VehicleItems';
 import { VehicleItem } from './VehicleItem';
 
+/**
+ * **VehicleTable**
+ *
+ * TODO: Document. -Jab, 3/5/2023
+ *
+ * @author Jab
+ */
 export class VehicleTable extends Script {
     area: ScriptString;
     complete: ScriptString;

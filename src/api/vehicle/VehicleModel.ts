@@ -1,20 +1,34 @@
 import { ParseBag } from '../../Parser';
-import { getFloat, getString, getURI, Script, ScriptFloat, ScriptString, ScriptVector3 } from '../Script';
+import {
+    getFloat,
+    getString,
+    getURI,
+    Script,
+    ScriptFloat,
+    ScriptString,
+    ScriptVector3,
+} from '../Script';
 
+/**
+ * **VehicleModel**
+ *
+ * TODO: Document. -Jab, 3/5/2023
+ *
+ * @author Jab
+ */
 export class VehicleModel extends Script {
-    
     file: ScriptString;
     offset: ScriptVector3;
     rotate: ScriptVector3;
     scale: ScriptFloat;
-    
+
     constructor(bag: ParseBag) {
         super(bag, '=', false, true);
         this.parse(bag);
     }
 
     onPropertyValue(property: string, value: string): boolean {
-        switch(property.toLowerCase()) {
+        switch (property.toLowerCase()) {
             case 'file':
                 this.file = getURI(value);
                 return true;
@@ -22,13 +36,21 @@ export class VehicleModel extends Script {
                 this.scale = getFloat(value);
                 return true;
             case 'offset': {
-                const [x, y, z] = getString(value).split(' ').map(o=>{ return getFloat(o.trim())});
-                this.offset = {x, y, z};
+                const [x, y, z] = getString(value)
+                    .split(' ')
+                    .map((o) => {
+                        return getFloat(o.trim());
+                    });
+                this.offset = { x, y, z };
                 return true;
             }
             case 'rotate': {
-                const [x, y, z] = getString(value).split(' ').map(o=>{ return getFloat(o.trim())});
-                this.rotate = {x, y, z};
+                const [x, y, z] = getString(value)
+                    .split(' ')
+                    .map((o) => {
+                        return getFloat(o.trim());
+                    });
+                this.rotate = { x, y, z };
                 return true;
             }
         }

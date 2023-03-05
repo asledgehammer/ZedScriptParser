@@ -9,6 +9,13 @@ import {
 } from '../Script';
 import { ParseBag } from '../../Parser';
 
+/**
+ * **VehicleWheel**
+ *
+ * TODO: Document. -Jab, 3/5/2023
+ *
+ * @author Jab
+ */
 export class VehicleWheel extends Script {
     front: ScriptBoolean;
     offset: ScriptVector3;

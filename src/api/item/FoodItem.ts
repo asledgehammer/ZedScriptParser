@@ -11,6 +11,13 @@ import { ItemScript } from './ItemScript';
 import { EvolvedRecipe, ScriptEvolvedRecipeArray } from './EvolvedRecipe';
 import { ParseBag } from 'Parser';
 
+/**
+ * **FoodItem**
+ *
+ * TODO: Document. -Jab, 3/5/2023
+ *
+ * @author Jab
+ */
 export class FoodItem extends ItemScript {
     alcoholic: ScriptBoolean;
     badCold: ScriptBoolean;

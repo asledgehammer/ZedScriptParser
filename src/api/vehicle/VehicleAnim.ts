@@ -1,6 +1,22 @@
-import { getBoolean, getFloat, getString, Script, ScriptBoolean, ScriptFloat, ScriptString, ScriptVector3 } from '../Script';
+import {
+    getBoolean,
+    getFloat,
+    getString,
+    Script,
+    ScriptBoolean,
+    ScriptFloat,
+    ScriptString,
+    ScriptVector3,
+} from '../Script';
 import { ParseBag } from '../../Parser';
 
+/**
+ * **VehicleAnim**
+ *
+ * TODO: Document. -Jab, 3/5/2023
+ *
+ * @author Jab
+ */
 export class VehicleAnim extends Script {
     angle: ScriptVector3;
     anim: ScriptString;

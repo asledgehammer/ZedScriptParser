@@ -3,6 +3,13 @@ import { getString, Script, ScriptString, ScriptStringArray } from '../Script';
 import { CopyFrame, ScriptCopyFrameArray } from './CopyFrame';
 import { CopyFrames, ScriptCopyFramesArray } from './CopyFrames';
 
+/**
+ * **AnimationScript**
+ *
+ * TODO: Document. -Jab, 3/5/2023
+ *
+ * @author Jab
+ */
 export class AnimationScript extends Script {
     animationDirectories: ScriptStringArray;
     copyFrame: ScriptCopyFrameArray;
@@ -14,7 +21,7 @@ export class AnimationScript extends Script {
     }
 
     onPropertyToken(bag: ParseBag, property: string): boolean {
-        switch(property.toLowerCase()) {
+        switch (property.toLowerCase()) {
             case 'copyframe':
                 if (bag.next() !== '{') {
                     throw new ParseError(`Expected '{'`);
@@ -48,7 +55,7 @@ export class AnimationScript extends Script {
             case 'meshname':
                 this.meshName = getString(value);
                 return true;
-        }        
+        }
         return false;
     }
 

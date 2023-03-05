@@ -9,12 +9,15 @@ export type LexerOptions = { comments: boolean; location: boolean };
 export class LexerError extends Error {
     /** @param {string} message */
     constructor(cursor: LexerCursor, message: string) {
-        super(`[${cursor.row}:${cursor.column}] :: ${message}`);
+        super(
+            `[ZedScriptParse][Lexer][ERROR][${cursor.row}:${cursor.column}]\t:: ${message}`,
+        );
         this.name = 'LexerError';
     }
 }
 
 export class LexerBag {
+    inCommentBlock: boolean = false;
     comments: LexerToken[] = [];
     tokens: LexerToken[] = [];
     options: Partial<LexerOptions>;
@@ -41,11 +44,11 @@ export class LexerBag {
         const start = this.cursor();
         const value = this.until(['\n'], true)!!;
         const stop = this.cursor();
-        console.log({value})
         return { loc: { start, stop }, value };
     }
 
     commentBlock() {
+        this.inCommentBlock = true;
         this.next();
         const start = this.cursor();
         let value = '';
@@ -62,6 +65,7 @@ export class LexerBag {
             }
         }
         const stop = this.cursor();
+        this.inCommentBlock = false;
         return { loc: { start, stop }, value: `${value}` };
     }
 
@@ -84,12 +88,14 @@ export class LexerBag {
 
     next(): string {
         let c = this.raw[this.offset++];
-        if (c === '/' && this.peek() === '*') {
-            this.comments.push(this.commentBlock());
-            c = this.next();
-        }
-        if (c == '/' && this.peek() === '/') {
-            this.comments.push(this.commentLine());
+        if (!this.inCommentBlock) {
+            if (c === '/' && this.peek() === '*') {
+                this.comments.push(this.commentBlock());
+                c = this.next();
+            }
+            if (c == '/' && this.peek() === '/') {
+                this.comments.push(this.commentLine());
+            }
         }
         return c;
     }
@@ -100,10 +106,10 @@ export class LexerBag {
     ): string | undefined {
         let s = '';
         while (true) {
-            if (this.isEOF()) {
-                return undefined;
-            }
+            if (this.isEOF()) return s;
             const c = this.next();
+            if (c === undefined) return s;
+
             s += c;
 
             for (const pattern of patterns) {
@@ -127,6 +133,15 @@ export class LexerBag {
         cursor: LexerCursor = this.cursor(this.offset, true),
     ): void {
         throw new LexerError(cursor, message);
+    }
+
+    warn(
+        message: string,
+        cursor: LexerCursor = this.cursor(this.offset, true),
+    ): void {
+        console.warn(
+            `[ZedScriptParse][Lexer][${cursor.row}:${cursor.column}]\t:: ${message}`,
+        );
     }
 
     peek(offsetArg: number = 0): string | undefined {
@@ -483,6 +498,36 @@ function stepInModule(bag: LexerBag) {
     }
 }
 
+function stepInVersion(bag: LexerBag) {
+    const expectsEquals = bag.until(['=']);
+    if (expectsEquals === undefined) {
+        bag.error('Unexpected EOF in version declaration.');
+        return;
+    }
+    if (expectsEquals.indexOf('=') !== expectsEquals.length - 1) {
+        bag.error("Expected '=' in version declaration.");
+    }
+
+    bag.token('=', bag.cursor(bag.offset - 2), bag.cursor(bag.offset - 1));
+
+    let versionActual = bag.until([',', '\n']);
+    if (versionActual === undefined) {
+        bag.error('Unexpected EOF in version declaration.');
+        return;
+    }
+    versionActual = versionActual.trim().replace(/\,/g, '');
+    if (versionActual === '') {
+        bag.error('Version is empty in version declaration.');
+        return;
+    }
+
+    bag.token(
+        versionActual,
+        bag.cursor(bag.offset - versionActual.length),
+        bag.cursor(bag.offset - 1),
+    );
+}
+
 ////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////
 
@@ -495,16 +540,30 @@ export const tokenize = (
     try {
         while (!bag.isEOF()) {
             const start = bag.cursor();
-            const word = bag.until([' '])?.trim();
+            const word = bag.until([' ', '\n'])?.trim();
             const stop = bag.cursor(bag.offset - 1);
 
             if (word == undefined) break;
+            else if (word === '') continue;
             const wordLower = word.toLowerCase();
-
             switch (wordLower) {
                 case 'module':
                     bag.token('module', start, stop);
                     stepInModule(bag);
+                    break;
+                case 'option':
+                    stepInDefinition(bag, '[root]', 'option', '=', false);
+                    break;
+                case 'version':
+                    bag.token('version', start, stop);
+                    stepInVersion(bag);
+                    break;
+                default:
+                    bag.warn(
+                        `Ignoring unknown artifact: ${
+                            word + ' ' + bag.until(['\n', 'undefined'], true)
+                        }`,
+                    );
                     break;
             }
         }
@@ -530,7 +589,8 @@ export const tokenize = (
         const tokens = bag.tokens.map((o) => {
             return o.value;
         });
-        const json = JSON.stringify({ tokens }, null, 4);
+        const comments = bag.comments;
+        const json = JSON.stringify({ tokens, comments }, null, 4);
         fs.writeFileSync('error_tokens.json', json);
         throw e;
     }

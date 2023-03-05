@@ -7,6 +7,13 @@ import {
 } from '../Script';
 import { ParseBag } from '../../Parser';
 
+/**
+ * **VehicleLightBar**
+ *
+ * TODO: Document. -Jab, 3/5/2023
+ *
+ * @author Jab
+ */
 export class VehicleLightBar extends Script {
     leftCol: ScriptFloatArray;
     rightCol: ScriptFloatArray;

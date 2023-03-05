@@ -1,8 +1,22 @@
 import { ParseBag } from 'Parser';
-import { getFloat, getString, getURI, Script, ScriptFloat, ScriptString, ScriptVector3 } from '../Script';
+import {
+    getFloat,
+    getString,
+    getURI,
+    Script,
+    ScriptFloat,
+    ScriptString,
+    ScriptVector3,
+} from '../Script';
 
+/**
+ * **VehiclePhysics**
+ *
+ * TODO: Document. -Jab, 3/5/2023
+ *
+ * @author Jab
+ */
 export class VehiclePhysics extends Script {
-
     extents: ScriptVector3;
     offset: ScriptVector3;
     radius: ScriptFloat;

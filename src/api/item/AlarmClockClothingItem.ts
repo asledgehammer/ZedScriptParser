@@ -2,6 +2,13 @@ import { getInt, getString, ScriptInt, ScriptString } from '../Script';
 import { ClothingItem } from './ClothingItem';
 import { ParseBag } from '../../Parser';
 
+/**
+ * **AlarmClockClothingItem**
+ *
+ * TODO: Document. -Jab, 3/5/2023
+ *
+ * @author Jab
+ */
 export class AlarmClockClothingItem extends ClothingItem {
     alarmSound: ScriptString;
     soundRadius: ScriptInt;

@@ -15,7 +15,7 @@ import {
 import { ParseBag } from '../../Parser';
 import { VehicleModel } from './VehicleModel';
 import { VehicleSkin } from './VehicleSkin';
-import { Attachment } from '../Attachment';
+import { Attachment } from '../model/ModelAttachment';
 import { VehicleLightBar } from './VehicleLightBar';
 import { VehicleWheel } from './VehicleWheel';
 import { VehiclePassenger } from './VehiclePassenger';
@@ -25,6 +25,13 @@ import { VehiclePart } from './VehiclePart';
 import { VehiclePhysics } from './VehiclePhysics';
 import { VehicleAttachment } from './VehicleAttachment';
 
+/**
+ * **VehicleScript**
+ *
+ * TODO: Document. -Jab, 3/5/2023
+ *
+ * @author Jab
+ */
 export class VehicleScript extends Script {
     areas: VehicleArea[] | undefined;
     attachments: VehicleAttachment[] | undefined;

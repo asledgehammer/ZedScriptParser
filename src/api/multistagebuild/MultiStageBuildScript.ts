@@ -13,6 +13,13 @@ import {
 } from '../Script';
 import { RequiredItem } from './RequiredItem';
 
+/**
+ * **MultiStageBuildScript**
+ *
+ * TODO: Document. -Jab, 3/5/2023
+ *
+ * @author Jab
+ */
 export class MultiStageBuildScript extends Script {
     bonusHealth: ScriptInt;
     bonusSkill: ScriptBoolean;

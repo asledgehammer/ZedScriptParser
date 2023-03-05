@@ -1,5 +1,7 @@
 import { ParseBag, ParseError } from '../Parser';
 
+export type Vector2 = { x: number; y: number };
+export type Vector3 = Vector2 & { z: number };
 export type ScriptBoolean = boolean | undefined;
 export type ScriptFloat = number | undefined;
 export type ScriptInt = number | undefined;
@@ -7,9 +9,6 @@ export type ScriptString = string | null | undefined;
 export type ScriptIntArray = number[] | undefined;
 export type ScriptFloatArray = number[] | undefined;
 export type ScriptStringArray = string[] | undefined;
-
-export type Vector2 = { x: number; y: number };
-export type Vector3 = Vector2 & { z: number };
 export type ScriptVector2 = Vector2 | undefined;
 export type ScriptVector3 = Vector3 | undefined;
 
@@ -39,6 +38,13 @@ export function getBoolean(value: string): ScriptBoolean {
     return value.toLowerCase() === 'true';
 }
 
+/**
+ * **Script**
+ *
+ * TODO: Document. -Jab, 3/5/2023
+ *
+ * @author Jab
+ */
 export abstract class Script {
     __properties: { [name: string]: string } | undefined;
     protected readonly ignoreProperties: { [name: string]: boolean } = {};

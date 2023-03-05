@@ -1,6 +1,13 @@
 import { ParseBag } from '../../Parser';
 import { getString, Script, ScriptString } from '../Script';
 
+/**
+ * **AnimationsMeshScript**
+ *
+ * TODO: Document. -Jab, 3/5/2023
+ *
+ * @author Jab
+ */
 export class AnimationsMeshScript extends Script {
     meshFile: ScriptString;
     animationDirectory: ScriptString;

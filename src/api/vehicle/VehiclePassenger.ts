@@ -1,9 +1,22 @@
-import { getBoolean, getString, Script, ScriptBoolean, ScriptString } from '../Script';
+import {
+    getBoolean,
+    getString,
+    Script,
+    ScriptBoolean,
+    ScriptString,
+} from '../Script';
 import { ParseBag } from '../../Parser';
 import { VehiclePosition } from './VehiclePosition';
 import { VehicleSwitchSeat } from './VehicleSwitchSeat';
 import { VehicleAnim } from './VehicleAnim';
 
+/**
+ * **VehiclePassenger**
+ *
+ * TODO: Document. -Jab, 3/5/2023
+ *
+ * @author Jab
+ */
 export class VehiclePassenger extends Script {
     anims: VehicleAnim[] | undefined;
     area: ScriptString;
@@ -38,13 +51,13 @@ export class VehiclePassenger extends Script {
 
     onPropertyValue(property: string, value: string): boolean {
         switch (property.toLowerCase().trim()) {
-            case 'area': 
+            case 'area':
                 this.area = getString(value);
                 return true;
-            case 'door': 
+            case 'door':
                 this.door = getString(value);
                 return true;
-            case 'door2': 
+            case 'door2':
                 this.door2 = getString(value);
                 return true;
             case 'hasroof':

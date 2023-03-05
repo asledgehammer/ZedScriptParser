@@ -9,6 +9,13 @@ import {
 import { ItemScript } from './ItemScript';
 import { ParseBag } from '../../Parser';
 
+/**
+ * **DrainableItem**
+ *
+ * TODO: Document. -Jab, 3/5/2023
+ *
+ * @author Jab
+ */
 export class DrainableItem extends ItemScript {
     cantBeConsolided: ScriptBoolean;
     consolidateOption: ScriptString;

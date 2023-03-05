@@ -1,8 +1,22 @@
-import { RecipeAction } from "./RecipeAction";
-import { RecipeSourceItem } from "./RecipeSourceItem";
+import { RecipeAction } from './RecipeAction';
+import { RecipeSourceItem } from './RecipeSourceItem';
 
+/**
+ * *ScriptRecipeSourceArray*
+ *
+ * TODO: Document. -Jab, 3/5/2023
+ *
+ * @author Jab
+ */
 export type ScriptRecipeSourceArray = RecipeSource[] | undefined;
 
+/**
+ * **RecipeSource**
+ *
+ * TODO: Document. -Jab, 3/5/2023
+ *
+ * @author Jab
+ */
 export class RecipeSource {
     items: RecipeSourceItem[];
     action: RecipeAction;

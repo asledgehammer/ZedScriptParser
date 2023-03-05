@@ -26,7 +26,7 @@ const doFile = (path: string, out: string, options: LexerOptions) => {
     const parsed = parse(tokens.tokens as string[]);
     fs.writeFileSync(
         out.replace('.txt', '.json'),
-        JSON.stringify({ modules: parsed }, null, 4),
+        JSON.stringify(parsed, null, 4),
     );
 };
 

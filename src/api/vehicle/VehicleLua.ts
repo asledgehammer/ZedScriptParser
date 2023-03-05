@@ -1,6 +1,13 @@
 import { getString, Script, ScriptString } from '../Script';
 import { ParseBag } from '../../Parser';
 
+/**
+ * **VehicleLua**
+ *
+ * TODO: Document. -Jab, 3/5/2023
+ *
+ * @author Jab
+ */
 export class VehicleLua extends Script {
     checkEngine: ScriptString;
     checkOperate: ScriptString;

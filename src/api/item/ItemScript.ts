@@ -16,6 +16,13 @@ import {
     ScriptBloodClothingTypes,
 } from './BloodClothingType';
 
+/**
+ * **ItemScript**
+ *
+ * TODO: Document. -Jab, 3/5/2023
+ *
+ * @author Jab
+ */
 export abstract class ItemScript extends Script {
     activatedItem: ScriptBoolean;
     alarmSound: ScriptString;
@@ -199,10 +206,10 @@ export abstract class ItemScript extends Script {
                 return true;
             case 'clothingitemextraoption':
                 this.clothingItemExtraOption = getString(value)
-                .split(';')
-                .map((o) => {
-                    return o.trim();
-                });
+                    .split(';')
+                    .map((o) => {
+                        return o.trim();
+                    });
                 return true;
             case 'conditionaffectscapacity':
                 this.conditionAffectsCapacity = getBoolean(value);

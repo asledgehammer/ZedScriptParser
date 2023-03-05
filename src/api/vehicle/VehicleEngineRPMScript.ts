@@ -2,6 +2,13 @@ import { ParseBag } from '../../Parser';
 import { Script } from '../Script';
 import { VehicleEngineData } from './VehicleEngineData';
 
+/**
+ * **VehicleEngineRPMScript**
+ *
+ * TODO: Document. -Jab, 3/5/2023
+ *
+ * @author Jab
+ */
 export class VehicleEngineRPMScript extends Script {
     data: VehicleEngineData[] | undefined;
 

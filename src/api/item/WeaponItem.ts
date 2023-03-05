@@ -13,6 +13,13 @@ import { ItemScript } from './ItemScript';
 import { ModelWeaponPart, ScriptModelWeaponPartArray } from './ModelWeaponPart';
 import { ParseBag } from '../../Parser';
 
+/**
+ * **WeaponItem**
+ *
+ * TODO: Document. -Jab, 3/5/2023
+ *
+ * @author Jab
+ */
 export class WeaponItem extends ItemScript {
     aimingMod: ScriptFloat;
     aimingPerkCritModifier: ScriptInt;

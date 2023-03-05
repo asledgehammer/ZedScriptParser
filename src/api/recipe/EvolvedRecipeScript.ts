@@ -10,8 +10,22 @@ import {
     ScriptString,
 } from '../Script';
 
+/**
+ * *ScriptItemRecipeMap*
+ *
+ * TODO: Document. -Jab, 3/5/2023
+ *
+ * @author Jab
+ */
 export type ScriptItemRecipeMap = { [name: string]: ItemRecipe } | undefined;
 
+/**
+ * **EvolvedRecipeScript**
+ *
+ * TODO: Document. -Jab, 3/5/2023
+ *
+ * @author Jab
+ */
 export class EvolvedRecipeScript extends Script {
     name: ScriptString;
     maxItems: ScriptInt;

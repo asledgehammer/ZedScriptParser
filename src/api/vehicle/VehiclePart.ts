@@ -18,6 +18,13 @@ import { VehicleTable } from './VehicleTable';
 import { VehicleUninstall } from './VehicleUninstall';
 import { VehicleWindow } from './VehicleWindow';
 
+/**
+ * **VehiclePart**
+ *
+ * TODO: Document. -Jab, 3/5/2023
+ *
+ * @author Jab
+ */
 export class VehiclePart extends Script {
     anims: VehicleAnim[] | undefined;
     area: ScriptString;
@@ -105,10 +112,10 @@ export class VehiclePart extends Script {
                 return true;
             case 'itemtype':
                 this.itemType = getString(value)
-                .split(';')
-                .map((o) => {
-                    return o.trim();
-                });
+                    .split(';')
+                    .map((o) => {
+                        return o.trim();
+                    });
                 return true;
             case 'mechanicrequirekey':
                 this.mechanicRequireKey = getBoolean(value);

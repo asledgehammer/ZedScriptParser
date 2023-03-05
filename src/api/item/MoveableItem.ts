@@ -1,6 +1,13 @@
 import { ParseBag } from '../../Parser';
 import { ItemScript } from './ItemScript';
 
+/**
+ * **MoveableItem**
+ *
+ * TODO: Document. -Jab, 3/5/2023
+ *
+ * @author Jab
+ */
 export class MoveableItem extends ItemScript {
     constructor(bag: ParseBag) {
         super(bag, '=', 'Moveable');

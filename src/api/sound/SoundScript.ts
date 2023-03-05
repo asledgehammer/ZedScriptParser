@@ -10,10 +10,40 @@ import {
 } from '../Script';
 import { SoundClip } from './SoundClip';
 
+/**
+ * *MasterVolume*
+ *
+ * TODO: Document. -Jab, 3/5/2023
+ *
+ * @author Jab
+ */
 export type MasterVolume = 'Primary' | 'Ambient' | 'Music' | 'VehicleEngine';
+
+/**
+ * *ScriptMasterVolume*
+ *
+ * TODO: Document. -Jab, 3/5/2023
+ *
+ * @author Jab
+ */
 export type ScriptMasterVolume = MasterVolume | undefined;
+
+/**
+ * *ScriptSoundClip*
+ *
+ * TODO: Document. -Jab, 3/5/2023
+ *
+ * @author Jab
+ */
 export type ScriptSoundClip = SoundClip | undefined;
 
+/**
+ * **SoundScript**
+ *
+ * TODO: Document. -Jab, 3/5/2023
+ *
+ * @author Jab
+ */
 export class SoundScript extends Script {
     category: ScriptString;
     is3D: ScriptBoolean;

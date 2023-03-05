@@ -31,6 +31,13 @@ import { ParseBag, ParseError } from '../Parser';
 import { AnimationsMeshScript } from './animation/AnimationsMeshScript';
 import { MultiStageBuildScript } from './multistagebuild/MultiStageBuildScript';
 
+/**
+ * **ModuleScript**
+ *
+ * TODO: Document. -Jab, 3/5/2023
+ *
+ * @author Jab
+ */
 export class ModuleScript {
     readonly animations: { [name: string]: AnimationScript } = {};
     readonly animationsMeshes: { [name: string]: AnimationsMeshScript } = {};
@@ -167,7 +174,8 @@ export class ModuleScript {
                     break;
                 case 'vehicleenginerpm':
                     const vehicleEngineRPM = new VehicleEngineRPMScript(bag);
-                    this.vehicleEngines[vehicleEngineRPM.__name!!] = vehicleEngineRPM;
+                    this.vehicleEngines[vehicleEngineRPM.__name!!] =
+                        vehicleEngineRPM;
                     break;
                 case 'template vehicle':
                     const vehicleTemplate = new VehicleTemplateScript(bag);

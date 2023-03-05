@@ -11,6 +11,13 @@ import {
 import { ItemScript } from './ItemScript';
 import { ParseBag } from '../../Parser';
 
+/**
+ * **ClothingItem**
+ *
+ * TODO: Document. -Jab, 3/5/2023
+ *
+ * @author Jab
+ */
 export class ClothingItem extends ItemScript {
     biteDefense: ScriptFloat;
     bulletDefense: ScriptFloat;

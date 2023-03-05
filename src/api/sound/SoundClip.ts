@@ -10,6 +10,13 @@ import {
     ScriptStringArray,
 } from '../Script';
 
+/**
+ * **SoundClip**
+ *
+ * TODO: Document. -Jab, 3/5/2023
+ *
+ * @author Jab
+ */
 export class SoundClip extends Script {
     distanceMin: ScriptInt;
     distanceMax: ScriptInt;
