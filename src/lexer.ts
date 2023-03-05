@@ -125,6 +125,27 @@ export class LexerBag {
 ////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////
 
+export function checkProperty(
+    bag: LexerBag,
+    property: string,
+    categories: string[] | string,
+    categoryGiven: string,
+) {
+    const catLower = categoryGiven.toLowerCase();
+    if (typeof categories === 'string') categories = [categories];
+    for (const catExp of categories) {
+        const catExpLower = catExp.toLowerCase();
+        if (catLower === catExpLower) {
+            return;
+        }
+    }
+
+    const cats = `[${categories.map((o) => o.toLowerCase()).join(', ')}]`;
+    bag.error(
+        `Cannot define ${property} in '${catLower}'. It is only allowed in ${cats}'.`,
+    );
+}
+
 export function stepInOpenBracket(bag: LexerBag): string {
     if (bag.peek() === '{') {
         const start = bag.cursor();
@@ -186,7 +207,7 @@ export function stepInProperty(
     if (property.indexOf(' ') !== -1) {
         const [cat, name] = property.split(' ');
         bag.token(
-            cat,
+            cat.toLowerCase(),
             bag.cursor(),
             bag.cursor(bag.offset - (property.length - cat.length)),
         );
@@ -212,7 +233,7 @@ export function stepInProperty(
 
         if (line == undefined) {
             bag.error(
-                `Unexpected EOF in ${property}: ${module}.${definition}.${property}`,
+                `Unexpected EOF in '${property}: ${module}.${definition}.${property}'`,
             );
             return;
         } else if (line === '') {
@@ -256,6 +277,43 @@ function stepInDefinition(
         const line = bag.until([',', '\n', '}'])?.trim();
         const stop = bag.cursor(bag.offset - 1);
 
+        function space(line: string): boolean {
+            const [cat] = line.split(' ').map((o) => {
+                return o.trim();
+            });
+            const prop = cat.toLowerCase();
+            switch (prop) {
+                case 'attachment':
+                    checkProperty(bag, prop, 'model', category);
+                    stepInProperty(bag, module, name, line, '=', false);
+                    return true;
+            }
+            return false;
+        }
+
+        function noSpace(line: string): boolean {
+            const prop = line.toLowerCase();
+            switch (prop) {
+                case 'copyframe':
+                    checkProperty(bag, prop, 'animation', category);
+                    stepInProperty(bag, module, name, prop, '=');
+                    return true;
+                case 'copyframes':
+                    checkProperty(bag, prop, 'animation', category);
+                    stepInProperty(bag, module, name, prop, '=');
+                    return true;
+                case 'clip':
+                    checkProperty(bag, prop, 'sound', category);
+                    stepInProperty(bag, module, name, prop, '=');
+                    return true;
+                case 'data':
+                    checkProperty(bag, prop, 'vehicleenginerpm', category);
+                    stepInProperty(bag, module, name, prop, '=');
+                    return true;
+            }
+            return false;
+        }
+
         if (line == undefined) {
             bag.error(`EOF in ${category}: ${module}.${name}`);
             return;
@@ -264,28 +322,6 @@ function stepInDefinition(
         } else if (line === '}') {
             bag.token('}', bag.cursor(bag.offset - 1), bag.cursor());
             break;
-        }
-
-        function checkProperty(
-            property: string,
-            categories: string[] | string,
-            categoryGiven: string,
-        ) {
-            const catLower = categoryGiven.toLowerCase();
-            if (typeof categories === 'string') categories = [categories];
-            for (const catExp of categories) {
-                const catExpLower = catExp.toLowerCase();
-                if (catLower === catExpLower) {
-                    return;
-                }
-            }
-
-            const cats = `[${categories
-                .map((o) => o.toLowerCase())
-                .join(', ')}]`;
-            bag.error(
-                `Cannot define ${property} in '${catLower}'. It is only allowed in ${cats}'.`,
-            );
         }
 
         if (line.indexOf(operator) !== -1) {
@@ -298,121 +334,18 @@ function stepInDefinition(
             } else {
                 bag.token(line.replace(/\,/g, '').trim(), start, stop);
             }
+            continue;
         } else if (line === ',') {
             continue;
-        } else {
-            const propertyLower = line.toLowerCase();
-            switch (propertyLower) {
-                case 'copyframe':
-                    checkProperty(propertyLower, 'animation', category);
-                    stepInProperty(bag, module, name, propertyLower, '=');
-                    break;
-                case 'copyframes':
-                    checkProperty(propertyLower, 'animation', category);
-                    stepInProperty(bag, module, name, propertyLower, '=');
-                    break;
-                case 'clip':
-                    checkProperty(propertyLower, 'sound', category);
-                    stepInProperty(bag, module, name, propertyLower, '=');
-                    break;
-                case 'model':
-                    checkProperty(propertyLower, 'vehicle', category);
-                    stepInProperty(
-                        bag,
-                        module,
-                        name,
-                        propertyLower,
-                        '=',
-                        false,
-                    );
-                    break;
-
-                case 'skin':
-                    checkProperty(propertyLower, 'vehicle', category);
-                    stepInProperty(bag, module, name, propertyLower, '=');
-                    break;
-                case 'sound':
-                    checkProperty(propertyLower, 'vehicle', category);
-                    stepInProperty(bag, module, name, propertyLower, '=');
-                    break;
-                case 'wheel':
-                    checkProperty(propertyLower, 'vehicle', category);
-                    stepInProperty(bag, module, name, propertyLower, '=');
-                    break;
-                case 'lightbar':
-                    checkProperty(propertyLower, 'vehicle', category);
-                    stepInProperty(bag, module, name, propertyLower, '=');
-                    break;
-                case 'data':
-                    checkProperty(propertyLower, 'vehicleenginerpm', category);
-                    stepInProperty(bag, module, name, propertyLower, '=');
-                    break;
-                default:
-                    let brk = false;
-                    if (line.indexOf(' ') !== -1) {
-                        const [propCategory] = line.split(' ');
-                        switch (propCategory.toLowerCase()) {
-                            case 'anim':
-                                brk = true;
-                                checkProperty(
-                                    propertyLower,
-                                    ['vehicle'],
-                                    category,
-                                );
-
-                                stepInProperty(
-                                    bag,
-                                    module,
-                                    name,
-                                    propertyLower,
-                                    '=',
-                                    false,
-                                );
-                                break;
-                            case 'area':
-                                brk = true;
-                                checkProperty(
-                                    propertyLower,
-                                    ['vehicle'],
-                                    category,
-                                );
-
-                                stepInProperty(
-                                    bag,
-                                    module,
-                                    name,
-                                    propertyLower,
-                                    '=',
-                                    false,
-                                );
-                                break;
-                            case 'attachment':
-                                brk = true;
-                                checkProperty(
-                                    propertyLower,
-                                    ['model', 'vehicle'],
-                                    category,
-                                );
-
-                                stepInProperty(
-                                    bag,
-                                    module,
-                                    name,
-                                    propertyLower,
-                                    '=',
-                                    false,
-                                );
-                                break;
-                        }
-                    }
-                    if (!brk) {
-                        bag.error(
-                            `Illegal line in '${module}.${name}': ${line}`,
-                        );
-                    }
-                    break;
-            }
         }
+
+        if (line.indexOf(' ') !== -1) {
+            if (space(line)) continue;
+        } else {
+            if (noSpace(line)) continue;
+        }
+
+        bag.error(`Illegal line in '${module}.${name}': ${line}`);
     }
 }
 
@@ -429,7 +362,7 @@ function stepInRecipe(bag: LexerBag, module: string, category: string) {
         const stop = bag.cursor(bag.offset - 1);
 
         if (line == undefined) {
-            bag.error(`EOF in recipe: ${module}.${recipe}`);
+            bag.error(`Unexpected EOF in '${module}.${recipe}'`);
             return;
         } else if (line === '') {
             continue;
@@ -455,7 +388,7 @@ function stepInImports(bag: LexerBag, module: string) {
         const stop = bag.cursor(bag.offset - 1);
 
         if (line == undefined) {
-            bag.error(`EOF in imports: ${module}`);
+            bag.error(`Unexpected EOF in '${module}.Imports'`);
             return;
         } else if (line === '') {
             continue;
@@ -483,7 +416,6 @@ function stepInModule(bag: LexerBag) {
             return;
         }
 
-        let isTemplate = false;
         const wordLower = word.toLowerCase();
         switch (wordLower) {
             /* (TERMINATOR) */
@@ -583,18 +515,11 @@ export const tokenize = (
             };
         }
     } catch (e) {
-        fs.writeFileSync(
-            'error.json',
-            JSON.stringify(
-                {
-                    tokens: bag.tokens.map((o) => {
-                        return o.value;
-                    }),
-                },
-                null,
-                4,
-            ),
-        );
+        const tokens = bag.tokens.map((o) => {
+            return o.value;
+        });
+        const json = JSON.stringify({ tokens }, null, 4);
+        fs.writeFileSync('error_tokens.json', json);
         throw e;
     }
 };
