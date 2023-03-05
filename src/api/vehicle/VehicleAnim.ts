@@ -1,10 +1,12 @@
-import { getFloat, getString, Script, ScriptFloat, ScriptString, ScriptVector3 } from '../Script';
+import { getBoolean, getFloat, getString, Script, ScriptBoolean, ScriptFloat, ScriptString, ScriptVector3 } from '../Script';
 import { ParseBag } from '../../Parser';
 
 export class VehicleAnim extends Script {
     angle: ScriptVector3;
     anim: ScriptString;
+    animate: ScriptBoolean;
     rate: ScriptFloat;
+    reverse: ScriptBoolean;
     sound: ScriptString;
 
     constructor(bag: ParseBag) {
@@ -29,8 +31,14 @@ export class VehicleAnim extends Script {
             case 'anim':
                 this.anim = getString(value);
                 return true;
+            case 'animate':
+                this.animate = getBoolean(value);
+                return true;
             case 'rate':
                 this.rate = getFloat(value);
+                return true;
+            case 'reverse':
+                this.reverse = getBoolean(value);
                 return true;
             case 'sound':
                 this.sound = getString(value);

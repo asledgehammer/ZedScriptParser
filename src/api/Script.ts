@@ -8,7 +8,9 @@ export type ScriptIntArray = number[] | undefined;
 export type ScriptFloatArray = number[] | undefined;
 export type ScriptStringArray = string[] | undefined;
 
-export type Vector3 = { x: number; y: number; z: number };
+export type Vector2 = { x: number; y: number };
+export type Vector3 = Vector2 & { z: number };
+export type ScriptVector2 = Vector2 | undefined;
 export type ScriptVector3 = Vector3 | undefined;
 
 export function getString(value: string): string {
@@ -59,7 +61,6 @@ export abstract class Script {
         }
 
         if (bag.next() !== '{') {
-            // console.log({__name: this.__name});
             throw new ParseError(`Expected '{'`);
         }
 
@@ -83,6 +84,12 @@ export abstract class Script {
             const [property, value] = curr.split(this.__operator).map((o) => {
                 return o.trim();
             });
+
+            /* (Continuity Check) */
+            if (property.startsWith('//')) {
+                return;
+            }
+
             if (!this.onPropertyValue(property, value)) {
                 this.addCustomProperty(property, value);
             }

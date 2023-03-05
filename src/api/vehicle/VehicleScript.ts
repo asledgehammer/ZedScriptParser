@@ -1,12 +1,15 @@
 import {
+    getBoolean,
     getFloat,
     getInt,
     getString,
     Script,
+    ScriptBoolean,
     ScriptFloat,
     ScriptInt,
     ScriptString,
     ScriptStringArray,
+    ScriptVector2,
     ScriptVector3,
 } from '../Script';
 import { ParseBag } from '../../Parser';
@@ -20,24 +23,29 @@ import { VehicleSound } from './VehicleSound';
 import { VehicleArea } from './VehicleArea';
 import { VehiclePart } from './VehiclePart';
 import { VehiclePhysics } from './VehiclePhysics';
+import { VehicleAttachment } from './VehicleAttachment';
 
 export class VehicleScript extends Script {
     areas: VehicleArea[] | undefined;
-    attachments: Attachment[] | undefined;
+    attachments: VehicleAttachment[] | undefined;
     brakingForce: ScriptInt;
     centerOfMassOffset: ScriptVector3;
     engineForce: ScriptInt;
     engineLoudness: ScriptInt;
     engineQuality: ScriptInt;
     engineRepairLevel: ScriptInt;
+    engineRPMType: ScriptString;
     extents: ScriptVector3;
+    extentsOffset: ScriptVector2;
     frontEndHealth: ScriptInt;
+    isSmallVehicle: ScriptBoolean;
     lightBar: VehicleLightBar | undefined;
     mass: ScriptFloat;
     maxSpeed: ScriptFloat;
     maxSuspensionTravelCm: ScriptInt;
     mechanicType: ScriptInt;
     model: VehicleModel | undefined;
+    offRoadEfficiency: ScriptFloat;
     parts: VehiclePart[] | undefined;
     passengers: VehiclePassenger[] | undefined;
     playerDamageProtection: ScriptFloat;
@@ -45,7 +53,10 @@ export class VehicleScript extends Script {
     physics: VehiclePhysics[] | undefined;
     rearEndHealth: ScriptInt;
     rollInfluence: ScriptFloat;
+    seatNumber: ScriptInt;
     seats: ScriptInt;
+    shadowExtents: ScriptVector2;
+    shadowOffset: ScriptVector2;
     skin: VehicleSkin | undefined;
     sound: VehicleSound | undefined;
     spawnOffsetY: ScriptFloat;
@@ -71,6 +82,14 @@ export class VehicleScript extends Script {
     wheelFriction: ScriptFloat;
     wheels: VehicleWheel[] | undefined;
 
+    gearRatioCount: ScriptInt;
+    gearRatioR: ScriptFloat;
+    gearRatio1: ScriptFloat;
+    gearRatio2: ScriptFloat;
+    gearRatio3: ScriptFloat;
+    gearRatio4: ScriptFloat;
+    gearRatio5: ScriptFloat;
+
     constructor(bag: ParseBag) {
         super(bag, '=');
     }
@@ -83,7 +102,7 @@ export class VehicleScript extends Script {
                 return true;
             case 'attachment':
                 if (this.attachments === undefined) this.attachments = [];
-                this.attachments.push(new Attachment(bag));
+                this.attachments.push(new VehicleAttachment(bag));
                 return true;
             case 'lightbar':
                 this.lightBar = new VehicleLightBar(bag);
@@ -135,6 +154,9 @@ export class VehicleScript extends Script {
             case 'engineforce':
                 this.engineForce = getInt(value);
                 return true;
+            case 'enginerpmtype':
+                this.engineRPMType = getString(value);
+                return true;
             case 'engineloudness':
                 this.engineLoudness = getInt(value);
                 return true;
@@ -154,9 +176,44 @@ export class VehicleScript extends Script {
                 this.extents = { x, y, z };
                 return true;
             }
+            case 'extentsoffset': {
+                const [x, y] = getString(value)
+                    .trim()
+                    .split(' ')
+                    .map((o) => {
+                        return getFloat(o);
+                    });
+                this.extentsOffset = { x, y };
+                return true;
+            }
             case 'frontendhealth':
                 this.frontEndHealth = getInt(value);
                 return true;
+            case 'gearratiocount':
+                this.gearRatioCount = getInt(value);
+                return true;
+            case 'gearratior':
+                this.gearRatioR = getFloat(value);
+                return true;
+            case 'gearratio1':
+                this.gearRatio1 = getFloat(value);
+                return true;
+            case 'gearratio2':
+                this.gearRatio2 = getFloat(value);
+                return true;
+            case 'gearratio3':
+                this.gearRatio3 = getFloat(value);
+                return true;
+            case 'gearratio4':
+                this.gearRatio4 = getFloat(value);
+                return true;
+            case 'gearratio5':
+                this.gearRatio5 = getFloat(value);
+                return true;
+            case 'issmallvehicle': {
+                this.isSmallVehicle = getBoolean(value);
+                return true;
+            }
             case 'mass': {
                 this.mass = getInt(value);
                 return true;
@@ -169,6 +226,9 @@ export class VehicleScript extends Script {
                 return true;
             case 'mechanictype':
                 this.mechanicType = getInt(value);
+                return true;
+            case 'offroadefficiency':
+                this.offRoadEfficiency = getFloat(value);
                 return true;
             case 'playerdamageprotection':
                 this.playerDamageProtection = getFloat(value);
@@ -188,9 +248,34 @@ export class VehicleScript extends Script {
             case 'rollinfluence':
                 this.rollInfluence = getFloat(value);
                 return true;
+
+            /* (Possible issue with vanilla scripts referring to the same variable) */
+            case 'seatnumber':
+                this.seatNumber = getInt(value);
+                return true;
             case 'seats':
                 this.seats = getInt(value);
                 return true;
+            /******************************************/
+
+            case 'shadowextents': {
+                const [x, y] = getString(value)
+                    .split(' ')
+                    .map((o) => {
+                        return getFloat(o.trim());
+                    });
+                this.shadowExtents = { x, y };
+                return true;
+            }
+            case 'shadowoffset': {
+                const [x, y] = getString(value)
+                    .split(' ')
+                    .map((o) => {
+                        return getFloat(o.trim());
+                    });
+                this.shadowOffset = { x, y };
+                return true;
+            }
             case 'spawnoffsety': {
                 this.spawnOffsetY = getFloat(value);
                 return true;

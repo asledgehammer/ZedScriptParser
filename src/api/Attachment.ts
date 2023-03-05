@@ -40,6 +40,7 @@ export class Attachment extends Script {
                 this.zOffset = getInt(value);
                 return true;
             }
+            
         }
         return false;
     }

@@ -11,6 +11,7 @@ export class VehicleLightBar extends Script {
     leftCol: ScriptFloatArray;
     rightCol: ScriptFloatArray;
     soundSiren: ScriptString;
+    texture: ScriptString;
 
     constructor(bag: ParseBag) {
         super(bag, '=', false, true);
@@ -39,6 +40,9 @@ export class VehicleLightBar extends Script {
                 return true;
             case 'soundsiren':
                 this.soundSiren = getString(value);
+                return true;
+            case 'texture':
+                this.texture = getString(value);
                 return true;
         }
         return false;

@@ -5,6 +5,7 @@ export class VehiclePartModel extends Script {
     
     file: ScriptString;
     offset: ScriptVector3;
+    rotate: ScriptVector3;
     scale: ScriptFloat;
     
     constructor(bag: ParseBag) {
@@ -23,6 +24,11 @@ export class VehiclePartModel extends Script {
             case 'offset': {
                 const [x, y, z] = getString(value).split(' ').map(o=>{ return getFloat(o.trim())});
                 this.offset = {x, y, z};
+                return true;
+            }
+            case 'rotate': {
+                const [x, y, z] = getString(value).split(' ').map(o=>{ return getFloat(o.trim())});
+                this.rotate = {x, y, z};
                 return true;
             }
         }

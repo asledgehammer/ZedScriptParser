@@ -13,11 +13,13 @@ import { VehicleItems } from './VehicleItems';
 import { VehicleItem } from './VehicleItem';
 
 export class VehicleTable extends Script {
+    area: ScriptString;
     complete: ScriptString;
     door: ScriptString;
     items: VehicleItem[] | undefined;
+    mechanicRequireKey: ScriptBoolean;
     professions: ScriptString;
-    recipes: ScriptString;
+    recipes: ScriptStringArray;
     requireEmpty: ScriptBoolean;
     requireInstalled: ScriptStringArray;
     requireUninstalled: ScriptStringArray;
@@ -42,17 +44,27 @@ export class VehicleTable extends Script {
 
     onPropertyValue(property: string, value: string): boolean {
         switch (property.toLowerCase().trim()) {
+            case 'area':
+                this.area = getString(value);
+                return true;
             case 'complete':
                 this.complete = getString(value);
                 return true;
             case 'door':
                 this.door = getString(value);
                 return true;
+            case 'mechanicrequirekey':
+                this.mechanicRequireKey = getBoolean(value);
+                return true;
             case 'professions':
                 this.professions = getString(value);
                 return true;
             case 'recipes':
-                this.recipes = getString(value);
+                this.recipes = getString(value)
+                    .split(';')
+                    .map((o) => {
+                        return o.trim();
+                    });
                 return true;
             case 'requireempty':
                 this.requireEmpty = getBoolean(value);

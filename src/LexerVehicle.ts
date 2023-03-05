@@ -48,7 +48,7 @@ export function stepInVehicle(
         const [cat, catName] = line.split(' ').map((o) => {
             return o.trim();
         });
-        console.log({ vehicleSpaceLine: line, cat });
+        // console.log({ vehicleSpaceLine: line, cat });
         switch (cat.toLowerCase()) {
             case 'area':
                 stepInArea(bag, `${module}.${name}`, catName);
@@ -75,7 +75,7 @@ export function stepInVehicle(
     /* (All non-named object constructors go here) */
     const noSpace = (line: string): boolean => {
         const lineLower = line.toLowerCase();
-        console.log({ vehicleNoSpaceLine: line });
+        // console.log({ vehicleNoSpaceLine: line });
         switch (lineLower) {
             case 'lightbar':
                 stepInLightbar(bag, `${module}.${name}`);
@@ -218,7 +218,7 @@ export function stepInVehicle(
             const [cat, catName] = line.split(' ').map((o) => {
                 return o.trim();
             });
-            console.log({ partSpaceLine: line, cat });
+            // console.log({ partSpaceLine: line, cat });
             switch (cat.toLowerCase()) {
                 case 'anim':
                     stepInAnim(bag, `${parent}.${name}`, catName);
@@ -236,7 +236,7 @@ export function stepInVehicle(
         /* (All non-named object constructors go here) */
         const noSpace = (line: string): boolean => {
             const cat = line.toLowerCase();
-            console.log({ partNoSpaceLine: line, cat });
+            // console.log({ partNoSpaceLine: line, cat });
             switch (cat) {
                 case 'container':
                     stepInContainer(bag, `${parent}.${name}`);
@@ -561,7 +561,7 @@ export function stepInVehicle(
             const [cat, catName] = line.split(' ').map((o) => {
                 return o.trim();
             });
-            console.log({ passengerSpaceLine: line, cat });
+            // console.log({ passengerSpaceLine: line, cat });
             switch (cat.toLowerCase()) {
                 case 'anim':
                     stepInAnim(bag, `${parent}.${name}`, catName);
@@ -579,7 +579,7 @@ export function stepInVehicle(
         /* (All non-named object constructors go here) */
         const noSpace = (line: string): boolean => {
             const cat = line.toLowerCase();
-            console.log({ tableNoSpaceLine: line, cat });
+            // console.log({ tableNoSpaceLine: line, cat });
             switch (cat) {
                 case 'items':
                     stepInItems(bag, `${parent}.${name}.${line}`);
@@ -791,7 +791,7 @@ export function stepInVehicle(
             const [cat] = line.split(' ').map((o) => {
                 return o.trim();
             });
-            console.log({ tableSpaceLine: line, cat });
+            // console.log({ tableSpaceLine: line, cat });
             switch (cat.toLowerCase()) {
             }
             return false;
@@ -800,7 +800,7 @@ export function stepInVehicle(
         /* (All non-named object constructors go here) */
         const noSpace = (line: string): boolean => {
             const cat = line.toLowerCase();
-            console.log({ tableNoSpaceLine: line, cat });
+            // console.log({ tableNoSpaceLine: line, cat });
             switch (cat) {
                 case 'items':
                     stepInItems(bag, `${parent}.${name}.${line}`);
@@ -857,7 +857,7 @@ export function stepInVehicle(
                 .map((o) => {
                     return o.trim();
                 });
-            console.log({ itemsNoSpaceLine: line, cat });
+            // console.log({ itemsNoSpaceLine: line, cat });
             switch (cat) {
             }
             return false;
@@ -869,7 +869,7 @@ export function stepInVehicle(
             const start = bag.cursor(bag.offset - index.length);
             const stop = bag.cursor();
 
-            console.log({ itemsNoSpaceLine: line, index });
+            // console.log({ itemsNoSpaceLine: line, index });
             /* (Array Token) */
             bag.token(index, start, stop);
             stepInItem(bag, `${parent}.part`, index);

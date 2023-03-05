@@ -1,7 +1,8 @@
 import { ParseBag } from 'Parser';
-import { getString, getURI, Script, ScriptString } from '../Script';
+import { getString, Script, ScriptString } from '../Script';
 
 export class VehicleSound extends Script {
+    backSignal: ScriptString;
     engine: ScriptString;
     engineStart: ScriptString;
     engineTurnOff: ScriptString;
@@ -15,7 +16,11 @@ export class VehicleSound extends Script {
 
     onPropertyValue(property: string, value: string): boolean {
         switch (property.trim().toLowerCase()) {
+            case 'backsignal':
+                this.backSignal = getString(value);
+                return true;
             case 'engine':
+                this.engine = getString(value);
                 return true;
             case 'enginestart':
                 this.engineStart = getString(value);

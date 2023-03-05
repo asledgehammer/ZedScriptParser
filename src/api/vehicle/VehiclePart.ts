@@ -5,13 +5,13 @@ import {
     Script,
     ScriptBoolean,
     ScriptString,
+    ScriptStringArray,
 } from '../Script';
 import { VehicleAnim } from './VehicleAnim';
 import { VehicleContainer } from './VehicleContainer';
 import { VehicleDoor } from './VehicleDoor';
 import { VehicleInstall } from './VehicleInstall';
 import { VehicleLua } from './VehicleLua';
-import { VehicleModel } from './VehicleModel';
 import { VehiclePartModel } from './VehiclePartModel';
 import { VehiclePassenger } from './VehiclePassenger';
 import { VehicleTable } from './VehicleTable';
@@ -24,6 +24,7 @@ export class VehiclePart extends Script {
     category: ScriptString;
     containers: VehicleContainer[] | undefined;
     doors: VehicleDoor[] | undefined;
+    hasLightsRear: ScriptBoolean;
     install: VehicleInstall | undefined;
     itemType: ScriptString;
     lua: VehicleLua | undefined;
@@ -31,6 +32,7 @@ export class VehiclePart extends Script {
     models: VehiclePartModel[] | undefined;
     parent: ScriptString;
     passengers: VehiclePassenger[] | undefined;
+    recipes: ScriptStringArray;
     repairMechanic: ScriptBoolean;
     specificItem: ScriptBoolean;
     tables: VehicleTable[] | undefined;
@@ -94,6 +96,13 @@ export class VehiclePart extends Script {
             case 'category':
                 this.category = getString(value);
                 return true;
+            case 'door':
+                // FIXME: There's no clear way to interpret this situation ATM. -Jab, 3/5/2023
+                // this.door = getString(value);
+                return true;
+            case 'haslightsrear':
+                this.hasLightsRear = getBoolean(value);
+                return true;
             case 'itemtype':
                 this.itemType = getString(value);
                 return true;
@@ -103,6 +112,12 @@ export class VehiclePart extends Script {
             case 'parent':
                 this.parent = getString(value);
                 return true;
+            case 'recipes':
+                this.recipes = getString(value)
+                    .split(';')
+                    .map((o) => {
+                        return o.trim();
+                    });
             case 'repairmechanic':
                 this.repairMechanic = getBoolean(value);
                 return true;

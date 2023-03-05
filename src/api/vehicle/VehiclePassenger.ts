@@ -8,6 +8,7 @@ export class VehiclePassenger extends Script {
     anims: VehicleAnim[] | undefined;
     area: ScriptString;
     door: ScriptString;
+    door2: ScriptString;
     hasRoof: ScriptBoolean;
     positions: VehiclePosition[] | undefined;
     switchSeats: VehicleSwitchSeat[] | undefined;
@@ -42,6 +43,9 @@ export class VehiclePassenger extends Script {
                 return true;
             case 'door': 
                 this.door = getString(value);
+                return true;
+            case 'door2': 
+                this.door2 = getString(value);
                 return true;
             case 'hasroof':
                 this.hasRoof = getBoolean(value);

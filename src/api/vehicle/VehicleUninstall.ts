@@ -1,8 +1,9 @@
-import { getInt, Script, ScriptInt } from '../Script';
+import { getInt, getString, Script, ScriptInt, ScriptStringArray } from '../Script';
 import { ParseBag } from '../../Parser';
 import { VehicleSkill } from './VehicleSkill';
 
 export class VehicleUninstall extends Script {
+    recipes: ScriptStringArray;
     skills: VehicleSkill[] | undefined;
     time: ScriptInt;
 
@@ -19,6 +20,13 @@ export class VehicleUninstall extends Script {
 
     onPropertyValue(property: string, value: string): boolean {
         switch (property.toLowerCase().trim()) {
+            case 'recipes':
+                this.recipes = getString(value)
+                    .split(';')
+                    .map((o) => {
+                        return o.trim();
+                    });
+                return true;
             case 'skills':
                 if (this.skills == null) this.skills = [];
                 const split = value.split(';');
