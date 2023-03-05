@@ -36,7 +36,16 @@ export class LexerBag {
         return this.offset >= this.raw.length;
     }
 
-    comment() {
+    commentLine() {
+        this.next();
+        const start = this.cursor();
+        const value = this.until(['\n'], true)!!;
+        const stop = this.cursor();
+        console.log({value})
+        return { loc: { start, stop }, value };
+    }
+
+    commentBlock() {
         this.next();
         const start = this.cursor();
         let value = '';
@@ -76,8 +85,11 @@ export class LexerBag {
     next(): string {
         let c = this.raw[this.offset++];
         if (c === '/' && this.peek() === '*') {
-            this.comments.push(this.comment());
+            this.comments.push(this.commentBlock());
             c = this.next();
+        }
+        if (c == '/' && this.peek() === '/') {
+            this.comments.push(this.commentLine());
         }
         return c;
     }

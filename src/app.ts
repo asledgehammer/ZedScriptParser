@@ -17,10 +17,10 @@ const doFile = (path: string, out: string, options: LexerOptions) => {
 
     /* Tokens. */
     const tokens = tokenize(path, options);
-    fs.writeFileSync(
-        out.replace('.txt', '.tokens.json'),
-        JSON.stringify({ tokens: tokens.tokens }, null, 4),
-    );
+    // fs.writeFileSync(
+    //     out.replace('.txt', '.tokens.json'),
+    //     JSON.stringify({ tokens: tokens.tokens }, null, 4),
+    // );
 
     /* Parsed API */
     const parsed = parse(tokens.tokens as string[]);
@@ -40,7 +40,7 @@ const doFolder = (path: string, out: string, options: LexerOptions) => {
 };
 
 doFolder('./assets/media/scripts', './assets/media/scripts_json', {
-    comments: false,
+    comments: true,
     location: false,
 });
 
