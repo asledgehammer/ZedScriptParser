@@ -1,7 +1,7 @@
 import { ParseBag } from 'Parser';
 import {
     getFloat,
-    getString,
+    getVector3,
     Script,
     ScriptFloat,
     ScriptVector3,
@@ -27,36 +27,18 @@ export class VehiclePhysics extends Script {
 
     onPropertyValue(property: string, value: string): boolean {
         switch (property.trim().toLowerCase()) {
-            case 'extents': {
-                const [x, y, z] = getString(value)
-                    .split(' ')
-                    .map((o) => {
-                        return getFloat(o.trim());
-                    });
-                this.extents = { x, y, z };
+            case 'extents':
+                this.extents = getVector3(value);
                 return true;
-            }
-            case 'offset': {
-                const [x, y, z] = getString(value)
-                    .split(' ')
-                    .map((o) => {
-                        return getFloat(o.trim());
-                    });
-                this.offset = { x, y, z };
+            case 'offset':
+                this.offset = getVector3(value);
                 return true;
-            }
             case 'radius':
                 this.radius = getFloat(value);
                 return true;
-            case 'rotate': {
-                const [x, y, z] = getString(value)
-                    .split(' ')
-                    .map((o) => {
-                        return getFloat(o.trim());
-                    });
-                this.rotate = { x, y, z };
+            case 'rotate':
+                this.rotate = getVector3(value);
                 return true;
-            }
         }
         return false;
     }

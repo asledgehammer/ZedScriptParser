@@ -21,10 +21,6 @@ export class VehicleLua extends Script {
         this.parse(bag);
     }
 
-    onPropertyToken(bag: ParseBag, property: string): boolean {
-        return false;
-    }
-
     onPropertyValue(property: string, value: string): boolean {
         switch (property.toLowerCase().trim()) {
             case 'checkengine':

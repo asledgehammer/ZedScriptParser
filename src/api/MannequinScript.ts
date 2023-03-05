@@ -27,10 +27,6 @@ export class MannequinScript extends Script {
         super(bag, '=');
     }
 
-    onPropertyToken(bag: ParseBag, property: string): boolean {
-        return false;
-    }
-
     onPropertyValue(property: string, value: string): boolean {
         switch (property.toLowerCase()) {
             case 'animset':

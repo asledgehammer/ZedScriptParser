@@ -2,6 +2,7 @@ import { ParseBag } from '../../Parser';
 import {
     getInt,
     getString,
+    getVector3,
     Script,
     ScriptInt,
     ScriptString,
@@ -32,28 +33,15 @@ export class Attachment extends Script {
             case 'bone':
                 this.bone = getString(value);
                 return true;
-            case 'offset': {
-                const [x, y, z] = getString(value)
-                    .split(' ')
-                    .map((o) => {
-                        return parseFloat(o);
-                    });
-                this.offset = { x, y, z };
+            case 'offset':
+                this.offset = getVector3(value);
                 return true;
-            }
-            case 'rotate': {
-                const [x, y, z] = getString(value)
-                    .split(' ')
-                    .map((o) => {
-                        return parseFloat(o);
-                    });
-                this.rotate = { x, y, z };
+            case 'rotate':
+                this.rotate = getVector3(value);
                 return true;
-            }
-            case 'zoffset': {
+            case 'zoffset':
                 this.zOffset = getInt(value);
                 return true;
-            }
         }
         return false;
     }

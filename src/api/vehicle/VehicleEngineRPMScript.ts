@@ -25,10 +25,4 @@ export class VehicleEngineRPMScript extends Script {
         }
         return false;
     }
-
-    onPropertyValue(property: string, value: string): boolean {
-        switch (property.toLowerCase()) {
-        }
-        return false;
-    }
 }

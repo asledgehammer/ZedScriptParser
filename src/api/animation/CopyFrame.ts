@@ -1,5 +1,6 @@
 import { getInt, getString, ScriptInt, ScriptString } from '../Script';
 import { ParseBag } from '../../Parser';
+import { Script } from '../Script';
 
 /**
  * *ScriptCopyFrameArray*
@@ -17,30 +18,28 @@ export type ScriptCopyFrameArray = CopyFrame[] | undefined;
  *
  * @author Jab
  */
-export class CopyFrame {
+export class CopyFrame extends Script {
     frame: ScriptInt;
     source: ScriptString;
     sourceFrame: ScriptInt;
 
-    parse(bag: ParseBag) {
-        while (!bag.isEOF()) {
-            const curr = bag.next();
-            if (curr === '}') return;
+    constructor(bag: ParseBag) {
+        super(bag, '=', false, true);
+        this.parse(bag);
+    }
 
-            const [property, value] = curr.split('=');
-            const propLower = property.toLowerCase();
-
-            switch (propLower) {
-                case 'frame':
-                    this.frame = getInt(value);
-                    break;
-                case 'source':
-                    this.source = getString(value);
-                    break;
-                case 'sourceframe':
-                    this.sourceFrame = getInt(value);
-                    break;
-            }
+    onPropertyValue(property: string, value: string): boolean {
+        switch (property.toLowerCase().trim()) {
+            case 'frame':
+                this.frame = getInt(value);
+                return true;
+            case 'source':
+                this.source = getString(value);
+                return true;
+            case 'sourceframe':
+                this.sourceFrame = getInt(value);
+                return true;
         }
+        return false;
     }
 }

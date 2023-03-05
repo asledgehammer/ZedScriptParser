@@ -22,8 +22,4 @@ export class VehicleItems extends Script {
         this.items.push(new VehicleItem(bag, property));
         return true;
     }
-
-    onPropertyValue(property: string, value: string): boolean {
-        return false;
-    }
 }

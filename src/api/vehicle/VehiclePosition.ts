@@ -1,6 +1,7 @@
 import {
     getFloat,
     getString,
+    getVector3,
     Script,
     ScriptString,
     ScriptVector3,
@@ -24,33 +25,17 @@ export class VehiclePosition extends Script {
         this.parse(bag);
     }
 
-    onPropertyToken(bag: ParseBag, property: string): boolean {
-        return false;
-    }
-
     onPropertyValue(property: string, value: string): boolean {
         switch (property.toLowerCase().trim()) {
             case 'area':
                 this.area = getString(value);
                 return true;
-            case 'offset': {
-                const [x, y, z] = getString(value)
-                    .split(' ')
-                    .map((o) => {
-                        return getFloat(o.trim());
-                    });
-                this.offset = { x, y, z };
+            case 'offset':
+                this.offset = getVector3(value);
                 return true;
-            }
-            case 'rotate': {
-                const [x, y, z] = getString(value)
-                    .split(' ')
-                    .map((o) => {
-                        return getFloat(o.trim());
-                    });
-                this.offset = { x, y, z };
+            case 'rotate':
+                this.offset = getVector3(value);
                 return true;
-            }
         }
         return false;
     }

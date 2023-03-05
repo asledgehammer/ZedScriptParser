@@ -12,6 +12,24 @@ export type ScriptStringArray = string[] | undefined;
 export type ScriptVector2 = Vector2 | undefined;
 export type ScriptVector3 = Vector3 | undefined;
 
+export function getVector2(value: string): Vector2 {
+    const [x, y] = getString(value)
+        .split(' ')
+        .map((o) => {
+            return parseFloat(o.trim());
+        });
+    return { x, y };
+}
+
+export function getVector3(value: string): Vector3 {
+    const [x, y, z] = getString(value)
+        .split(' ')
+        .map((o) => {
+            return parseFloat(o.trim());
+        });
+    return { x, y, z };
+}
+
 export function getString(value: string): string {
     return value;
 }

@@ -1,7 +1,7 @@
 import {
     getBoolean,
     getFloat,
-    getString,
+    getVector3,
     Script,
     ScriptBoolean,
     ScriptFloat,
@@ -27,24 +27,13 @@ export class VehicleWheel extends Script {
         this.parse(bag);
     }
 
-    onPropertyToken(bag: ParseBag, property: string): boolean {
-        switch (property.toLowerCase().trim()) {
-        }
-        return false;
-    }
-
     onPropertyValue(property: string, value: string): boolean {
         switch (property.toLowerCase().trim()) {
             case 'front':
                 this.front = getBoolean(value);
                 return true;
             case 'offset':
-                const [x, y, z] = getString(value)
-                    .split(' ')
-                    .map((o) => {
-                        return parseFloat(o.trim());
-                    });
-                this.offset = { x, y, z };
+                this.offset = getVector3(value);
                 return true;
             case 'radius':
                 this.radius = getFloat(value);

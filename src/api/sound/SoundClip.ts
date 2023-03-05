@@ -31,10 +31,6 @@ export class SoundClip extends Script {
         super(bag, '=', true, true);
     }
 
-    onPropertyToken(bag: ParseBag, property: string): boolean {
-        return false;
-    }
-
     onPropertyValue(property: string, value: string): boolean {
         switch (property.toLowerCase()) {
             case 'distancemin':

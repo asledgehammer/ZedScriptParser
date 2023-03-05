@@ -3,6 +3,8 @@ import {
     getFloat,
     getInt,
     getString,
+    getVector2,
+    getVector3,
     Script,
     ScriptBoolean,
     ScriptFloat,
@@ -148,13 +150,7 @@ export class VehicleScript extends Script {
                 this.brakingForce = getInt(value);
                 return true;
             case 'centerofmassoffset': {
-                const [x, y, z] = getString(value)
-                    .trim()
-                    .split(' ')
-                    .map((o) => {
-                        return getFloat(o);
-                    });
-                this.centerOfMassOffset = { x, y, z };
+                this.centerOfMassOffset = getVector3(value);
                 return true;
             }
             case 'engineforce':
@@ -173,23 +169,11 @@ export class VehicleScript extends Script {
                 this.engineRepairLevel = getInt(value);
                 return true;
             case 'extents': {
-                const [x, y, z] = getString(value)
-                    .trim()
-                    .split(' ')
-                    .map((o) => {
-                        return getFloat(o);
-                    });
-                this.extents = { x, y, z };
+                this.extents = getVector3(value);
                 return true;
             }
             case 'extentsoffset': {
-                const [x, y] = getString(value)
-                    .trim()
-                    .split(' ')
-                    .map((o) => {
-                        return getFloat(o);
-                    });
-                this.extentsOffset = { x, y };
+                this.extentsOffset = getVector2(value);
                 return true;
             }
             case 'frontendhealth':
@@ -240,12 +224,7 @@ export class VehicleScript extends Script {
                 this.playerDamageProtection = getFloat(value);
                 return true;
             case 'physicschassisshape': {
-                const [x, y, z] = getString(value)
-                    .split(' ')
-                    .map((o) => {
-                        return getFloat(o.trim());
-                    });
-                this.physicsChassisShape = { x, y, z };
+                this.physicsChassisShape = getVector3(value);
                 return true;
             }
             case 'rearendhealth':
@@ -270,16 +249,11 @@ export class VehicleScript extends Script {
                     .map((o) => {
                         return getFloat(o.trim());
                     });
-                this.shadowExtents = { x, y };
+                this.shadowExtents = getVector2(value);
                 return true;
             }
             case 'shadowoffset': {
-                const [x, y] = getString(value)
-                    .split(' ')
-                    .map((o) => {
-                        return getFloat(o.trim());
-                    });
-                this.shadowOffset = { x, y };
+                this.shadowOffset = getVector2(value);
                 return true;
             }
             case 'spawnoffsety': {

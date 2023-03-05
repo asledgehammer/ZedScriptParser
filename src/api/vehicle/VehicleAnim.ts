@@ -2,6 +2,7 @@ import {
     getBoolean,
     getFloat,
     getString,
+    getVector3,
     Script,
     ScriptBoolean,
     ScriptFloat,
@@ -30,19 +31,10 @@ export class VehicleAnim extends Script {
         this.parse(bag);
     }
 
-    onPropertyToken(bag: ParseBag, property: string): boolean {
-        return false;
-    }
-
     onPropertyValue(property: string, value: string): boolean {
         switch (property.toLowerCase().trim()) {
             case 'angle':
-                const [x, y, z] = getString(value)
-                    .split(' ')
-                    .map((o) => {
-                        return getFloat(o.trim());
-                    });
-                this.angle = { x, y, z };
+                this.angle = getVector3(value);
                 return true;
             case 'anim':
                 this.anim = getString(value);

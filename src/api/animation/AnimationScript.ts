@@ -1,4 +1,4 @@
-import { ParseBag, ParseError } from '../../Parser';
+import { ParseBag } from '../../Parser';
 import { getString, Script, ScriptString, ScriptStringArray } from '../Script';
 import { CopyFrame, ScriptCopyFrameArray } from './CopyFrame';
 import { CopyFrames, ScriptCopyFramesArray } from './CopyFrames';
@@ -17,28 +17,19 @@ export class AnimationScript extends Script {
     meshName: ScriptString;
 
     constructor(bag: ParseBag) {
-        super(bag, '=');
+        super(bag, '=', false);
+        this.parse(bag);
     }
 
     onPropertyToken(bag: ParseBag, property: string): boolean {
         switch (property.toLowerCase()) {
             case 'copyframe':
-                if (bag.next() !== '{') {
-                    throw new ParseError(`Expected '{'`);
-                }
                 if (this.copyFrame == null) this.copyFrame = [];
-                const copyFrame = new CopyFrame();
-                copyFrame.parse(bag);
-                this.copyFrame.push(copyFrame);
+                this.copyFrame.push(new CopyFrame(bag));
                 return true;
             case 'copyframes':
-                if (bag.next() !== '{') {
-                    throw new ParseError(`Expected '{'`);
-                }
                 if (this.copyFrames == null) this.copyFrames = [];
-                const copyFrames = new CopyFrames();
-                copyFrames.parse(bag);
-                this.copyFrames.push(copyFrames);
+                this.copyFrames.push(new CopyFrames(bag));
                 return true;
         }
         return false;
@@ -57,48 +48,5 @@ export class AnimationScript extends Script {
                 return true;
         }
         return false;
-    }
-
-    parse(bag: ParseBag) {
-        while (!bag.isEOF()) {
-            const curr = bag.next();
-            if (curr === '}') return;
-
-            const split = curr.split('=');
-            const property = split[0];
-            const value = split[1];
-            const propLower = property.toLowerCase();
-
-            switch (propLower) {
-                case 'animationdirectory':
-                    if (this.animationDirectories == null) {
-                        this.animationDirectories = [];
-                    }
-                    this.animationDirectories.push(getString(value)!!);
-                    break;
-                case 'meshname':
-                    this.meshName = getString(value);
-                    break;
-                case 'copyframe':
-                    if (bag.next() !== '{') {
-                        throw new ParseError(`Expected '{'`);
-                    }
-                    if (this.copyFrame == null) this.copyFrame = [];
-                    const copyFrame = new CopyFrame();
-                    copyFrame.parse(bag);
-                    this.copyFrame.push(copyFrame);
-                    break;
-                case 'copyframes':
-                    if (bag.next() !== '{') {
-                        throw new ParseError(`Expected '{'`);
-                    }
-                    if (this.copyFrames == null) this.copyFrames = [];
-                    const copyFrames = new CopyFrames();
-                    copyFrames.parse(bag);
-                    this.copyFrames.push(copyFrames);
-                    break;
-                default:
-            }
-        }
     }
 }

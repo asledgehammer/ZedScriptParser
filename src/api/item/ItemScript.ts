@@ -149,10 +149,6 @@ export abstract class ItemScript extends Script {
         this.type = type;
     }
 
-    onPropertyToken(_: ParseBag, __: string): boolean {
-        return false;
-    }
-
     onPropertyValue(property: string, value: string): boolean {
         switch (property.toLowerCase()) {
             case 'activateditem':
