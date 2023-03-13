@@ -1,5 +1,5 @@
 import { ParseBag } from '../util/ParseBag';
-import { getInt, Script, ScriptInt } from '../Script';
+import { getInt, Script, ScriptInt, ScriptString } from '../Script';
 
 /**
  * **SoundTimelineScript**
@@ -10,6 +10,7 @@ import { getInt, Script, ScriptInt } from '../Script';
  */
 export class SoundTimelineScript extends Script {
     idle: ScriptInt;
+    electricityOn: ScriptInt;
 
     constructor(bag: ParseBag) {
         super(bag, '=');
@@ -19,6 +20,9 @@ export class SoundTimelineScript extends Script {
         property = property.trim();
         value = value.trim();
         switch (property.toLowerCase()) {
+            case 'electricityon':
+                this.electricityOn = getInt(value);
+                return true;
             case 'idle':
                 this.idle = getInt(value);
                 return true;
