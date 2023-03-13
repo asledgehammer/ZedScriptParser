@@ -1,5 +1,5 @@
 import { ParseBag } from '../util/ParseBag';
-import { Script } from '../Script';
+import { getInt, getString, Script, ScriptInt, ScriptString } from '../Script';
 
 /**
  * **UniqueRecipeScript**
@@ -9,8 +9,34 @@ import { Script } from '../Script';
  * @author Jab
  */
 export class UniqueRecipeScript extends Script {
+
+    baseRecipeItem: ScriptString;
+    boredom: ScriptInt;
+    hapiness: ScriptInt;
+    item: ScriptString;
+
     constructor(bag: ParseBag) {
         super(bag, ':');
+    }
+
+    onPropertyValue(property: string, value: string): boolean {
+        property = property.trim();
+        value = value.trim();
+        switch(property.toLowerCase()) {
+            case 'baserecipeitem':
+                this.baseRecipeItem = getString(value);
+                return true;
+            case 'boredom':
+                this.boredom = getInt(value);
+                return true;
+            case 'hapiness':
+                this.hapiness = getInt(value);
+                return true;
+            case 'item':
+                this.item = getString(value);
+                return true;
+        }
+        return false;
     }
 
     get label(): string {
