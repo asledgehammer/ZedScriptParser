@@ -229,6 +229,14 @@ export class ModuleScript {
             }
         }
 
+        if(this.imports !== undefined && this.imports.length !== 0) {
+            s += `${prefix}    imports {\n`;
+            for(const i of this.imports) {
+                s += `${prefix}        ${i},\n`
+            }
+            s += `${prefix}    }\n`;
+        }
+        
         process(this.animations);
         process(this.animationsMeshes);
         process(this.evolvedRecipes);

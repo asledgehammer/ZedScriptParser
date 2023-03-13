@@ -53,18 +53,7 @@ export class ZedScript {
     }
 
     writeTXT(path: string, options: {headerComment: boolean} = {headerComment: true}) {
-        let parsed: any = '';
-
-        if(options.headerComment === undefined || options.headerComment) {
-            parsed += [
-                '/*',
-                ` * Generated: ${new Date().toISOString()}`,
-                ' *',
-                ' * ZedScriptParser By asledgehammer.',
-                ' *   - https://github.com/asledgehammer/ZedScriptParser',
-                ' */\n\n'
-            ].join('\n');
-        }
+        let parsed: string = '';
 
         if (this.type === 'module') {
             const keys = Object.keys(this._modules);
@@ -78,6 +67,19 @@ export class ZedScript {
             for (const key of Object.keys(this._options)) {
                 parsed += this._options[key].toScript('');
             }
+        }
+
+        parsed = parsed.split('\n').filter((o) => { return o.trim() !== ''}).join('\n');
+
+        if(options.headerComment === undefined || options.headerComment) {
+            parsed = [
+                '/*',
+                ` * Generated: ${new Date().toISOString()}`,
+                ' *',
+                ' * ZedScriptParser By asledgehammer.',
+                ' *   - https://github.com/asledgehammer/ZedScriptParser',
+                ' */\n\n'
+            ].join('\n') + parsed;
         }
 
         fs.writeFileSync(path, parsed);
