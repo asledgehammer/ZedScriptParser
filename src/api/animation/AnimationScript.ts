@@ -96,7 +96,7 @@ export class AnimationScript extends Script {
             }
         }
 
-        const {animationDirectories, copyFrame, copyFrames} = this;
+        const { animationDirectories, copyFrame, copyFrames } = this;
 
         function processDictionary(dict: { [name: string]: any }) {
             const keys = Object.keys(dict);
@@ -108,9 +108,11 @@ export class AnimationScript extends Script {
                 if (key === 'ignoreProperties') continue;
 
                 if (key === 'animationDirectories') {
-                    if(animationDirectories === undefined) continue;
-                    for(const entry of animationDirectories) {
-                        s += `${prefix}    animationDirectory${' '.repeat(maxLenKey - 'animationDirectory'.length)} = ${entry},\n`
+                    if (animationDirectories === undefined) continue;
+                    for (const entry of animationDirectories) {
+                        s += `${prefix}    animationDirectory${' '.repeat(
+                            maxLenKey - 'animationDirectory'.length,
+                        )} = ${entry},\n`;
                     }
                     continue;
                 }
@@ -125,14 +127,14 @@ export class AnimationScript extends Script {
 
         processDictionary(this);
 
-        if(copyFrame !== undefined) {
-            for(const entry of copyFrame) {
+        if (copyFrame !== undefined) {
+            for (const entry of copyFrame) {
                 s += entry.toScript(`${prefix}    `) + '\n';
             }
         }
 
-        if(copyFrames !== undefined) {
-            for(const entry of copyFrames) {
+        if (copyFrames !== undefined) {
+            for (const entry of copyFrames) {
                 s += entry.toScript(`${prefix}    `) + '\n';
             }
         }

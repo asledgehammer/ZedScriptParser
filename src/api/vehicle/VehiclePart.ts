@@ -345,17 +345,17 @@ export class VehiclePart extends Script {
             if (key === '__operator') continue;
             if (key === 'ignoreProperties') continue;
 
-                /* Part Objects */
-                if (key === 'anims') continue;
-                if (key === 'containers') continue;
-                if (key === 'doors') continue;
-                if (key === 'install') continue;
-                if (key === 'models') continue;
-                if (key === 'passengers') continue;
-                if (key === 'tables') continue;
-                if (key === 'lua') continue;
-                if (key === 'uninstall') continue;
-                if (key === 'windows') continue;
+            /* Part Objects */
+            if (key === 'anims') continue;
+            if (key === 'containers') continue;
+            if (key === 'doors') continue;
+            if (key === 'install') continue;
+            if (key === 'models') continue;
+            if (key === 'passengers') continue;
+            if (key === 'tables') continue;
+            if (key === 'lua') continue;
+            if (key === 'uninstall') continue;
+            if (key === 'windows') continue;
 
             if (key.length > maxLenKey) maxLenKey = key.length;
         }

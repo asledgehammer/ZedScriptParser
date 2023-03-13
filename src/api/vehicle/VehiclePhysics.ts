@@ -1,10 +1,6 @@
 import { getVector3, ScriptVector3 } from '../util/Math';
 import { ParseBag } from '../util/ParseBag';
-import {
-    getFloat,
-    Script,
-    ScriptFloat,
-} from '../Script';
+import { getFloat, Script, ScriptFloat } from '../Script';
 
 /**
  * **VehiclePhysics**

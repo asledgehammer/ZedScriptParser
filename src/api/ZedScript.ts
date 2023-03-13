@@ -52,7 +52,10 @@ export class ZedScript {
         );
     }
 
-    writeTXT(path: string, options: {headerComment: boolean} = {headerComment: true}) {
+    writeTXT(
+        path: string,
+        options: { headerComment: boolean } = { headerComment: true },
+    ) {
         let parsed: string = '';
 
         if (this.type === 'module') {
@@ -69,17 +72,23 @@ export class ZedScript {
             }
         }
 
-        parsed = parsed.split('\n').filter((o) => { return o.trim() !== ''}).join('\n');
+        parsed = parsed
+            .split('\n')
+            .filter((o) => {
+                return o.trim() !== '';
+            })
+            .join('\n');
 
-        if(options.headerComment === undefined || options.headerComment) {
-            parsed = [
-                '/*',
-                ` * Generated: ${new Date().toISOString()}`,
-                ' *',
-                ' * ZedScriptParser By asledgehammer.',
-                ' *   - https://github.com/asledgehammer/ZedScriptParser',
-                ' */\n\n'
-            ].join('\n') + parsed;
+        if (options.headerComment === undefined || options.headerComment) {
+            parsed =
+                [
+                    '/*',
+                    ` * Generated: ${new Date().toISOString()}`,
+                    ' *',
+                    ' * ZedScriptParser By asledgehammer.',
+                    ' *   - https://github.com/asledgehammer/ZedScriptParser',
+                    ' */\n\n',
+                ].join('\n') + parsed;
         }
 
         fs.writeFileSync(path, parsed);

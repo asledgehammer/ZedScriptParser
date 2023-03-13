@@ -11,9 +11,7 @@ import {
     ScriptInt,
     ScriptString,
 } from '../Script';
-import {
-    BloodClothingType,
-} from './BloodClothingType';
+import { BloodClothingType } from './BloodClothingType';
 import { ItemReplaceType as ItemReplaceType } from './ReplaceType';
 
 /**
@@ -35,7 +33,7 @@ export abstract class ItemScript extends Script {
     attachmentsProvided: ScriptDelimiterArray<string>; // ScriptStringArray;
     attachmentType: ScriptString;
     bandagePower: ScriptFloat;
-    bloodLocation: ScriptDelimiterArray<BloodClothingType>;//ScriptBloodClothingTypes;
+    bloodLocation: ScriptDelimiterArray<BloodClothingType>; //ScriptBloodClothingTypes;
     bodyLocation: ScriptString;
     boredomChange: ScriptInt;
     brakeForce: ScriptInt;
@@ -196,10 +194,16 @@ export abstract class ItemScript extends Script {
                 this.clothingItem = getString(value);
                 return true;
             case 'clothingitemextra':
-                this.clothingItemExtra = new DelimiterArray(';', getString(value));
+                this.clothingItemExtra = new DelimiterArray(
+                    ';',
+                    getString(value),
+                );
                 return true;
             case 'clothingitemextraoption':
-                this.clothingItemExtraOption = new DelimiterArray(';', getString(value));
+                this.clothingItemExtraOption = new DelimiterArray(
+                    ';',
+                    getString(value),
+                );
                 return true;
             case 'conditionaffectscapacity':
                 this.conditionAffectsCapacity = getBoolean(value);
@@ -286,7 +290,9 @@ export abstract class ItemScript extends Script {
                     const [key, value] = entry.split(' ').map((a) => {
                         return a.trim();
                     });
-                    this.replaceTypes.values.push(new ItemReplaceType(key, value));
+                    this.replaceTypes.values.push(
+                        new ItemReplaceType(key, value),
+                    );
                 }
                 return true;
             case 'runspeedmodifier':
@@ -323,13 +329,22 @@ export abstract class ItemScript extends Script {
                 this.replaceOnUseOn = getString(value);
                 return true;
             case 'requireinhandorinventory':
-                this.requireInHandOrInventory = new DelimiterArray('/', getString(value));
+                this.requireInHandOrInventory = new DelimiterArray(
+                    '/',
+                    getString(value),
+                );
                 return true;
             case 'replaceinprimaryhand':
-                this.replaceInPrimaryHand =  new DelimiterArray(' ', getString(value));
+                this.replaceInPrimaryHand = new DelimiterArray(
+                    ' ',
+                    getString(value),
+                );
                 return true;
             case 'replaceinsecondhand':
-                this.replaceInSecondHand = new DelimiterArray(' ', getString(value));
+                this.replaceInSecondHand = new DelimiterArray(
+                    ' ',
+                    getString(value),
+                );
                 return true;
             case 'trap':
                 this.trap = getBoolean(value);
@@ -350,7 +365,10 @@ export abstract class ItemScript extends Script {
                 this.worldStaticModel = getString(value);
                 return true;
             case 'attachmentsprovided':
-                this.attachmentsProvided = new DelimiterArray(';', getString(value));
+                this.attachmentsProvided = new DelimiterArray(
+                    ';',
+                    getString(value),
+                );
                 return true;
             case 'attachmentreplacement':
                 this.attachmentReplacement = getString(value);
@@ -467,7 +485,10 @@ export abstract class ItemScript extends Script {
                 this.customContextMenu = getString(value); // ContextMenu_${CustomContextMenu}
                 return true;
             case 'iconsfortexture':
-                this.iconsForTexture = new DelimiterArray(';', getString(value));
+                this.iconsForTexture = new DelimiterArray(
+                    ';',
+                    getString(value),
+                );
                 return true;
             case 'bloodlocation':
                 this.bloodLocation = new DelimiterArray(';', getString(value));
@@ -563,7 +584,7 @@ export abstract class ItemScript extends Script {
             }
         }
 
-        const { modelWeaponParts, replaceTypes} = (this as any);
+        const { modelWeaponParts, replaceTypes } = this as any;
 
         function processDictionary(dict: { [name: string]: any }) {
             const keys = Object.keys(dict);
@@ -574,12 +595,13 @@ export abstract class ItemScript extends Script {
                 if (key === '__operator') continue;
                 if (key === 'ignoreProperties') continue;
                 if (key === 'modelWeaponParts') {
-                    for(const entry of modelWeaponParts!!.values) {
-                        s += `${prefix}    modelWeaponPart${' '.repeat(maxLenKey - 'modelWeaponPart'.length)} = ${entry.toScript('')},\n`
+                    for (const entry of modelWeaponParts!!.values) {
+                        s += `${prefix}    modelWeaponPart${' '.repeat(
+                            maxLenKey - 'modelWeaponPart'.length,
+                        )} = ${entry.toScript('')},\n`;
                     }
                     continue;
                 }
-                
 
                 const value = dict[key];
                 processValue(key, value);
@@ -588,7 +610,7 @@ export abstract class ItemScript extends Script {
 
         processDictionary(this);
 
-        if(this.__properties !== undefined) {
+        if (this.__properties !== undefined) {
             s += `${prefix}\n/* Custom Properties */\n\n`;
             processDictionary(this.__properties);
         }

@@ -9,7 +9,6 @@ import { getInt, getString, Script, ScriptInt, ScriptString } from '../Script';
  * @author Jab
  */
 export class UniqueRecipeScript extends Script {
-
     baseRecipeItem: ScriptString;
     boredom: ScriptInt;
     hapiness: ScriptInt;
@@ -22,7 +21,7 @@ export class UniqueRecipeScript extends Script {
     onPropertyValue(property: string, value: string): boolean {
         property = property.trim();
         value = value.trim();
-        switch(property.toLowerCase()) {
+        switch (property.toLowerCase()) {
             case 'baserecipeitem':
                 this.baseRecipeItem = getString(value);
                 return true;

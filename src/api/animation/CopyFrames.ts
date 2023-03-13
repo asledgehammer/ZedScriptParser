@@ -30,7 +30,7 @@ export class CopyFrames extends Script {
     }
 
     onPropertyValue(property: string, value: string): boolean {
-        switch(property.trim().toLowerCase()) {
+        switch (property.trim().toLowerCase()) {
             case 'frame':
                 this.frame = getInt(value);
                 return true;

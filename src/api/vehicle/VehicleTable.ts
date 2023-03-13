@@ -74,10 +74,16 @@ export class VehicleTable extends Script {
                 this.requireEmpty = getBoolean(value);
                 return true;
             case 'requireinstalled':
-                this.requireInstalled  = new DelimiterArray(';', getString(value));
+                this.requireInstalled = new DelimiterArray(
+                    ';',
+                    getString(value),
+                );
                 return true;
             case 'requireuninstalled':
-                this.requireUninstalled = new DelimiterArray(';', getString(value));
+                this.requireUninstalled = new DelimiterArray(
+                    ';',
+                    getString(value),
+                );
                 return true;
             case 'skills':
                 this.skills = getString(value);

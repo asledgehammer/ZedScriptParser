@@ -1,9 +1,4 @@
-import {
-    getInt,
-    getString,
-    ScriptInt,
-    ScriptString,
-} from '../Script';
+import { getInt, getString, ScriptInt, ScriptString } from '../Script';
 import { ItemScript } from './ItemScript';
 import { ParseBag } from '../util/ParseBag';
 import { DelimiterArray, ScriptDelimiterArray } from '../util/Array';
@@ -64,6 +59,4 @@ export class ContainerItem extends ItemScript {
         }
         return super.onPropertyValue(property, value);
     }
-
-    
 }

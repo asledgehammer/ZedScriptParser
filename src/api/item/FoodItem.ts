@@ -106,7 +106,8 @@ export class FoodItem extends ItemScript {
                         const [name, sAmount] = s.split(':').map((a) => {
                             return a.trim();
                         });
-                        if (this.evolvedRecipe == null) this.evolvedRecipe = new DelimiterArray(';');
+                        if (this.evolvedRecipe == null)
+                            this.evolvedRecipe = new DelimiterArray(';');
                         this.evolvedRecipe.values.push(
                             new EvolvedRecipe(name, parseInt(sAmount)),
                         );
@@ -162,7 +163,10 @@ export class FoodItem extends ItemScript {
                 this.removeUnhappinessWhenCooked = getBoolean(value);
                 return true;
             case 'replaceoncooked':
-                this.replaceOnCooked = new DelimiterArray(';', getString(value));
+                this.replaceOnCooked = new DelimiterArray(
+                    ';',
+                    getString(value),
+                );
                 return true;
             case 'replaceonrotten':
                 this.replaceOnRotten = getString(value);

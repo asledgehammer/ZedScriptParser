@@ -1,4 +1,4 @@
-import { getFloat, getString } from "../Script";
+import { getFloat, getString } from '../Script';
 
 export type ScriptVector2 = Vector2 | undefined;
 export type ScriptVector3 = Vector3 | undefined;

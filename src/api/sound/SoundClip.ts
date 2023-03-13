@@ -124,9 +124,9 @@ export class SoundClip extends Script {
 
         processDictionary(this);
 
-        if(this.events !== undefined) {
+        if (this.events !== undefined) {
             s += `${prefix}    events = `;
-            for(const event of this.events.values) {
+            for (const event of this.events.values) {
                 s += `${event} / `;
             }
             s = s.substring(0, s.length - 2) + '\n';

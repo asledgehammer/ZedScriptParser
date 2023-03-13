@@ -15,6 +15,8 @@ export class RecipeResult {
     }
 
     toScript(prefix: string, maxKeyLength: number = 'result'.length): string {
-        return `${prefix}result${" ".repeat("result".length - maxKeyLength)}: ${this.item} = ${this.amount}`;
+        return `${prefix}result${' '.repeat('result'.length - maxKeyLength)}: ${
+            this.item
+        } = ${this.amount}`;
     }
 }

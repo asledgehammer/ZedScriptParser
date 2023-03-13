@@ -253,7 +253,10 @@ export class WeaponItem extends ItemScript {
                 this.fireMode = getString(value);
                 return true;
             case 'firemodepossibilities':
-                this.fireModePossibilities = new DelimiterArray('/', getString(value)); // getString(value)?.split('/');
+                this.fireModePossibilities = new DelimiterArray(
+                    '/',
+                    getString(value),
+                ); // getString(value)?.split('/');
                 return true;
             case 'firepower':
                 this.firePower = getInt(value);
@@ -426,7 +429,7 @@ export class WeaponItem extends ItemScript {
                 this.soundGain = getFloat(value);
                 return true;
             case 'soundmap':
-                this.soundMap = new DelimiterArray(' ', getString(value)); 
+                this.soundMap = new DelimiterArray(' ', getString(value));
                 return true;
             case 'soundvolume':
                 this.soundVolume = getInt(value);

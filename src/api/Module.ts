@@ -229,14 +229,14 @@ export class ModuleScript {
             }
         }
 
-        if(this.imports !== undefined && this.imports.length !== 0) {
+        if (this.imports !== undefined && this.imports.length !== 0) {
             s += `${prefix}    imports {\n`;
-            for(const i of this.imports) {
-                s += `${prefix}        ${i},\n`
+            for (const i of this.imports) {
+                s += `${prefix}        ${i},\n`;
             }
             s += `${prefix}    }\n`;
         }
-        
+
         process(this.animations);
         process(this.animationsMeshes);
         process(this.evolvedRecipes);
@@ -252,7 +252,6 @@ export class ModuleScript {
         process(this.vehicleEngines);
         process(this.vehicles);
         process(this.vehicleTemplates);
-        
 
         return `${s}${prefix}}\n`;
     }

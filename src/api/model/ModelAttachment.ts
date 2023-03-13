@@ -1,12 +1,5 @@
 import { ParseBag } from '../util/ParseBag';
-import {
-    getInt,
-    getString,
-    
-    Script,
-    ScriptInt,
-    ScriptString,
-} from '../Script';
+import { getInt, getString, Script, ScriptInt, ScriptString } from '../Script';
 import { getVector3, ScriptVector3 } from '../util/Math';
 
 /**

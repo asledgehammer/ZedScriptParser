@@ -26,7 +26,7 @@ function help() {
                 '    --lintfile  [path]       :: Lints a file with ZedScript.\n' +
                 '    --parsedir  [path] [out] :: Parsed a directory of files with ZedScript.\n' +
                 '    --tojson    [path] [out] :: Parses a ZedScript file and saves it as JSON.\n' +
-                '    --toscript  [path] [out] :: Parses a JSON file and saves it as ZedScript.\n'
+                '    --toscript  [path] [out] :: Parses a JSON file and saves it as ZedScript.\n',
         ),
     );
 }
@@ -111,7 +111,7 @@ function init() {
                 help();
                 return;
             }
-    
+
             function doFile(file: string, out: string) {
                 console.log(`Formatting: ${file}`);
                 const zedScript = ZedScript.fromScript(file, {
@@ -119,7 +119,7 @@ function init() {
                     location: false,
                 });
                 zedScript.write('txt', out, { pretty: true });
-            };
+            }
 
             const [_, path, out] = args;
             const files: string[] = [];

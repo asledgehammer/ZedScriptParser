@@ -327,13 +327,13 @@ export class RecipeScript extends Script {
             }
         }
 
-        if(this.sources !== undefined) {
-            for(const entry of this.sources) {
+        if (this.sources !== undefined) {
+            for (const entry of this.sources) {
                 s += entry.toScript(`${prefix}    `) + ',\n';
             }
         }
 
-        if(this.result !== undefined) {
+        if (this.result !== undefined) {
             s += this.result.toScript(`${prefix}    `) + ',\n';
         }
 

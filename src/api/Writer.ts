@@ -1,3 +1,1 @@
-export function write() {
-
-};
+export function write() {}

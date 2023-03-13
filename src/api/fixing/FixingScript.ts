@@ -162,18 +162,22 @@ export class FixingScript extends Script {
         }
 
         if (this.require !== undefined) {
-            s += `${prefix}    require${' '.repeat(maxLenKey-'require'.length)}: ${this.require},\n`;
+            s += `${prefix}    require${' '.repeat(
+                maxLenKey - 'require'.length,
+            )}: ${this.require},\n`;
         }
 
         if (this.fixers !== undefined) {
             for (const fixer of this.fixers) {
-                s += `${prefix}    fixer${' '.repeat(maxLenKey-'fixer'.length)}: ${fixer.toScript()},\n`;
+                s += `${prefix}    fixer${' '.repeat(
+                    maxLenKey - 'fixer'.length,
+                )}: ${fixer.toScript()},\n`;
             }
         }
 
         processDictionary(this);
 
-        if(this.__properties !== undefined) {
+        if (this.__properties !== undefined) {
             s += `${prefix}\n/* Custom Properties */\n\n`;
             processDictionary(this.__properties);
         }

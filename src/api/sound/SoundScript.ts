@@ -60,7 +60,7 @@ export class SoundScript extends Script {
     onPropertyToken(bag: ParseBag, property: string): boolean {
         switch (property.toLowerCase()) {
             case 'clip':
-                if(this.clips === undefined) this.clips = [];
+                if (this.clips === undefined) this.clips = [];
                 this.clips.push(new SoundClip(bag));
                 return true;
         }
@@ -110,7 +110,9 @@ export class SoundScript extends Script {
             }
 
             if (key === 'clips') {
-                o['clips'] = this.clips!!.map(p=> { return p.toJSON(); });
+                o['clips'] = this.clips!!.map((p) => {
+                    return p.toJSON();
+                });
             }
 
             /* (Add property to the exported JSON object) */
@@ -182,7 +184,7 @@ export class SoundScript extends Script {
         processDictionary(this);
 
         if (this.clips !== undefined) {
-            for(const clip of this.clips) {
+            for (const clip of this.clips) {
                 s += '\n' + clip.toScript(`${prefix}    `);
             }
         }
@@ -195,7 +197,6 @@ export class SoundScript extends Script {
         let result = `${s}\n${prefix}}\n`;
         return result;
     }
-
 
     get label(): string {
         return 'sound';
