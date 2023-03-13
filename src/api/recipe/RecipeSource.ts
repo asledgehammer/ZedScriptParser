@@ -31,6 +31,6 @@ export class RecipeSource {
             .map((o) => {
                 return o.toScript();
             })
-            .join('; ')},`;
+            .join('; ')}`;
     }
 }

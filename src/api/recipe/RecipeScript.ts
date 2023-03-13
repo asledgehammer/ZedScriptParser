@@ -286,7 +286,9 @@ export class RecipeScript extends Script {
                         `Key '${key}': Object doesn't have 'toScript(): '${value.constructor.name}'`,
                     );
                 }
-                s += value.toScript(`${prefix}    `) + '\n';
+                s += `${prefix}    ${
+                    key + ' '.repeat(maxLenKey - key.length)
+                } ${operator} ${value.toScript(`${prefix}    `)}\n`;
             } else {
                 s += `${prefix}    ${
                     key + ' '.repeat(maxLenKey - key.length)
@@ -295,7 +297,7 @@ export class RecipeScript extends Script {
         }
 
         function processArray(key: string | undefined, array: any[]) {
-            if(key !== undefined) {
+            if (key !== undefined) {
                 s += `${prefix}    ${
                     key + ' '.repeat(maxLenKey - key.length)
                 } ${operator} `;
@@ -325,13 +327,21 @@ export class RecipeScript extends Script {
             }
         }
 
-        processArray(undefined, this.sources);
-        processValue('result', this.result);
+        if(this.sources !== undefined) {
+            for(const entry of this.sources) {
+                s += entry.toScript(`${prefix}    `) + ',\n';
+            }
+        }
+
+        if(this.result !== undefined) {
+            s += this.result.toScript(`${prefix}    `) + ',\n';
+        }
+
         s += `\n`;
 
         processDictionary(this);
 
-        if(this.__properties !== undefined) {
+        if (this.__properties !== undefined) {
             s += `${prefix}\n/* Custom Properties */\n\n`;
             processDictionary(this.__properties);
         }
