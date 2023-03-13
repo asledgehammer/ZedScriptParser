@@ -95,6 +95,7 @@ export class LexerBag {
             }
             if (c == '/' && this.peek() === '/') {
                 this.comments.push(this.commentLine());
+                c = this.next();
             }
         }
         return c;
