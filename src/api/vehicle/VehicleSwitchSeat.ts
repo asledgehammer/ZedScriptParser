@@ -5,7 +5,7 @@ import {
     ScriptFloat,
     ScriptString,
 } from '../Script';
-import { ParseBag } from '../../Parser';
+import { ParseBag } from '../util/ParseBag';
 
 /**
  * **VehicleSwitchSeat**
@@ -37,5 +37,9 @@ export class VehicleSwitchSeat extends Script {
                 return true;
         }
         return false;
+    }
+
+    get label(): string {
+        return 'switchseat';
     }
 }

@@ -13,4 +13,9 @@ export class VehicleSkill {
         this.skill = skill;
         this.level = level;
     }
+
+    toScript(prefix: string = ''): string {
+        if (this.level === 1) return `${prefix}${this.skill}`;
+        return `${prefix}${this.skill} = ${this.level}`;
+    }
 }

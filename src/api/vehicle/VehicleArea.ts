@@ -1,5 +1,5 @@
 import { getFloat, getString, Script } from '../Script';
-import { ParseBag } from '../../Parser';
+import { ParseBag } from '../util/ParseBag';
 
 /**
  * *XYWH*
@@ -8,7 +8,23 @@ import { ParseBag } from '../../Parser';
  *
  * @author Jab
  */
-export type XYWH = { x: number; y: number; w: number; h: number };
+export class XYWH {
+    x: number;
+    y: number;
+    w: number;
+    h: number;
+
+    constructor(x: number, y: number, w: number, h: number) {
+        this.x = x;
+        this.y = y;
+        this.w = w;
+        this.h = h;
+    }
+
+    toScript(prefix: string = ''): string {
+        return `${prefix}${this.x} ${this.y} ${this.w} ${this.h}`;
+    }
+}
 
 /**
  * **VehicleArea**
@@ -33,9 +49,13 @@ export class VehicleArea extends Script {
                     .map((o) => {
                         return getFloat(o.trim());
                     });
-                this.xywh = { x, y, w, h };
+                this.xywh = new XYWH(x, y, w, h);
                 return true;
         }
         return false;
+    }
+
+    get label(): string {
+        return 'area';
     }
 }

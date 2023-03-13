@@ -8,15 +8,6 @@
 export type ScriptModelWeaponPart = ModelWeaponPart | undefined;
 
 /**
- * *ScriptModelWeaponPartArray*
- *
- * TODO: Document. -Jab, 3/5/2023
- *
- * @author Jab
- */
-export type ScriptModelWeaponPartArray = ModelWeaponPart[] | undefined;
-
-/**
  * **ModelWeaponPart**
  *
  * TODO: Document. -Jab, 3/5/2023
@@ -39,5 +30,9 @@ export class ModelWeaponPart {
         this.modelName = modelName;
         this.attachmentNameSelf = attachmentNameSelf;
         this.attachmentParent = attachmentParent;
+    }
+
+    toScript(prefix: string = ''): string {
+        return `${this.partType} ${this.modelName} ${this.attachmentNameSelf} ${this.attachmentParent}`;
     }
 }

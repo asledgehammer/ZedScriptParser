@@ -1,0 +1,440 @@
+@startuml ZedScript
+
+title ZedScript - Item
+
+hide circle
+hide empty members
+skinparam padding 3
+skinparam shadowing true
+
+skinparam TitleFontSize 42
+skinparam TitleFontColor #C8C8C8
+skinparam TitleFontName consolas
+skinparam TitleFontStyle bold
+
+skinparam BackgroundColor #1e1e1e
+
+skinparam shadowOffset 3 3 1 1
+skinparam ClassBorderThickness 1
+skinparam ClassBorderColor #252526
+skinparam ClassBackgroundColor #3e3e42
+skinparam Classcolor #C8C8C8
+skinparam ClassFontColor #C8C8C8
+skinparam ClassFontName consolas
+skinparam ClassFontSize 14
+
+skinparam IconPublicColor #007acc
+
+skinparam ObjectBorderColor #2d2d30
+skinparam ObjectBackgroundColor #3e3e42
+skinparam Objectcolor #C8C8C8
+skinparam ObjectFontColor #C8C8C8
+skinparam ObjectFontName consolas
+skinparam ObjectFontSize 14
+
+skinparam ArrowColor #007acc
+skinparam ArrowThickness 3
+
+skinparam TitleFontSize 42
+' skinparam linetype ortho
+
+''' ITEM '''
+
+    class Normal {
+        +activatedItem: <color:#4EC9B0>boolean
+        +alarmSound: <color:#4EC9B0>string
+        +alcohol: <color:#4EC9B0>boolean
+        +alcoholic: <color:#4EC9B0>boolean
+        +alcoholPower: <color:#4EC9B0>float
+        +alwaysWelcomeGift: <color:#4EC9B0>boolean
+        +ammoType: <color:#4EC9B0>string
+        +attachmentReplacement: <color:#4EC9B0>string
+        +attachmentsProvided: <color:#4EC9B0>string<color:#FFD710>[]
+        +attachmentType: <color:#4EC9B0>string
+        +bandagePower: <color:#4EC9B0>float
+        +bloodLocation: <color:#4EC9B0>BloodClothingTypes
+        +bodyLocation: <color:#4EC9B0>string
+        +boredomChange: <color:#4EC9B0>int
+        +brakeForce: <color:#4EC9B0>int
+        +breakSound: <color:#4EC9B0>string
+        +calories: <color:#4EC9B0>int
+        +canBandage: <color:#4EC9B0>boolean
+        +canBeRemote: <color:#4EC9B0>boolean
+        +canHaveHoles: <color:#4EC9B0>boolean
+        +canStack: <color:#4EC9B0>boolean
+        +canStoreWater: <color:#4EC9B0>boolean
+        +carbohydrates: <color:#4EC9B0>int
+        +chanceToSpawnDamaged: <color:#4EC9B0>int
+        +closeKillMove: <color:#4EC9B0>string
+        +clothingExtraSubmenu: <color:#4EC9B0>string
+        +clothingItem: <color:#4EC9B0>string
+        +clothingItemExtra: <color:#4EC9B0>string<color:#FFD710>[]
+        +clothingItemExtraOption: <color:#4EC9B0>string<color:#FFD710>[]
+        +colorBlue: <color:#4EC9B0>int
+        +colorGreen: <color:#4EC9B0>int
+        +colorRed: <color:#4EC9B0>int
+        +conditionAffectsCapacity: <color:#4EC9B0>boolean
+        +conditionLowerNormal: <color:#4EC9B0>float
+        +conditionLowerOffroad: <color:#4EC9B0>float
+        +conditionLowerStandard: <color:#4EC9B0>float
+        +conditionMax: <color:#4EC9B0>int
+        +count: <color:#4EC9B0>int
+        +countDownSound: <color:#4EC9B0>string
+        +customContextMenu: <color:#4EC9B0>string
+        +customEatSound: <color:#4EC9B0>string
+        +disappearOnUse: <color:#4EC9B0>boolean
+        +displayCategory: <color:#4EC9B0>string
+        +displayName: <color:#4EC9B0>string
+        +eatType: <color:#4EC9B0>string
+        +engineLoudness: <color:#4EC9B0>float
+        +equippedNoSprint: <color:#4EC9B0>boolean
+        +evolvedRecipeName: <color:#4EC9B0>string
+        +explosionSound: <color:#4EC9B0>string
+        +fabricType: <color:#4EC9B0>string
+        +fatigueChange: <color:#4EC9B0>float
+        +fishingLure: <color:#4EC9B0>boolean
+        +foodType: <color:#4EC9B0>string
+        +gunType: <color:#4EC9B0>string
+        +icon: <color:#4EC9B0>string
+        +iconsForTexture: <color:#4EC9B0>string<color:#FFD710>[]
+        +isCookable: <color:#4EC9B0>boolean
+        +isWaterSource: <color:#4EC9B0>boolean
+        +itemWhenDry: <color:#4EC9B0>string
+        +keepOnDeplete: <color:#4EC9B0>boolean
+        +lightDistance: <color:#4EC9B0>int
+        +lightStrength: <color:#4EC9B0>float
+        +lipids: <color:#4EC9B0>int
+        +makeUpType: <color:#4EC9B0>string
+        +maxAmmo: <color:#4EC9B0>int
+        +maxCapacity: <color:#4EC9B0>int
+        +mechanicsItem: <color:#4EC9B0>boolean
+        +mediaCategory: <color:#4EC9B0>string
+        +medical: <color:#4EC9B0>boolean
+        +metalValue: <color:#4EC9B0>float
+        +onCreate: <color:#4EC9B0>string
+        +obsolete: <color:#4EC9B0>boolean
+        +placeMultipleSound: <color:#4EC9B0>string
+        +placeOneSound: <color:#4EC9B0>string
+        +poison: <color:#4EC9B0>boolean
+        +poisonDetectionLevel: <color:#4EC9B0>int
+        +primaryAnimMask: <color:#4EC9B0>string
+        +protectFromRainWhenEquipped: <color:#4EC9B0>boolean
+        +proteins: <color:#4EC9B0>int
+        +rainFactor: <color:#4EC9B0>float
+        +reduceInfectionPower: <color:#4EC9B0>float
+        +remoteController: <color:#4EC9B0>boolean
+        +remoteRange: <color:#4EC9B0>int
+        +replaceOnUse: <color:#4EC9B0>string
+        +replaceOnUseOn: <color:#4EC9B0>string
+        +replaceTypes: <color:#4EC9B0>'Map<string, string>'
+        +requireInHandOrInventory: <color:#4EC9B0>string<color:#FFD710>[]
+        +replaceInPrimaryHand: <color:#4EC9B0>string<color:#FFD710>[]
+        +replaceInSecondHand: <color:#4EC9B0>string<color:#FFD710>[]
+        +requiresEquippedBothHands: <color:#4EC9B0>boolean
+        +runSpeedModifier: <color:#4EC9B0>float
+        +scaleWorldIcon: <color:#4EC9B0>float
+        +secondaryAnimMask: <color:#4EC9B0>string
+        +soundRadius: <color:#4EC9B0>int
+        +staticModel: <color:#4EC9B0>string
+        +stressChange: <color:#4EC9B0>int
+        +survivalGear: <color:#4EC9B0>boolean
+        +suspensionCompression: <color:#4EC9B0>float
+        +suspensionDamping: <color:#4EC9B0>float
+        +swingAnim: <color:#4EC9B0>string
+        +tags: <color:#4EC9B0>string<color:#FFD710>[]
+        +tooltip: <color:#4EC9B0>string
+        +torchCone: <color:#4EC9B0>boolean
+        +torchDot: <color:#4EC9B0>float
+        +trap: <color:#4EC9B0>boolean
+        +unhappyChange: <color:#4EC9B0>int
+        +useDelta: <color:#4EC9B0>float
+        +useWhileEquipped: <color:#4EC9B0>boolean
+        +useWorldItem: <color:#4EC9B0>boolean
+        +vehicleType: <color:#4EC9B0>int
+        +weight: <color:#4EC9B0>float
+        +weightEmpty: <color:#4EC9B0>float
+        +wet: <color:#4EC9B0>boolean
+        +wetCooldown: <color:#4EC9B0>float
+        +wheelFriction: <color:#4EC9B0>float
+        +worldObjectSprite: <color:#4EC9B0>string
+        +worldStaticModel: <color:#4EC9B0>string
+        +type: <color:#4EC9B0>string
+    }
+
+    class AlarmClockClothing {
+        +alarmSound: <color:#4EC9B0>string
+        +soundRadius: <color:#4EC9B0>int
+    }
+    
+    class Clothing {
+        +biteDefense: <color:#4EC9B0>float
+        +bulletDefense: <color:#4EC9B0>float
+        +canHaveHoles: <color:#4EC9B0>boolean
+        +chanceToFall: <color:#4EC9B0>int
+        +combatSpeedModifier: <color:#4EC9B0>float
+        +conditionLowerChanceOneIn: <color:#4EC9B0>int
+        +cosmetic: <color:#4EC9B0>boolean
+        +insulation: <color:#4EC9B0>float
+        +neckProtectionModifier: <color:#4EC9B0>float
+        +removeOnBroken: <color:#4EC9B0>boolean
+        +runSpeedModifier: <color:#4EC9B0>float
+        +scratchDefense: <color:#4EC9B0>float
+        +spriteName: <color:#4EC9B0>string
+        +stompPower: <color:#4EC9B0>float
+        +temperature: <color:#4EC9B0>float
+        +waterResistance: <color:#4EC9B0>float
+        +weightWet: <color:#4EC9B0>float
+        +windResistance: <color:#4EC9B0>float
+        +worldRender: <color:#4EC9B0>boolean
+    }
+
+    class Container {
+        +canBeEquipped: <color:#4EC9B0>string
+        +capacity: <color:#4EC9B0>int
+        +closeSound: <color:#4EC9B0>string
+        +onlyAcceptCategory: <color:#4EC9B0>string
+        +openSound: <color:#4EC9B0>string
+        +putInSound: <color:#4EC9B0>string
+        +soundParameter: <color:#4EC9B0>string<color:#FFD710>[]
+        +weightReduction: <color:#4EC9B0>int
+    }
+
+    class Drainable {
+        +cantBeConsolided: <color:#4EC9B0>boolean
+        +consolidateOption: <color:#4EC9B0>string
+        +fillFromDispenserSound: <color:#4EC9B0>string
+        +fillFromTapSound: <color:#4EC9B0>string
+        +hairDye: <color:#4EC9B0>boolean
+        +mechanicsItem: <color:#4EC9B0>boolean
+        +replaceOnDeplete: <color:#4EC9B0>string
+        +ticksPerEquipUse: <color:#4EC9B0>int
+        +useWhileUnequipped: <color:#4EC9B0>boolean
+        +vehicleType: <color:#4EC9B0>int
+    }
+
+    class Food {
+        +alcoholic: <color:#4EC9B0>boolean
+        +badCold: <color:#4EC9B0>boolean
+        +badInMicrowave: <color:#4EC9B0>boolean
+        +cannedFood: <color:#4EC9B0>boolean
+        +cantBeFrozen: <color:#4EC9B0>boolean
+        +cantEat: <color:#4EC9B0>boolean
+        +cookingSound: <color:#4EC9B0>string
+        +dangerousUncooked: <color:#4EC9B0>boolean
+        +daysFresh: <color:#4EC9B0>int
+        +daysTotallyRotten: <color:#4EC9B0>int
+        +enduranceChange: <color:#4EC9B0>int
+        +evolvedRecipes: <color:#4EC9B0>EvolvedRecipe<color:#FFD710>[]
+        +fluReduction: <color:#4EC9B0>int
+        +goodHot: <color:#4EC9B0>boolean
+        +herbalistType: <color:#4EC9B0>string
+        +hungerChange: <color:#4EC9B0>int
+        +isCookable: <color:#4EC9B0>boolean
+        +minutesToBurn: <color:#4EC9B0>int
+        +minutesToCook: <color:#4EC9B0>int
+        +onCooked: <color:#4EC9B0>string
+        +onEat: <color:#4EC9B0>string
+        +packaged: <color:#4EC9B0>boolean
+        +painReduction: <color:#4EC9B0>int
+        +poisonDetectionLevel: <color:#4EC9B0>int
+        +poisonPower: <color:#4EC9B0>int
+        +reduceFoodSickness: <color:#4EC9B0>int
+        +removeNegativeEffectOnCooked: <color:#4EC9B0>boolean
+        +removeUnhappinessWhenCooked: <color:#4EC9B0>boolean
+        +replaceOnCooked: <color:#4EC9B0>string<color:#FFD710>[]
+        +replaceOnRotten: <color:#4EC9B0>string
+        +spice: <color:#4EC9B0>boolean
+        +thirstChange: <color:#4EC9B0>int
+        +useForPoison: <color:#4EC9B0>int
+    }
+
+    class Key {
+        +digitalPadlock: <color:#4EC9B0>boolean
+        +padlock: <color:#4EC9B0>boolean
+    }
+
+    class Literature {
+        +canBeWrite: <color:#4EC9B0>boolean
+        +lvlSkillTrained: <color:#4EC9B0>int
+        +numberOfPages: <color:#4EC9B0>int
+        +numLevelsTrained: <color:#4EC9B0>int
+        +pageToWrite: <color:#4EC9B0>int
+        +skillTrained: <color:#4EC9B0>string
+        +teachedRecipes: <color:#4EC9B0>string<color:#FFD710>[]
+    }
+
+    class Map {
+        +map: <color:#4EC9B0>string
+    }
+
+    class Radio {
+        +acceptMediaType: <color:#4EC9B0>int
+        +baseVolumeRange: <color:#4EC9B0>int
+        +isHighTier: <color:#4EC9B0>boolean
+        +isPortable: <color:#4EC9B0>boolean
+        +isTelevision: <color:#4EC9B0>boolean
+        +maxChannel: <color:#4EC9B0>int
+        +micRange: <color:#4EC9B0>int
+        +minChannel: <color:#4EC9B0>int
+        +noTransmit: <color:#4EC9B0>boolean
+        +transmitRange: <color:#4EC9B0>int
+        +twoWay: <color:#4EC9B0>boolean
+        +usesBattery: <color:#4EC9B0>boolean
+    }
+
+    class Weapon {
+        +aimingMod: <color:#4EC9B0>float
+        +aimingPerkCritModifier: <color:#4EC9B0>int
+        +aimingPerkHitChanceModifier: <color:#4EC9B0>float
+        +aimingPerkMinAngleModifier: <color:#4EC9B0>float
+        +aimingPerkRangeModifier: <color:#4EC9B0>float
+        +aimingTime: <color:#4EC9B0>int
+        +alwaysKnockdown: <color:#4EC9B0>boolean
+        +ammoBox: <color:#4EC9B0>string
+        +angleFalloff: <color:#4EC9B0>boolean
+        +baseSpeed: <color:#4EC9B0>float
+        +bringToBearSound: <color:#4EC9B0>string
+        +bulletOutSound: <color:#4EC9B0>string
+        +canBarricade: <color:#4EC9B0>boolean
+        +canBePlaced: <color:#4EC9B0>boolean
+        +canBeReused: <color:#4EC9B0>boolean
+        +cantAttackWithLowestEndurance: <color:#4EC9B0>boolean
+        +clickSound: <color:#4EC9B0>string
+        +clipSize: <color:#4EC9B0>int
+        +categories: <color:#4EC9B0>string<color:#FFD710>[]
+        +conditionLowerChanceOneIn: <color:#4EC9B0>int
+        +critDmgMultiplier: <color:#4EC9B0>float
+        +criticalChance: <color:#4EC9B0>float
+        +damageCategory: <color:#4EC9B0>string
+        +damageMakeHole: <color:#4EC9B0>boolean
+        +doorDamage: <color:#4EC9B0>int
+        +doorHitSound: <color:#4EC9B0>string
+        +ejectAmmoSound: <color:#4EC9B0>string
+        +ejectAmmoStartSound: <color:#4EC9B0>string
+        +ejectAmmoStopSound: <color:#4EC9B0>string
+        +enduranceMod: <color:#4EC9B0>float
+        +equipSound: <color:#4EC9B0>string
+        +explosionPower: <color:#4EC9B0>int
+        +explosionRange: <color:#4EC9B0>int
+        +explosionTimer: <color:#4EC9B0>int
+        +extraDamage: <color:#4EC9B0>float
+        +fireMode: <color:#4EC9B0>string
+        +fireModePossibilities: <color:#4EC9B0>string<color:#FFD710>[]
+        +firePower: <color:#4EC9B0>int
+        +fireRange: <color:#4EC9B0>int
+        +haveChamber: <color:#4EC9B0>boolean
+        +hitAngleMod: <color:#4EC9B0>float
+        +hitChance: <color:#4EC9B0>int
+        +hitFloorSound: <color:#4EC9B0>string
+        +hitSound: <color:#4EC9B0>string
+        +idleAnim: <color:#4EC9B0>string
+        +insertAllBulletsReload: <color:#4EC9B0>boolean
+        +insertAmmoSound: <color:#4EC9B0>string
+        +insertAmmoStartSound: <color:#4EC9B0>string
+        +insertAmmoStopSound: <color:#4EC9B0>string
+        +impactSound: <color:#4EC9B0>string
+        +isAimedFirearm: <color:#4EC9B0>boolean
+        +isAimedHandWeapon: <color:#4EC9B0>boolean
+        +jamGunChance: <color:#4EC9B0>float
+        +knockBackOnNoDeath: <color:#4EC9B0>boolean
+        +knockdownMod: <color:#4EC9B0>float
+        +magazineType: <color:#4EC9B0>string
+        +manuallyRemoveSpentRounds: <color:#4EC9B0>boolean
+        +maxDamage: <color:#4EC9B0>float
+        +maxHitCount: <color:#4EC9B0>int
+        +maxRange: <color:#4EC9B0>float
+        +minAngle: <color:#4EC9B0>float
+        +minDamage: <color:#4EC9B0>float
+        +minimumSwingTime: <color:#4EC9B0>float
+        +minRange: <color:#4EC9B0>float
+        +modelWeaponParts: <color:#4EC9B0>ModelWeaponPart<color:#FFD710>[]
+        +multipleHitConditionAffected: <color:#4EC9B0>boolean
+        +noiseDuration: <color:#4EC9B0>int
+        +noiseRange: <color:#4EC9B0>int
+        +npcSoundBoost: <color:#4EC9B0>float
+        +otherHandRequire: <color:#4EC9B0>string
+        +otherHandUse: <color:#4EC9B0>boolean
+        +physicsObject: <color:#4EC9B0>string
+        +piercingBullets: <color:#4EC9B0>boolean
+        +placedSprite: <color:#4EC9B0>string
+        +projectileCount: <color:#4EC9B0>int
+        +pushBackMod: <color:#4EC9B0>float
+        +rackAfterShoot: <color:#4EC9B0>boolean
+        +rackSound: <color:#4EC9B0>string
+        +ranged: <color:#4EC9B0>boolean
+        +rangeFalloff: <color:#4EC9B0>boolean
+        +recoilDelay: <color:#4EC9B0>int
+        +reloadTime: <color:#4EC9B0>int
+        +runAnim: <color:#4EC9B0>string
+        +sensorRange: <color:#4EC9B0>int
+        +shareDamage: <color:#4EC9B0>boolean
+        +shareEndurance: <color:#4EC9B0>boolean
+        +shellFallSound: <color:#4EC9B0>string
+        +smokeRange: <color:#4EC9B0>int
+        +soundGain: <color:#4EC9B0>float
+        +soundMap: <color:#4EC9B0>string<color:#FFD710>[]
+        +soundVolume: <color:#4EC9B0>int
+        +splatBloodOnNoDeath: <color:#4EC9B0>boolean
+        +splatNumber: <color:#4EC9B0>int
+        +splatSize: <color:#4EC9B0>float
+        +stopPower: <color:#4EC9B0>int
+        +subCategory: <color:#4EC9B0>string
+        +swingAmountBeforeImpact: <color:#4EC9B0>float
+        +swingSound: <color:#4EC9B0>string
+        +swingTime: <color:#4EC9B0>float
+        +toHitModifier: <color:#4EC9B0>float
+        +treeDamage: <color:#4EC9B0>int
+        +triggerExplosionTimer: <color:#4EC9B0>int
+        +twoHandWeapon: <color:#4EC9B0>boolean
+        +unequipSound: <color:#4EC9B0>string
+        +useEndurance: <color:#4EC9B0>boolean
+        +useSelf: <color:#4EC9B0>boolean
+        +weaponLength: <color:#4EC9B0>float
+        +weaponReloadType: <color:#4EC9B0>string
+        +weaponSprite: <color:#4EC9B0>string
+        +weaponWeight: <color:#4EC9B0>float
+    }
+
+    class WeaponPart {
+        +aimingTimeModifier: <color:#4EC9B0>int
+        +angleModifier: <color:#4EC9B0>float
+        +damageModifier: <color:#4EC9B0>float
+        +hitChanceModifier: <color:#4EC9B0>int
+        +maxRangeModifier: <color:#4EC9B0>int
+        +minRangeModifier: <color:#4EC9B0>int
+        +mountOn: <color:#4EC9B0>string<color:#FFD710><color:#FFD710>[]
+        +partType: <color:#4EC9B0>string
+        +recoilDelayModifier: <color:#4EC9B0>int
+        +reloadTimeModifier: <color:#4EC9B0>int
+        +weightModifier: <color:#4EC9B0>float
+    }
+
+'''''''''''''''''''''''''''''''
+
+    class ModelWeapon {
+        +partType: <color:#4EC9B0>string
+        +modelName: <color:#4EC9B0>string
+        +attachmentNameSelf: <color:#4EC9B0>string
+        +attachmentParent: <color:#4EC9B0>string
+    }
+
+    class EvolvedRecipe {
+        +name: <color:#4EC9B0>string
+        +amount: <color:#4EC9B0>int
+    }
+
+    left to right direction
+
+    Normal::activatedItem -[hidden]- Radio
+    Normal -[hidden]- Weapon
+    Weapon -[hidden]- Clothing
+    Weapon -[hidden]- Container
+    Weapon -[hidden]- Drainable
+    Weapon -[hidden]- Food
+    Weapon -[hidden]- Literature
+    Weapon::modelWeaponParts <-- ModelWeapon
+    Weapon -[hidden]- WeaponPart
+    Weapon -[hidden]- Key
+    Weapon -[hidden]- AlarmClockClothing
+
+@enduml

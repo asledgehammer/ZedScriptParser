@@ -13,4 +13,8 @@ export class XPReward {
         this.type = type;
         this.amount = amount;
     }
+
+    toScript(prefix: string = ''): string {
+        return `${prefix}${this.type} = ${this.amount}`;
+    }
 }

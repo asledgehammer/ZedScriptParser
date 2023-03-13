@@ -1,6 +1,6 @@
 import { getBoolean, getInt, ScriptBoolean, ScriptInt } from '../Script';
 import { ItemScript } from './ItemScript';
-import { ParseBag } from '../../Parser';
+import { ParseBag } from '../util/ParseBag';
 
 /**
  * **RadioItem**
@@ -32,6 +32,7 @@ export class RadioItem extends ItemScript {
     }
 
     onPropertyValue(property: string, value: string): boolean {
+        value = value.trim();
         switch (property.toLowerCase()) {
             case 'acceptmediatype':
                 this.acceptMediaType = getInt(value);

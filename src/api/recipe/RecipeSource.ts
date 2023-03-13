@@ -25,4 +25,12 @@ export class RecipeSource {
         this.items = items;
         this.action = action;
     }
+
+    toScript(prefix: string = '') {
+        return `${prefix}${this.action} ${this.items
+            .map((o) => {
+                return o.toScript();
+            })
+            .join('; ')},`;
+    }
 }

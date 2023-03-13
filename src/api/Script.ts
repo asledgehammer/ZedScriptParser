@@ -1,7 +1,6 @@
-import { ParseBag, ParseError } from '../Parser';
+import { ParseBag } from './util/ParseBag';
+import { ParseError } from './util/ParseError';
 
-export type Vector2 = { x: number; y: number };
-export type Vector3 = Vector2 & { z: number };
 export type ScriptBoolean = boolean | undefined;
 export type ScriptFloat = number | undefined;
 export type ScriptInt = number | undefined;
@@ -9,26 +8,6 @@ export type ScriptString = string | null | undefined;
 export type ScriptIntArray = number[] | undefined;
 export type ScriptFloatArray = number[] | undefined;
 export type ScriptStringArray = string[] | undefined;
-export type ScriptVector2 = Vector2 | undefined;
-export type ScriptVector3 = Vector3 | undefined;
-
-export function getVector2(value: string): Vector2 {
-    const [x, y] = getString(value)
-        .split(' ')
-        .map((o) => {
-            return parseFloat(o.trim());
-        });
-    return { x, y };
-}
-
-export function getVector3(value: string): Vector3 {
-    const [x, y, z] = getString(value)
-        .split(' ')
-        .map((o) => {
-            return parseFloat(o.trim());
-        });
-    return { x, y, z };
-}
 
 export function getString(value: string): string {
     return value;
@@ -156,6 +135,77 @@ export abstract class Script {
         return o;
     }
 
+    toScript(prefix: string = ''): string {
+        let s = `${prefix}`;
+        if (this.label !== '') s += `${this.label} `;
+        if (this.__name !== undefined) {
+            if (this.__name === '') {
+                throw new Error(
+                    `The name of the object is empty: ${this.label}`,
+                );
+            }
+            s += `${this.__name} `;
+        }
+        s += '{\n\n';
+
+        const maxLenKey = this.getMaxLengthKey();
+
+        const { __operator: operator } = this;
+
+        function processValue(key: string, value: any) {
+            if (Array.isArray(value)) {
+                processArray(key, value);
+            } else if (typeof value === 'object') {
+                if (value.toScript === undefined) {
+                    throw new Error(
+                        `Key '${key}': Object doesn't have 'toScript(): '${value.constructor.name}'`,
+                    );
+                }
+                s += `${prefix}    ${
+                    key + ' '.repeat(maxLenKey - key.length)
+                } ${operator} ${value.toScript()},\n`;
+            } else {
+                s += `${prefix}    ${
+                    key + ' '.repeat(maxLenKey - key.length)
+                } ${operator} ${value.toString()},\n`;
+            }
+        }
+
+        function processArray(key: string, array: any[]) {
+            s += `${prefix}    ${
+                key + ' '.repeat(maxLenKey - key.length)
+            } ${operator} `;
+            for (let index = 0; index < array.length; index++) {
+                const value = array[index];
+                processValue(`${index}`, value);
+            }
+        }
+
+        function processDictionary(dict: { [name: string]: any }) {
+            const keys = Object.keys(dict);
+            keys.sort((a, b) => a.localeCompare(b));
+            for (const key of keys) {
+                if (key === '__name') continue;
+                if (key === '__properties') continue;
+                if (key === '__operator') continue;
+                if (key === 'ignoreProperties') continue;
+
+                const value = dict[key];
+                processValue(key, value);
+            }
+        }
+
+        processDictionary(this);
+
+        if (this.__properties !== undefined) {
+            s += `\n${prefix}    /* Custom Properties */\n\n`;
+            processDictionary(this.__properties);
+        }
+
+        let result = `${s}\n${prefix}}\n`;
+        return result;
+    }
+
     addCustomProperty(property: string, value: string): void {
         if (this.__properties == undefined) {
             this.__properties = {};
@@ -177,4 +227,32 @@ export abstract class Script {
     onPropertyValue(property: string, value: string): boolean {
         return false;
     }
+
+    getMaxLengthKey() {
+        const keys = [
+            ...Object.keys(this),
+            ...(this.__properties !== undefined
+                ? Object.keys(this.__properties)
+                : []),
+        ];
+        keys.sort((a, b) => a.localeCompare(b));
+
+        let maxLenKey = 0;
+        for (const key of keys) {
+            if (key === '__name') continue;
+            if (key === '__properties') continue;
+            if (key === '__operator') continue;
+            if (key === 'ignoreProperties') continue;
+
+            if (key.length > maxLenKey) maxLenKey = key.length;
+        }
+
+        return maxLenKey;
+    }
+
+    abstract get label(): string;
+
+    // get label(): string {
+    //     return 'unknown';
+    // }
 }

@@ -1,4 +1,4 @@
-import { ParseBag } from '../../Parser';
+import { ParseBag } from '../util/ParseBag';
 import { XPReward } from './BuildXP';
 import { RequiredSkill } from './RequiredSkill';
 import {
@@ -9,9 +9,9 @@ import {
     ScriptBoolean,
     ScriptInt,
     ScriptString,
-    ScriptStringArray,
 } from '../Script';
 import { RequiredItem } from './RequiredItem';
+import { DelimiterArray, ScriptDelimiterArray } from '../util/Array';
 
 /**
  * **MultiStageBuildScript**
@@ -30,10 +30,10 @@ export class MultiStageBuildScript extends Script {
     id: ScriptString;
     name: ScriptString;
     northSprite: ScriptString;
-    previousStages: ScriptStringArray;
+    previousStages: ScriptDelimiterArray<string>; //ScriptStringArray;
     skillRequired: RequiredSkill | undefined;
-    itemsRequired: RequiredItem[] | undefined;
-    itemsToKeep: ScriptStringArray;
+    itemsRequired: ScriptDelimiterArray<RequiredItem>;
+    itemsToKeep: ScriptDelimiterArray<string>; //ScriptStringArray;
     knownRecipe: ScriptString;
     sprite: ScriptString;
     thumpSound: ScriptString;
@@ -69,17 +69,17 @@ export class MultiStageBuildScript extends Script {
                 this.id = getString(value);
                 return true;
             case 'itemsrequired':
-                this.itemsRequired = [];
+                this.itemsRequired = new DelimiterArray(';');
                 const split = getString(value).split(';');
                 for (const entry of split) {
                     const [item, sAmount] = entry.split('=');
-                    this.itemsRequired.push(
+                    this.itemsRequired.values.push(
                         new RequiredItem(item, getInt(sAmount)),
                     );
                 }
                 return true;
             case 'itemstokeep':
-                this.itemsToKeep = getString(value).split(';');
+                this.itemsToKeep = new DelimiterArray(';', getString(value));
                 return true;
             case 'knownrecipe':
                 this.knownRecipe = getString(value);
@@ -91,9 +91,7 @@ export class MultiStageBuildScript extends Script {
                 this.northSprite = getString(value);
                 return true;
             case 'previousstage':
-                this.previousStages = getString(value)
-                    .split(';')
-                    .map((o) => o.trim());
+                this.previousStages = new DelimiterArray(';', getString(value));
                 return true;
             case 'skillrequired':
                 const [skill, sLevel] = getString(value).split('=');
@@ -117,5 +115,9 @@ export class MultiStageBuildScript extends Script {
                 return true;
         }
         return false;
+    }
+
+    get label(): string {
+        return 'multistagebuild';
     }
 }

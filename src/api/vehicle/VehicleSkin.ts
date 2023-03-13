@@ -1,4 +1,4 @@
-import { ParseBag } from 'Parser';
+import { ParseBag } from '../util/ParseBag';
 import { getURI, Script, ScriptString } from '../Script';
 
 /**
@@ -23,5 +23,9 @@ export class VehicleSkin extends Script {
                 return true;
         }
         return false;
+    }
+
+    get label(): string {
+        return 'skin';
     }
 }

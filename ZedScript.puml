@@ -1,0 +1,881 @@
+@startuml ZedScript
+
+title ZedScript - Item
+
+!theme vibrant
+
+skinparam TitleFontSize 42
+' skinparam theme vibrant
+skinparam linetype ortho
+
+skinparam TitleFontColor White
+skinparam TitleFontName consolas
+skinparam TitleFontStyle bold
+
+skinparam BackgroundColor Black
+
+skinparam ObjectBackgroundColor #DEF
+skinparam Objectcolor Black
+skinparam ObjectFontName consolas
+
+skinparam shadowing false
+skinparam SequenceGroupBodyBackgroundColor 55555555
+
+skinparam ArrowColor Orange
+skinparam ArrowThickness 2
+
+''' ITEM '''
+
+    object Normal {
+        +activatedItem: ScriptBoolean
+        +alarmSound: ScriptString
+        +alcohol: ScriptBoolean
+        +alcoholic: ScriptBoolean
+        +alcoholPower: ScriptFloat
+        +alwaysWelcomeGift: ScriptBoolean
+        +ammoType: ScriptString
+        +attachmentReplacement: ScriptString
+        +attachmentsProvided: ScriptStringArray
+        +attachmentType: ScriptString
+        +bandagePower: ScriptFloat
+        +bloodLocation: ScriptBloodClothingTypes
+        +bodyLocation: ScriptString
+        +boredomChange: ScriptInt
+        +brakeForce: ScriptInt
+        +breakSound: ScriptString
+        +calories: ScriptInt
+        +canBandage: ScriptBoolean
+        +canBeRemote: ScriptBoolean
+        +canHaveHoles: ScriptBoolean
+        +canStack: ScriptBoolean
+        +canStoreWater: ScriptBoolean
+        +carbohydrates: ScriptInt
+        +chanceToSpawnDamaged: ScriptInt
+        +closeKillMove: ScriptString
+        +clothingExtraSubmenu: ScriptString
+        +clothingItem: ScriptString
+        +clothingItemExtra: ScriptStringArray
+        +clothingItemExtraOption: ScriptStringArray
+        +colorBlue: ScriptInt
+        +colorGreen: ScriptInt
+        +colorRed: ScriptInt
+        +conditionAffectsCapacity: ScriptBoolean
+        +conditionLowerNormal: ScriptFloat
+        +conditionLowerOffroad: ScriptFloat
+        +conditionLowerStandard: ScriptFloat
+        +conditionMax: ScriptInt
+        +count: ScriptInt
+        +countDownSound: ScriptString
+        +customContextMenu: ScriptString
+        +customEatSound: ScriptString
+        +disappearOnUse: ScriptBoolean
+        +displayCategory: ScriptString
+        +displayName: ScriptString
+        +eatType: ScriptString
+        +engineLoudness: ScriptFloat
+        +equippedNoSprint: ScriptBoolean
+        +evolvedRecipeName: ScriptString
+        +explosionSound: ScriptString
+        +fabricType: ScriptString
+        +fatigueChange: ScriptFloat
+        +fishingLure: ScriptBoolean
+        +foodType: ScriptString
+        +gunType: ScriptString
+        +icon: ScriptString
+        +iconsForTexture: ScriptStringArray
+        +isCookable: ScriptBoolean
+        +isWaterSource: ScriptBoolean
+        +itemWhenDry: ScriptString
+        +keepOnDeplete: ScriptBoolean
+        +lightDistance: ScriptInt
+        +lightStrength: ScriptFloat
+        +lipids: ScriptInt
+        +makeUpType: ScriptString
+        +maxAmmo: ScriptInt
+        +maxCapacity: ScriptInt
+        +mechanicsItem: ScriptBoolean
+        +mediaCategory: ScriptString
+        +medical: ScriptBoolean
+        +metalValue: ScriptFloat
+        +onCreate: ScriptString
+        +obsolete: ScriptBoolean
+        +placeMultipleSound: ScriptString
+        +placeOneSound: ScriptString
+        +poison: ScriptBoolean
+        +poisonDetectionLevel: ScriptInt
+        +primaryAnimMask: ScriptString
+        +protectFromRainWhenEquipped: ScriptBoolean
+        +proteins: ScriptInt
+        +rainFactor: ScriptFloat
+        +reduceInfectionPower: ScriptFloat
+        +remoteController: ScriptBoolean
+        +remoteRange: ScriptInt
+        +replaceOnUse: ScriptString
+        +replaceOnUseOn: ScriptString
+        +replaceTypes: { [type: string]: string; } | undefined
+        +requireInHandOrInventory: ScriptStringArray
+        +replaceInPrimaryHand: ScriptStringArray
+        +replaceInSecondHand: ScriptStringArray
+        +requiresEquippedBothHands: ScriptBoolean
+        +runSpeedModifier: ScriptFloat
+        +scaleWorldIcon: ScriptFloat
+        +secondaryAnimMask: ScriptString
+        +soundRadius: ScriptInt
+        +staticModel: ScriptString
+        +stressChange: ScriptInt
+        +survivalGear: ScriptBoolean
+        +suspensionCompression: ScriptFloat
+        +suspensionDamping: ScriptFloat
+        +swingAnim: ScriptString
+        +tags: ScriptStringArray
+        +tooltip: ScriptString
+        +torchCone: ScriptBoolean
+        +torchDot: ScriptFloat
+        +trap: ScriptBoolean
+        +unhappyChange: ScriptInt
+        +useDelta: ScriptFloat
+        +useWhileEquipped: ScriptBoolean
+        +useWorldItem: ScriptBoolean
+        +vehicleType: ScriptInt
+        +weight: ScriptFloat
+        +weightEmpty: ScriptFloat
+        +wet: ScriptBoolean
+        +wetCooldown: ScriptFloat
+        +wheelFriction: ScriptFloat
+        +worldObjectSprite: ScriptString
+        +worldStaticModel: ScriptString
+        +type: string
+    }
+
+    object AlarmClockClothing {
+        +alarmSound: ScriptString
+        +soundRadius: ScriptInt
+    }
+    
+    object AlarmClock {
+    }
+
+    object Clothing {
+        +biteDefense: ScriptFloat
+        +bulletDefense: ScriptFloat
+        +canHaveHoles: ScriptBoolean
+        +chanceToFall: ScriptInt
+        +combatSpeedModifier: ScriptFloat
+        +conditionLowerChanceOneIn: ScriptInt
+        +cosmetic: ScriptBoolean
+        +insulation: ScriptFloat
+        +neckProtectionModifier: ScriptFloat
+        +removeOnBroken: ScriptBoolean
+        +runSpeedModifier: ScriptFloat
+        +scratchDefense: ScriptFloat
+        +spriteName: ScriptString
+        +stompPower: ScriptFloat
+        +temperature: ScriptFloat
+        +waterResistance: ScriptFloat
+        +weightWet: ScriptFloat
+        +windResistance: ScriptFloat
+        +worldRender: ScriptBoolean
+    }
+
+    object Container {
+        +canBeEquipped: ScriptString
+        +capacity: ScriptInt
+        +closeSound: ScriptString
+        +onlyAcceptCategory: ScriptString
+        +openSound: ScriptString
+        +putInSound: ScriptString
+        +soundParameter: ScriptStringArray
+        +weightReduction: ScriptInt
+    }
+
+    object Drainable {
+        +cantBeConsolided: ScriptBoolean
+        +consolidateOption: ScriptString
+        +fillFromDispenserSound: ScriptString
+        +fillFromTapSound: ScriptString
+        +hairDye: ScriptBoolean
+        +mechanicsItem: ScriptBoolean
+        +replaceOnDeplete: ScriptString
+        +ticksPerEquipUse: ScriptInt
+        +useWhileUnequipped: ScriptBoolean
+        +vehicleType: ScriptInt
+    }
+
+    object Food {
+        +alcoholic: ScriptBoolean
+        +badCold: ScriptBoolean
+        +badInMicrowave: ScriptBoolean
+        +cannedFood: ScriptBoolean
+        +cantBeFrozen: ScriptBoolean
+        +cantEat: ScriptBoolean
+        +cookingSound: ScriptString
+        +dangerousUncooked: ScriptBoolean
+        +daysFresh: ScriptInt
+        +daysTotallyRotten: ScriptInt
+        +enduranceChange: ScriptInt
+        +evolvedRecipes: ScriptEvolvedRecipeArray
+        +fluReduction: ScriptInt
+        +goodHot: ScriptBoolean
+        +herbalistType: ScriptString
+        +hungerChange: ScriptInt
+        +isCookable: ScriptBoolean
+        +minutesToBurn: ScriptInt
+        +minutesToCook: ScriptInt
+        +onCooked: ScriptString
+        +onEat: ScriptString
+        +packaged: ScriptBoolean
+        +painReduction: ScriptInt
+        +poisonDetectionLevel: ScriptInt
+        +poisonPower: ScriptInt
+        +reduceFoodSickness: ScriptInt
+        +removeNegativeEffectOnCooked: ScriptBoolean
+        +removeUnhappinessWhenCooked: ScriptBoolean
+        +replaceOnCooked: ScriptStringArray
+        +replaceOnRotten: ScriptString
+        +spice: ScriptBoolean
+        +thirstChange: ScriptInt
+        +useForPoison: ScriptInt
+    }
+
+    object Key {
+        +digitalPadlock: ScriptBoolean
+        +padlock: ScriptBoolean
+    }
+
+    object KeyRing {
+    }
+
+    object Literature {
+        +canBeWrite: ScriptBoolean
+        +lvlSkillTrained: ScriptInt
+        +numberOfPages: ScriptInt
+        +numLevelsTrained: ScriptInt
+        +pageToWrite: ScriptInt
+        +skillTrained: ScriptString
+        +teachedRecipes: ScriptStringArray
+    }
+
+    object Map {
+        +map: ScriptString
+    }
+
+    object Moveable {
+    }
+
+    object Radio {
+        +acceptMediaType: ScriptInt
+        +baseVolumeRange: ScriptInt
+        +isHighTier: ScriptBoolean
+        +isPortable: ScriptBoolean
+        +isTelevision: ScriptBoolean
+        +maxChannel: ScriptInt
+        +micRange: ScriptInt
+        +minChannel: ScriptInt
+        +noTransmit: ScriptBoolean
+        +transmitRange: ScriptInt
+        +twoWay: ScriptBoolean
+        +usesBattery: ScriptBoolean
+    }
+
+    object Weapon {
+        +aimingMod: ScriptFloat
+        +aimingPerkCritModifier: ScriptInt
+        +aimingPerkHitChanceModifier: ScriptFloat
+        +aimingPerkMinAngleModifier: ScriptFloat
+        +aimingPerkRangeModifier: ScriptFloat
+        +aimingTime: ScriptInt
+        +alwaysKnockdown: ScriptBoolean
+        +ammoBox: ScriptString
+        +angleFalloff: ScriptBoolean
+        +baseSpeed: ScriptFloat
+        +bringToBearSound: ScriptString
+        +bulletOutSound: ScriptString
+        +canBarricade: ScriptBoolean
+        +canBePlaced: ScriptBoolean
+        +canBeReused: ScriptBoolean
+        +cantAttackWithLowestEndurance: ScriptBoolean
+        +clickSound: ScriptString
+        +clipSize: ScriptInt
+        +categories: ScriptStringArray
+        +conditionLowerChanceOneIn: ScriptInt
+        +critDmgMultiplier: ScriptFloat
+        +criticalChance: ScriptFloat
+        +damageCategory: ScriptString
+        +damageMakeHole: ScriptBoolean
+        +doorDamage: ScriptInt
+        +doorHitSound: ScriptString
+        +ejectAmmoSound: ScriptString
+        +ejectAmmoStartSound: ScriptString
+        +ejectAmmoStopSound: ScriptString
+        +enduranceMod: ScriptFloat
+        +equipSound: ScriptString
+        +explosionPower: ScriptInt
+        +explosionRange: ScriptInt
+        +explosionTimer: ScriptInt
+        +extraDamage: ScriptFloat
+        +fireMode: ScriptString
+        +fireModePossibilities: ScriptStringArray
+        +firePower: ScriptInt
+        +fireRange: ScriptInt
+        +haveChamber: ScriptBoolean
+        +hitAngleMod: ScriptFloat
+        +hitChance: ScriptInt
+        +hitFloorSound: ScriptString
+        +hitSound: ScriptString
+        +idleAnim: ScriptString
+        +insertAllBulletsReload: ScriptBoolean
+        +insertAmmoSound: ScriptString
+        +insertAmmoStartSound: ScriptString
+        +insertAmmoStopSound: ScriptString
+        +impactSound: ScriptString
+        +isAimedFirearm: ScriptBoolean
+        +isAimedHandWeapon: ScriptBoolean
+        +jamGunChance: ScriptFloat
+        +knockBackOnNoDeath: ScriptBoolean
+        +knockdownMod: ScriptFloat
+        +magazineType: ScriptString
+        +manuallyRemoveSpentRounds: ScriptBoolean
+        +maxDamage: ScriptFloat
+        +maxHitCount: ScriptInt
+        +maxRange: ScriptFloat
+        +minAngle: ScriptFloat
+        +minDamage: ScriptFloat
+        +minimumSwingTime: ScriptFloat
+        +minRange: ScriptFloat
+        +modelWeaponParts: ScriptModelWeaponPartArray
+        +multipleHitConditionAffected: ScriptBoolean
+        +noiseDuration: ScriptInt
+        +noiseRange: ScriptInt
+        +npcSoundBoost: ScriptFloat
+        +otherHandRequire: ScriptString
+        +otherHandUse: ScriptBoolean
+        +physicsObject: ScriptString
+        +piercingBullets: ScriptBoolean
+        +placedSprite: ScriptString
+        +projectileCount: ScriptInt
+        +pushBackMod: ScriptFloat
+        +rackAfterShoot: ScriptBoolean
+        +rackSound: ScriptString
+        +ranged: ScriptBoolean
+        +rangeFalloff: ScriptBoolean
+        +recoilDelay: ScriptInt
+        +reloadTime: ScriptInt
+        +runAnim: ScriptString
+        +sensorRange: ScriptInt
+        +shareDamage: ScriptBoolean
+        +shareEndurance: ScriptBoolean
+        +shellFallSound: ScriptString
+        +smokeRange: ScriptInt
+        +soundGain: ScriptFloat
+        +soundMap: ScriptStringArray
+        +soundVolume: ScriptInt
+        +splatBloodOnNoDeath: ScriptBoolean
+        +splatNumber: ScriptInt
+        +splatSize: ScriptFloat
+        +stopPower: ScriptInt
+        +subCategory: ScriptString
+        +swingAmountBeforeImpact: ScriptFloat
+        +swingSound: ScriptString
+        +swingTime: ScriptFloat
+        +toHitModifier: ScriptFloat
+        +treeDamage: ScriptInt
+        +triggerExplosionTimer: ScriptInt
+        +twoHandWeapon: ScriptBoolean
+        +unequipSound: ScriptString
+        +useEndurance: ScriptBoolean
+        +useSelf: ScriptBoolean
+        +weaponLength: ScriptFloat
+        +weaponReloadType: ScriptString
+        +weaponSprite: ScriptString
+        +weaponWeight: ScriptFloat
+    }
+
+    object WeaponPart {
+        +aimingTimeModifier: ScriptInt
+        +angleModifier: ScriptFloat
+        +damageModifier: ScriptFloat
+        +hitChanceModifier: ScriptInt
+        +maxRangeModifier: ScriptInt
+        +minRangeModifier: ScriptInt
+        +mountOn: ScriptStringArray
+        +partType: ScriptString
+        +recoilDelayModifier: ScriptInt
+        +reloadTimeModifier: ScriptInt
+        +weightModifier: ScriptFloat
+    }
+
+'''''''''''''''''''''''''''''''
+
+    object ModelWeapon {
+        +partType: string
+        +modelName: string
+        +attachmentNameSelf: string
+        +attachmentParent: string
+    }
+
+    object EvolvedRecipe {
+        +name: string
+        +amount: number
+    }
+
+    Weapon::modelWeaponParts ..right. ModelWeapon
+
+    Normal *-right- Container
+    Normal *-right- Weapon
+    Normal *-right- WeaponPart
+    
+    Clothing -right-* Normal
+    Literature -right-* Normal
+    Drainable -right-* Normal
+    Radio -right-* Normal
+
+    Clothing -right-* AlarmClockClothing
+    Food -right-* Normal
+
+    Normal *-right- Map
+    EvolvedRecipe ..right. Food::evolvedRecipes
+    Normal *-right- Moveable
+    Normal *-right- Key
+    Normal *-right- KeyRing
+    Normal *-right- AlarmClock
+
+    participant "<img:logo.png{scale=0.5}>" as logo
+
+    logo
+
+' class ItemRecipe {
+'     +name: string
+'     +module: string
+'     +use: number
+' }
+' class EvolvedRecipeScript {
+'     +name: ScriptString
+'     +maxItems: ScriptInt
+'     +items: ScriptItemRecipeMap
+'     +resultItem: ScriptString
+'     +baseItem: ScriptString
+'     +cookable: ScriptBoolean
+'     +addIngredientIfCooked: ScriptBoolean
+'     +canAddSpicesEmpty: ScriptBoolean
+'     +addIngredientSound: ScriptString
+'     +hidden: ScriptBoolean
+'     +allowFrozenItem: ScriptBoolean
+' }
+' class FixerSkill {
+'     +skill: string
+'     +level: number
+' }
+' class Fixer {
+'     +item: string
+'     +amount: number
+'     +skills: FixerSkill[] | undefined
+' }
+' class FixingScript {
+'     +require: ScriptStringArray
+'     +fixers: ScriptFixerArray
+'     +globalItem: ScriptFixer
+'     +conditionModifier: ScriptFloat
+' }
+
+
+' class MannequinScript {
+'     +animSet: ScriptString
+'     +animState: ScriptString
+'     +female: ScriptBoolean
+'     +model: ScriptString
+'     +outfit: ScriptString
+'     +pose: ScriptString
+'     +texture: ScriptString
+' }
+' class BoneWeight {
+'     +name: string
+'     +weight: number
+' }
+' class Attachment {
+'     +bone: ScriptString
+'     +offset: ScriptVector3
+'     +rotate: ScriptVector3
+'     +zOffset: ScriptInt
+' }
+' class ModelScript {
+'     +animationsMesh: ScriptString
+'     +attachments: Attachment[] | undefined
+'     +boneWeight: ScriptBoneWeightArray
+'     +invertX: ScriptBoolean
+'     +mesh: ScriptString
+'     +scale: ScriptFloat
+'     +shader: ScriptString
+'     +static: ScriptBoolean
+'     +texture: ScriptString
+' }
+' class RecipeSourceItem {
+'     +name: string
+'     +amount: number
+' }
+' class RecipeSource {
+'     +items: RecipeSourceItem[]
+'     +action: RecipeAction
+' }
+' class SkillRequirement {
+'     +skill: string
+'     +level: number
+' }
+' class RecipeResult {
+'     +amount: number
+'     +item: string
+' }
+' class RecipeProp {
+'     +amount: number
+'     +item: string
+' }
+' class RecipeScript {
+'     +allowDestroyedItem: ScriptBoolean
+'     +allowFrozenItem: ScriptBoolean
+'     +allowRottenItem: ScriptBoolean
+'     +animNode: ScriptString
+'     +bakingSoda: ScriptInt
+'     +canBeDoneFromFloor: ScriptBoolean
+'     +category: ScriptString
+'     +flour: ScriptInt
+'     +inSameInventory: ScriptBoolean
+'     +isHidden: ScriptBoolean
+'     +nearItem: ScriptString
+'     +needToBeLearn: ScriptBoolean
+'     +noBrokenItems: ScriptBoolean
+'     +onCanPerform: ScriptString
+'     +onCreate: ScriptString
+'     +onGiveXP: ScriptString
+'     +onTest: ScriptString
+'     +prop1: RecipeProp | undefined
+'     +prop2: RecipeProp | undefined
+'     +removeResultItem: ScriptBoolean
+'     +result: RecipeResult | undefined
+'     +sound: ScriptString
+'     +stopOnWalk: ScriptBoolean
+'     +time: ScriptInt
+'     +water: ScriptInt
+'     +skillsRequired: SkillRequirement[] | undefined
+'     +sources: RecipeSource[]
+' }
+' class RuntimeAnimationScript
+' class SoundClip {
+'     +distanceMin: ScriptInt
+'     +distanceMax: ScriptInt
+'     +events: ScriptStringArray
+'     +file: ScriptString
+'     +pitch: ScriptFloat
+'     +volume: ScriptFloat
+'     +reverbFactor: ScriptFloat
+'     +reverbMaxRange: ScriptFloat
+' }
+' class SoundScript {
+'     +category: ScriptString
+'     +is3D: ScriptBoolean
+'     +loop: ScriptBoolean
+'     +master: ScriptMasterVolume
+'     +maxInstancesPerEmitter: ScriptInt
+'     +clip: ScriptSoundClip
+'     +toJSON(): any
+' }
+' class SoundTimelineScript
+' class UniqueRecipeScript
+' class VehicleEngineData
+' class VehicleEngineRPMScript {
+'     +data: VehicleEngineData[] | undefined
+' }
+' class VehicleModel {
+'     +file: ScriptString
+'     +offset: ScriptVector3
+'     +rotate: ScriptVector3
+'     +scale: ScriptFloat
+' }
+' class VehicleSkin {
+'     +texture: ScriptString
+' }
+' class VehicleLightBar {
+'     +leftCol: ScriptFloatArray
+'     +rightCol: ScriptFloatArray
+'     +soundSiren: ScriptString
+'     +texture: ScriptString
+' }
+' class VehicleWheel {
+'     +front: ScriptBoolean
+'     +offset: ScriptVector3
+'     +radius: ScriptFloat
+'     +width: ScriptFloat
+' }
+' class VehiclePosition {
+'     +area: ScriptString
+'     +offset: ScriptVector3
+'     +rotate: ScriptVector3
+' }
+' class VehicleSwitchSeat {
+'     +anim: ScriptString
+'     +rate: ScriptFloat
+'     +sound: ScriptString
+' }
+' class VehicleAnim {
+'     +angle: ScriptVector3
+'     +anim: ScriptString
+'     +animate: ScriptBoolean
+'     +rate: ScriptFloat
+'     +reverse: ScriptBoolean
+'     +sound: ScriptString
+' }
+' class VehiclePassenger {
+'     +anims: VehicleAnim[] | undefined
+'     +area: ScriptString
+'     +door: ScriptString
+'     +door2: ScriptString
+'     +hasRoof: ScriptBoolean
+'     +positions: VehiclePosition[] | undefined
+'     +switchSeats: VehicleSwitchSeat[] | undefined
+' }
+' class VehicleSound {
+'     +backSignal: ScriptString
+'     +engine: ScriptString
+'     +engineStart: ScriptString
+'     +engineTurnOff: ScriptString
+'     +horn: ScriptString
+'     +ignitionFail: ScriptString
+' }
+' class VehicleArea {
+'     +xywh: XYWH | undefined
+' }
+' class VehicleContainer {
+'     +capacity: ScriptInt
+'     +conditionAffectsCapacity: ScriptBoolean
+'     +contentType: ScriptString
+'     +seat: ScriptString
+'     +test: ScriptString
+' }
+' class VehicleDoor
+' class VehicleSkill {
+'     +skill: string
+'     +level: number
+' }
+' class VehicleInstall {
+'     +recipes: ScriptStringArray
+'     +skills: VehicleSkill[] | undefined
+'     +time: ScriptInt
+' }
+' class VehicleLua {
+'     +checkEngine: ScriptString
+'     +checkOperate: ScriptString
+'     +create: ScriptString
+'     +init: ScriptString
+'     +update: ScriptString
+'     +use: ScriptString
+' }
+' class VehiclePartModel {
+'     +file: ScriptString
+'     +offset: ScriptVector3
+'     +rotate: ScriptVector3
+'     +scale: ScriptFloat
+' }
+' class VehicleItem {
+'     +count: ScriptInt
+'     +equip: ScriptString
+'     +keep: ScriptBoolean
+'     +type: ScriptString
+' }
+' class VehicleItems {
+'     +items: VehicleItem[] | undefined
+' }
+' class VehicleTable {
+'     +area: ScriptString
+'     +complete: ScriptString
+'     +door: ScriptString
+'     +items: VehicleItem[] | undefined
+'     +mechanicRequireKey: ScriptBoolean
+'     +professions: ScriptString
+'     +recipes: ScriptStringArray
+'     +requireEmpty: ScriptBoolean
+'     +requireInstalled: ScriptStringArray
+'     +requireUninstalled: ScriptStringArray
+'     +skills: ScriptString
+'     +test: ScriptString
+'     +time: ScriptInt
+'     +traits: ScriptString
+' }
+' class VehicleUninstall {
+'     +recipes: ScriptStringArray
+'     +skills: VehicleSkill[] | undefined
+'     +time: ScriptInt
+' }
+' class VehicleWindow {
+'     +openable: ScriptBoolean
+' }
+' class VehiclePart {
+'     +anims: VehicleAnim[] | undefined
+'     +area: ScriptString
+'     +category: ScriptString
+'     +containers: VehicleContainer[] | undefined
+'     +doors: VehicleDoor[] | undefined
+'     +hasLightsRear: ScriptBoolean
+'     +install: VehicleInstall | undefined
+'     +itemType: ScriptStringArray
+'     +lua: VehicleLua | undefined
+'     +mechanicRequireKey: ScriptBoolean
+'     +models: VehiclePartModel[] | undefined
+'     +parent: ScriptString
+'     +passengers: VehiclePassenger[] | undefined
+'     +recipes: ScriptStringArray
+'     +repairMechanic: ScriptBoolean
+'     +specificItem: ScriptBoolean
+'     +tables: VehicleTable[] | undefined
+'     +uninstall: VehicleUninstall | undefined
+'     +wheel: ScriptString
+'     +windows: VehicleWindow[] | undefined
+' }
+' class VehiclePhysics {
+'     +extents: ScriptVector3
+'     +offset: ScriptVector3
+'     +radius: ScriptFloat
+'     +rotate: ScriptVector3
+' }
+' class VehicleAttachment {
+'     +canAttach: ScriptString
+'     +offset: ScriptVector3
+'     +rotate: ScriptVector3
+'     +updateConstraint: ScriptBoolean
+'     +zOffset: ScriptInt
+' }
+' class VehicleScript {
+'     +areas: VehicleArea[] | undefined
+'     +attachments: VehicleAttachment[] | undefined
+'     +brakingForce: ScriptInt
+'     +centerOfMassOffset: ScriptVector3
+'     +engineForce: ScriptInt
+'     +engineLoudness: ScriptInt
+'     +engineQuality: ScriptInt
+'     +engineRepairLevel: ScriptInt
+'     +engineRPMType: ScriptString
+'     +extents: ScriptVector3
+'     +extentsOffset: ScriptVector2
+'     +frontEndHealth: ScriptInt
+'     +isSmallVehicle: ScriptBoolean
+'     +lightBar: VehicleLightBar | undefined
+'     +mass: ScriptFloat
+'     +maxSpeed: ScriptFloat
+'     +maxSuspensionTravelCm: ScriptInt
+'     +mechanicType: ScriptInt
+'     +model: VehicleModel | undefined
+'     +offRoadEfficiency: ScriptFloat
+'     +parts: VehiclePart[] | undefined
+'     +passengers: VehiclePassenger[] | undefined
+'     +playerDamageProtection: ScriptFloat
+'     +physicsChassisShape: ScriptVector3
+'     +physics: VehiclePhysics[] | undefined
+'     +rearEndHealth: ScriptInt
+'     +rollInfluence: ScriptFloat
+'     +seatNumber: ScriptInt
+'     +seats: ScriptInt
+'     +shadowExtents: ScriptVector2
+'     +shadowOffset: ScriptVector2
+'     +skin: VehicleSkin | undefined
+'     +sound: VehicleSound | undefined
+'     +spawnOffsetY: ScriptFloat
+'     +steeringIncrement: ScriptFloat
+'     +steeringClamp: ScriptFloat
+'     +stoppingMovementForce: ScriptFloat
+'     +suspensionStiffness: ScriptInt
+'     +suspensionCompression: ScriptFloat
+'     +suspensionDamping: ScriptFloat
+'     +suspensionRestLength: ScriptFloat
+'     +template!: ScriptString
+'     +templates: ScriptStringArray
+'     +textureDamage1Overlay: ScriptString
+'     +textureDamage1Shell: ScriptString
+'     +textureDamage2Overlay: ScriptString
+'     +textureDamage2Shell: ScriptString
+'     +textureLights: ScriptString
+'     +textureMask: ScriptString
+'     +textureRust: ScriptString
+'     +wheelFriction: ScriptFloat
+'     +wheels: VehicleWheel[] | undefined
+'     +gearRatioCount: ScriptInt
+'     +gearRatioR: ScriptFloat
+'     +gearRatio1: ScriptFloat
+'     +gearRatio2: ScriptFloat
+'     +gearRatio3: ScriptFloat
+'     +gearRatio4: ScriptFloat
+'     +gearRatio5: ScriptFloat
+' }
+' class VehicleTemplateScript extends VehicleScript
+' class AnimationsMeshScript {
+'     +meshFile: ScriptString
+'     +animationDirectory: ScriptString
+' }
+' class XPReward {
+'     +type: string
+'     +amount: number
+' }
+' class RequiredSkill {
+'     +skill: string
+'     +level: number
+' }
+' class RequiredItem {
+'     +item: string
+'     +amount: number
+' }
+' class MultiStageBuildScript {
+'     +bonusHealth: ScriptInt
+'     +bonusSkill: ScriptBoolean
+'     +canBarricade: ScriptBoolean
+'     +canBePlastered: ScriptBoolean
+'     +completionSound: ScriptString
+'     +craftingSound: ScriptString
+'     +id: ScriptString
+'     +name: ScriptString
+'     +northSprite: ScriptString
+'     +previousStages: ScriptStringArray
+'     +skillRequired: RequiredSkill | undefined
+'     +itemsRequired: RequiredItem[] | undefined
+'     +itemsToKeep: ScriptStringArray
+'     +knownRecipe: ScriptString
+'     +sprite: ScriptString
+'     +thumpSound: ScriptString
+'     +timeNeeded: ScriptInt
+'     +wallType: ScriptString
+'     +xp: XPReward | undefined
+' }
+' class ModuleScript {
+'     +animations: { [name: string]: AnimationScript; }
+'     +animationsMeshes: { [name: string]: AnimationsMeshScript; }
+'     +evolvedRecipes: { [name: string]: EvolvedRecipeScript; }
+'     +fixings: { [name: string]: FixingScript; }
+'     +imports: string[]
+'     +importedModules: { [name: string]: ModuleScript; }
+'     +items: { [name: string]: ItemScript; }
+'     +mannequins: { [name: string]: MannequinScript; }
+'     +models: { [name: string]: ModelScript; }
+'     +multiStageBuilds: { [name: string]: MultiStageBuildScript; }
+'     +recipes: { [name: string]: RecipeScript; }
+'     +runtimeAnimations: { [name: string]: RuntimeAnimationScript; }
+'     +sounds: { [name: string]: SoundScript; }
+'     +soundTimelines: { [name: string]: SoundTimelineScript; }
+'     +uniqueRecipes: { [name: string]: UniqueRecipeScript; }
+'     +vehicles: { [name: string]: VehicleScript; }
+'     +vehicleTemplates: { [name: string]: VehicleTemplateScript; }
+'     +vehicleEngines: { [name: string]: VehicleEngineRPMScript; }
+'     +__name: string
+' }
+' class CopyFrame {
+'     +frame: ScriptInt
+'     +source: ScriptString
+'     +sourceFrame: ScriptInt
+' }
+' class CopyFrames {
+'     +frame: ScriptInt
+'     +source: ScriptString
+'     +sourceFrame1: ScriptInt
+'     +sourceFrame2: ScriptInt
+' }
+' class AnimationScript {
+'     +animationDirectories: ScriptStringArray
+'     +copyFrame: ScriptCopyFrameArray
+'     +copyFrames: ScriptCopyFramesArray
+'     +meshName: ScriptString
+' }
+@enduml

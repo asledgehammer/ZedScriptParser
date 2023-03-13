@@ -1,4 +1,4 @@
-import { ParseBag } from '../../Parser';
+import { ParseBag } from '../util/ParseBag';
 import { getFloat, getInt, Script } from '../Script';
 
 /**
@@ -13,6 +13,10 @@ export class SandBoxScript extends Script {
     constructor(bag: ParseBag) {
         super(bag, '=', false);
         this.parse(bag);
+    }
+
+    toScript(prefix: string = ''): string {
+        return `${prefix}\n`;
     }
 
     onPropertyValue(property: string, value: string): boolean {
@@ -41,5 +45,9 @@ export class SandBoxScript extends Script {
         // [String]
         (this as any)[property] = value;
         return true;
+    }
+
+    get label(): string {
+        return 'option';
     }
 }

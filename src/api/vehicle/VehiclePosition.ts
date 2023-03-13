@@ -1,12 +1,10 @@
+import { getVector3, ScriptVector3 } from '../util/Math';
 import {
-    getFloat,
     getString,
-    getVector3,
     Script,
     ScriptString,
-    ScriptVector3,
 } from '../Script';
-import { ParseBag } from '../../Parser';
+import { ParseBag } from '../util/ParseBag';
 
 /**
  * **VehiclePosition**
@@ -38,5 +36,9 @@ export class VehiclePosition extends Script {
                 return true;
         }
         return false;
+    }
+
+    get label(): string {
+        return 'position';
     }
 }

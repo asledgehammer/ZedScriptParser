@@ -1,0 +1,320 @@
+@startuml ZedScript - Vehicle
+
+title ZedScript - Vehicle
+
+hide circle
+hide empty members
+skinparam padding 3
+skinparam shadowing true
+
+skinparam TitleFontSize 42
+skinparam TitleFontColor #C8C8C8
+skinparam TitleFontName consolas
+skinparam TitleFontStyle bold
+
+skinparam BackgroundColor #1e1e1e
+
+skinparam shadowOffset 3 3 1 1
+skinparam ClassBorderThickness 1
+skinparam ClassBorderColor #252526
+skinparam ClassBackgroundColor #3e3e42
+skinparam Classcolor #C8C8C8
+skinparam ClassFontColor #C8C8C8
+skinparam ClassFontName consolas
+skinparam ClassFontSize 14
+
+skinparam IconPublicColor #007acc
+
+skinparam ObjectBorderColor #2d2d30
+skinparam ObjectBackgroundColor #3e3e42
+skinparam Objectcolor #C8C8C8
+skinparam ObjectFontColor #C8C8C8
+skinparam ObjectFontName consolas
+skinparam ObjectFontSize 14
+
+skinparam ArrowColor #007acc
+skinparam ArrowThickness 3
+
+class Anim {
+    +angle: <color:#4EC9B0>vec3
+    +anim: <color:#4EC9B0>string
+    +animate: <color:#4EC9B0>boolean
+    +rate: <color:#4EC9B0>float
+    +reverse: <color:#4EC9B0>boolean
+    +sound: <color:#4EC9B0>string
+}
+
+class Area {
+    +xywh: <color:#4EC9B0>XYWH
+}
+
+class Attachment {
+    +canAttach: <color:#4EC9B0>string
+    +offset: <color:#4EC9B0>vec3
+    +rotate: <color:#4EC9B0>vec3
+    +updateConstraint: <color:#4EC9B0>boolean
+    +zOffset: <color:#4EC9B0>int
+}
+
+class Container {
+    +capacity: <color:#4EC9B0>int
+    +conditionAffectsCapacity: <color:#4EC9B0>boolean
+    +contentType: <color:#4EC9B0>string
+    +seat: <color:#4EC9B0>string
+    +test: <color:#4EC9B0>string
+}
+
+class EngineData
+
+class EngineRPM {
+    +data: <color:#4EC9B0>EngineData<color:#FFD710>[]
+}
+
+class Install {
+    +recipes: <color:#4EC9B0>string<color:#FFD710>[]
+    +skills: <color:#4EC9B0>Skill<color:#FFD710>[]
+    +time: <color:#4EC9B0>int
+}
+
+class Item {
+    +count: <color:#4EC9B0>int
+    +equip: <color:#4EC9B0>string
+    +keep: <color:#4EC9B0>boolean
+    +type: <color:#4EC9B0>string
+}
+
+class Items {
+    +items: <color:#4EC9B0>Item<color:#FFD710>[]
+}
+
+class LightBar {
+    +leftCol: <color:#4EC9B0>float<color:#FFD710>[]
+    +rightCol: <color:#4EC9B0>float<color:#FFD710>[]
+    +soundSiren: <color:#4EC9B0>string
+    +texture: <color:#4EC9B0>string
+}
+
+class Lua {
+    +checkEngine: <color:#4EC9B0>string
+    +checkOperate: <color:#4EC9B0>string
+    +create: <color:#4EC9B0>string
+    +init: <color:#4EC9B0>string
+    +update: <color:#4EC9B0>string
+    +use: <color:#4EC9B0>string
+}
+
+class Model {
+    +file: <color:#4EC9B0>string
+    +offset: <color:#4EC9B0>vec3
+    +rotate: <color:#4EC9B0>vec3
+    +scale: <color:#4EC9B0>float
+}
+
+class Part {
+    +anims: <color:#4EC9B0>Anim<color:#FFD710>[]
+    +area: <color:#4EC9B0>string
+    +category: <color:#4EC9B0>string
+    +containers: <color:#4EC9B0>Container<color:#FFD710>[]
+    +doors: <color:#4EC9B0>Door<color:#FFD710>[]
+    +hasLightsRear: <color:#4EC9B0>boolean
+    +install: <color:#4EC9B0>Install
+    +itemType: <color:#4EC9B0>string<color:#FFD710>[]
+    +lua: <color:#4EC9B0>Lua
+    +mechanicRequireKey: <color:#4EC9B0>boolean
+    +models: <color:#4EC9B0>PartModel<color:#FFD710>[]
+    +parent: <color:#4EC9B0>string
+    +passengers: <color:#4EC9B0>Passenger<color:#FFD710>[]
+    +recipes: <color:#4EC9B0>string<color:#FFD710>[]
+    +repairMechanic: <color:#4EC9B0>boolean
+    +specificItem: <color:#4EC9B0>boolean
+    +tables: <color:#4EC9B0>Table<color:#FFD710>[]
+    +uninstall: <color:#4EC9B0>Uninstall
+    +wheel: <color:#4EC9B0>string
+    +windows: <color:#4EC9B0>Window<color:#FFD710>[]
+}
+
+class PartModel {
+    +file: <color:#4EC9B0>string
+    +offset: <color:#4EC9B0>vec3
+    +rotate: <color:#4EC9B0>vec3
+    +scale: <color:#4EC9B0>float
+}
+
+class Passenger {
+    +anims: <color:#4EC9B0>Anim<color:#FFD710>[]
+    +area: <color:#4EC9B0>string
+    +door: <color:#4EC9B0>string
+    +door2: <color:#4EC9B0>string
+    +hasRoof: <color:#4EC9B0>boolean
+    +positions: <color:#4EC9B0>Position<color:#FFD710>[]
+    +switchSeats: <color:#4EC9B0>SwitchSeat<color:#FFD710>[]
+}
+
+class Physics {
+    +extents: <color:#4EC9B0>vec3
+    +offset: <color:#4EC9B0>vec3
+    +radius: <color:#4EC9B0>float
+    +rotate: <color:#4EC9B0>vec3
+}
+
+class Position {
+    +area: <color:#4EC9B0>string
+    +offset: <color:#4EC9B0>vec3
+    +rotate: <color:#4EC9B0>vec3
+}
+
+class Skill {
+    +skill: <color:#4EC9B0>string
+    +level: <color:#4EC9B0>number
+}
+
+class Skin {
+    +texture: <color:#4EC9B0>string
+}
+
+class Sound {
+    +backSignal: <color:#4EC9B0>string
+    +engine: <color:#4EC9B0>string
+    +engineStart: <color:#4EC9B0>string
+    +engineTurnOff: <color:#4EC9B0>string
+    +horn: <color:#4EC9B0>string
+    +ignitionFail: <color:#4EC9B0>string
+}
+
+class SwitchSeat {
+    +anim: <color:#4EC9B0>string
+    +rate: <color:#4EC9B0>float
+    +sound: <color:#4EC9B0>string
+}
+
+class Table {
+    +area: <color:#4EC9B0>string
+    +complete: <color:#4EC9B0>string
+    +door: <color:#4EC9B0>string
+    +items: <color:#4EC9B0>Item<color:#FFD710>[]
+    +mechanicRequireKey: <color:#4EC9B0>boolean
+    +professions: <color:#4EC9B0>string
+    +recipes: <color:#4EC9B0>string<color:#FFD710>[]
+    +requireEmpty: <color:#4EC9B0>boolean
+    +requireInstalled: <color:#4EC9B0>string<color:#FFD710>[]
+    +requireUninstalled: <color:#4EC9B0>string<color:#FFD710>[]
+    +skills: <color:#4EC9B0>string
+    +test: <color:#4EC9B0>string
+    +time: <color:#4EC9B0>int
+    +traits: <color:#4EC9B0>string
+}
+
+class Uninstall {
+    +recipes: <color:#4EC9B0>string<color:#FFD710>[]
+    +skills: <color:#4EC9B0>Skill<color:#FFD710>[]
+    +time: <color:#4EC9B0>int
+}
+
+class Vehicle {
+    +areas: <color:#4EC9B0>Area<color:#FFD710>[]
+    +attachments: <color:#4EC9B0>Attachment<color:#FFD710>[]
+    +brakingForce: <color:#4EC9B0>int
+    +centerOfMassOffset: <color:#4EC9B0>vec3
+    +engineForce: <color:#4EC9B0>int
+    +engineLoudness: <color:#4EC9B0>int
+    +engineQuality: <color:#4EC9B0>int
+    +engineRepairLevel: <color:#4EC9B0>int
+    +engineRPMType: <color:#4EC9B0>string
+    +extents: <color:#4EC9B0>vec3
+    +extentsOffset: <color:#4EC9B0>vec2
+    +frontEndHealth: <color:#4EC9B0>int
+    +isSmallVehicle: <color:#4EC9B0>boolean
+    +lightBar: <color:#4EC9B0>LightBar
+    +mass: <color:#4EC9B0>float
+    +maxSpeed: <color:#4EC9B0>float
+    +maxSuspensionTravelCm: <color:#4EC9B0>int
+    +mechanicType: <color:#4EC9B0>int
+    +model: <color:#4EC9B0>Model
+    +offRoadEfficiency: <color:#4EC9B0>float
+    +parts: <color:#4EC9B0>Part<color:#FFD710>[]
+    +passengers: <color:#4EC9B0>Passenger<color:#FFD710>[]
+    +playerDamageProtection: <color:#4EC9B0>float
+    +physicsChassisShape: <color:#4EC9B0>vec3
+    +physics: <color:#4EC9B0>Physics<color:#FFD710>[]
+    +rearEndHealth: <color:#4EC9B0>int
+    +rollInfluence: <color:#4EC9B0>float
+    +seatNumber: <color:#4EC9B0>int
+    +seats: <color:#4EC9B0>int
+    +shadowExtents: <color:#4EC9B0>vec2
+    +shadowOffset: <color:#4EC9B0>vec2
+    +skin: <color:#4EC9B0>Skin
+    +sound: <color:#4EC9B0>Sound
+    +spawnOffsetY: <color:#4EC9B0>float
+    +steeringIncrement: <color:#4EC9B0>float
+    +steeringClamp: <color:#4EC9B0>float
+    +stoppingMovementForce: <color:#4EC9B0>float
+    +suspensionStiffness: <color:#4EC9B0>int
+    +suspensionCompression: <color:#4EC9B0>float
+    +suspensionDamping: <color:#4EC9B0>float
+    +suspensionRestLength: <color:#4EC9B0>float
+    +template!: <color:#4EC9B0>string
+    +templates: <color:#4EC9B0>string<color:#FFD710>[]
+    +textureDamage1Overlay: <color:#4EC9B0>string
+    +textureDamage1Shell: <color:#4EC9B0>string
+    +textureDamage2Overlay: <color:#4EC9B0>string
+    +textureDamage2Shell: <color:#4EC9B0>string
+    +textureLights: <color:#4EC9B0>string
+    +textureMask: <color:#4EC9B0>string
+    +textureRust: <color:#4EC9B0>string
+    +wheelFriction: <color:#4EC9B0>float
+    +wheels: <color:#4EC9B0>Wheel<color:#FFD710>[]
+    +gearRatioCount: <color:#4EC9B0>int
+    +gearRatioR: <color:#4EC9B0>float
+    +gearRatio1: <color:#4EC9B0>float
+    +gearRatio2: <color:#4EC9B0>float
+    +gearRatio3: <color:#4EC9B0>float
+    +gearRatio4: <color:#4EC9B0>float
+    +gearRatio5: <color:#4EC9B0>float
+}
+
+class Wheel {
+    +front: <color:#4EC9B0>boolean
+    +offset: <color:#4EC9B0>vec3
+    +radius: <color:#4EC9B0>float
+    +width: <color:#4EC9B0>float
+}
+
+class Window {
+    +openable: <color:#4EC9B0>boolean
+}
+
+left to right direction
+
+Vehicle::areas --> Area
+Vehicle::attachments --> Attachment
+Vehicle::lightBar --> LightBar
+Vehicle::model --> Model
+Vehicle::parts --> Part
+Vehicle::passengers --> Passenger
+Vehicle::physics --> Physics
+Vehicle::sound ---> Sound
+Vehicle::wheels -> Wheel
+Vehicle::skin --> Skin
+
+Part::anims --> Anim
+Part::containers ---> Container
+Part::install --> Install
+Part::lua ---> Lua
+Part::models ---> PartModel
+Part::passengers ---> Passenger
+Part::uninstall --> Uninstall
+Part::windows --> Window
+Part::tables ---> Table
+
+Passenger::positions --> Position
+Passenger::switchSeats --> SwitchSeat
+
+Table::items --> Items
+
+Items::items -> Item
+
+EngineRPM::data --> EngineData
+
+Uninstall::skills --> Skill
+
+@enduml

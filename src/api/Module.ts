@@ -27,9 +27,11 @@ import { UniqueRecipeScript } from './recipe/UniqueRecipeScript';
 import { VehicleEngineRPMScript as VehicleEngineRPMScript } from './vehicle/VehicleEngineRPMScript';
 import { VehicleScript } from './vehicle/VehicleScript';
 import { VehicleTemplateScript } from './vehicle/VehicleTemplateScript';
-import { ParseBag, ParseError } from '../Parser';
+import { ParseBag } from './util/ParseBag';
+import { ParseError } from './util/ParseError';
 import { AnimationsMeshScript } from './animation/AnimationsMeshScript';
 import { MultiStageBuildScript } from './multistagebuild/MultiStageBuildScript';
+import { toArray } from './util/IO';
 
 /**
  * **ModuleScript**
@@ -193,17 +195,6 @@ export class ModuleScript {
             __name: this.__name,
         };
 
-        const toArray = (obj: any): any | undefined => {
-            const keys = Object.keys(obj).sort((a, b) => a.localeCompare(b));
-            if (keys.length === 0) return undefined;
-            const array: any[] = [];
-            for (const key of keys) {
-                const value = obj[key];
-                array.push(value.toJSON());
-            }
-            return array;
-        };
-
         o.animations = toArray(this.animations);
         o.animationsMeshes = toArray(this.animationsMeshes);
         o.evolvedRecipes = toArray(this.evolvedRecipes);
@@ -215,10 +206,47 @@ export class ModuleScript {
         o.multiStageBuilds = toArray(this.multiStageBuilds);
         o.recipes = toArray(this.recipes);
         o.sounds = toArray(this.sounds);
+        o.uniqueRecipes = toArray(this.uniqueRecipes);
         o.vehicles = toArray(this.vehicles);
         o.vehicleTemplates = toArray(this.vehicleTemplates);
 
         return o;
+    }
+
+    toScript(prefix: string = ''): string {
+        let s = `${prefix}module ${this.__name} {\n\n`;
+
+        function process(dict: { [name: string]: any }) {
+            const keys = Object.keys(dict);
+            keys.sort((a, b) => a.localeCompare(b));
+            for (const key of keys) {
+                const value = dict[key];
+                if (typeof value === 'object') {
+                    s += dict[key].toScript(`${prefix}    `) + '\n';
+                } else {
+                    s += `${prefix}    ${dict[key].toString()}\n`;
+                }
+            }
+        }
+
+        process(this.animations);
+        process(this.animationsMeshes);
+        process(this.evolvedRecipes);
+        process(this.fixings);
+        process(this.items);
+        process(this.mannequins);
+        process(this.models);
+        process(this.multiStageBuilds);
+        process(this.recipes);
+        process(this.sounds);
+        process(this.soundTimelines);
+        process(this.uniqueRecipes);
+        process(this.vehicleEngines);
+        process(this.vehicles);
+        process(this.vehicleTemplates);
+        
+
+        return `${s}${prefix}}\n`;
     }
 
     static createItem(bag: ParseBag): ItemScript {
@@ -236,7 +264,7 @@ export class ModuleScript {
 
         bag.offset = offsetOrig;
 
-        switch (type) {
+        switch (type.trim()) {
             case 'alarmclock':
                 return new AlarmClockItem(bag);
             case 'alarmclockclothing':

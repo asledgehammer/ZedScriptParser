@@ -1,6 +1,6 @@
 import { getInt, getString, ScriptInt, ScriptString } from '../Script';
 import { ClothingItem } from './ClothingItem';
-import { ParseBag } from '../../Parser';
+import { ParseBag } from '../util/ParseBag';
 
 /**
  * **AlarmClockClothingItem**
@@ -22,6 +22,8 @@ export class AlarmClockClothingItem extends ClothingItem {
     }
 
     onPropertyValue(property: string, value: string): boolean {
+        property = property.trim();
+        value = value.trim();
         switch (property.toLowerCase()) {
             case 'alarmsound':
                 this.alarmSound = getString(value);

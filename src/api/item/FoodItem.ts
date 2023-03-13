@@ -5,11 +5,11 @@ import {
     ScriptBoolean,
     ScriptInt,
     ScriptString,
-    ScriptStringArray,
 } from '../Script';
 import { ItemScript } from './ItemScript';
-import { EvolvedRecipe, ScriptEvolvedRecipeArray } from './EvolvedRecipe';
-import { ParseBag } from 'Parser';
+import { EvolvedRecipe } from './EvolvedRecipe';
+import { ParseBag } from '../util/ParseBag';
+import { DelimiterArray, ScriptDelimiterArray } from '../util/Array';
 
 /**
  * **FoodItem**
@@ -30,7 +30,7 @@ export class FoodItem extends ItemScript {
     daysFresh: ScriptInt;
     daysTotallyRotten: ScriptInt;
     enduranceChange: ScriptInt;
-    evolvedRecipe: ScriptEvolvedRecipeArray;
+    evolvedRecipe: ScriptDelimiterArray<EvolvedRecipe>;
     fluReduction: ScriptInt;
     goodHot: ScriptBoolean;
     herbalistType: ScriptString;
@@ -47,7 +47,7 @@ export class FoodItem extends ItemScript {
     reduceFoodSickness: ScriptInt;
     removeNegativeEffectOnCooked: ScriptBoolean;
     removeUnhappinessWhenCooked: ScriptBoolean;
-    replaceOnCooked: ScriptStringArray;
+    replaceOnCooked: ScriptDelimiterArray<string>;
     replaceOnRotten: ScriptString;
     spice: ScriptBoolean;
     thirstChange: ScriptInt;
@@ -62,6 +62,8 @@ export class FoodItem extends ItemScript {
     }
 
     onPropertyValue(property: string, value: string): boolean {
+        property = property.trim();
+        value = value.trim();
         switch (property.toLowerCase()) {
             case 'badcold':
                 this.badCold = getBoolean(value);
@@ -104,8 +106,8 @@ export class FoodItem extends ItemScript {
                         const [name, sAmount] = s.split(':').map((a) => {
                             return a.trim();
                         });
-                        if (this.evolvedRecipe == null) this.evolvedRecipe = [];
-                        this.evolvedRecipe.push(
+                        if (this.evolvedRecipe == null) this.evolvedRecipe = new DelimiterArray(';');
+                        this.evolvedRecipe.values.push(
                             new EvolvedRecipe(name, parseInt(sAmount)),
                         );
                     }
@@ -160,7 +162,7 @@ export class FoodItem extends ItemScript {
                 this.removeUnhappinessWhenCooked = getBoolean(value);
                 return true;
             case 'replaceoncooked':
-                this.replaceOnCooked = getString(value).split(';');
+                this.replaceOnCooked = new DelimiterArray(';', getString(value));
                 return true;
             case 'replaceonrotten':
                 this.replaceOnRotten = getString(value);

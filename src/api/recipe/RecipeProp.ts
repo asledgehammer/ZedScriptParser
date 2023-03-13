@@ -13,4 +13,11 @@ export class RecipeProp {
         this.item = item;
         this.amount = amount;
     }
+
+    toScript(prefix: string = ''): string {
+        if(this.amount === 1) {
+            return `${prefix}${this.item}`;
+        }
+        return `${prefix}${this.item} = ${this.amount}`;
+    }
 }

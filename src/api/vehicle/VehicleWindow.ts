@@ -1,5 +1,5 @@
 import { getBoolean, Script, ScriptBoolean } from '../Script';
-import { ParseBag } from '../../Parser';
+import { ParseBag } from '../util/ParseBag';
 
 /**
  * **VehicleWindow**
@@ -23,5 +23,9 @@ export class VehicleWindow extends Script {
                 return true;
         }
         return false;
+    }
+
+    get label(): string {
+        return 'window';
     }
 }

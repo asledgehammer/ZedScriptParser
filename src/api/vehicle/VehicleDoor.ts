@@ -1,5 +1,5 @@
 import { Script } from '../Script';
-import { ParseBag } from '../../Parser';
+import { ParseBag } from '../util/ParseBag';
 
 /**
  * **VehicleDoor**
@@ -12,5 +12,9 @@ export class VehicleDoor extends Script {
     constructor(bag: ParseBag) {
         super(bag, '=', false, true);
         this.parse(bag);
+    }
+
+    get label(): string {
+        return 'door';
     }
 }

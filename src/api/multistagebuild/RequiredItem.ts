@@ -13,4 +13,8 @@ export class RequiredItem {
         this.item = item;
         this.amount = amount;
     }
+
+    toScript(prefix: string = ''): string {
+        return `${prefix}${this.item} = ${this.amount}`;
+    }
 }

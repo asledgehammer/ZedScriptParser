@@ -1,4 +1,4 @@
-import { ParseBag } from '../../Parser';
+import { ParseBag } from '../util/ParseBag';
 import { getString, Script, ScriptString } from '../Script';
 
 /**
@@ -26,5 +26,9 @@ export class AnimationsMeshScript extends Script {
                 return true;
         }
         return false;
+    }
+
+    get label(): string {
+        return 'animationsmesh';
     }
 }

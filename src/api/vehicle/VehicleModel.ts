@@ -1,13 +1,12 @@
-import { ParseBag } from '../../Parser';
+import { ParseBag } from '../util/ParseBag';
 import {
     getFloat,
     getURI,
-    getVector3,
     Script,
     ScriptFloat,
     ScriptString,
-    ScriptVector3,
 } from '../Script';
+import { getVector3, ScriptVector3 } from '../util/Math';
 
 /**
  * **VehicleModel**
@@ -43,5 +42,9 @@ export class VehicleModel extends Script {
                 return true;
         }
         return false;
+    }
+
+    get label(): string {
+        return 'model';
     }
 }

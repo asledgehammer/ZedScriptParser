@@ -1,10 +1,9 @@
-import { ParseBag } from 'Parser';
+import { getVector3, ScriptVector3 } from '../util/Math';
+import { ParseBag } from '../util/ParseBag';
 import {
     getFloat,
-    getVector3,
     Script,
     ScriptFloat,
-    ScriptVector3,
 } from '../Script';
 
 /**
@@ -41,5 +40,9 @@ export class VehiclePhysics extends Script {
                 return true;
         }
         return false;
+    }
+
+    get label(): string {
+        return 'physics';
     }
 }

@@ -5,10 +5,10 @@ import {
     ScriptFloat,
     ScriptInt,
     ScriptString,
-    ScriptStringArray,
 } from '../Script';
 import { ItemScript } from './ItemScript';
-import { ParseBag } from '../../Parser';
+import { ParseBag } from '../util/ParseBag';
+import { DelimiterArray, ScriptDelimiterArray } from '../util/Array';
 
 /**
  * **WeaponPartItem**
@@ -24,7 +24,7 @@ export class WeaponPartItem extends ItemScript {
     hitChanceModifier: ScriptInt;
     maxRangeModifier: ScriptInt;
     minRangeModifier: ScriptInt;
-    mountOn: ScriptStringArray;
+    mountOn: ScriptDelimiterArray<string>;
     partType: ScriptString;
     recoilDelayModifier: ScriptInt;
     reloadTimeModifier: ScriptInt;
@@ -39,6 +39,8 @@ export class WeaponPartItem extends ItemScript {
     }
 
     onPropertyValue(property: string, value: string): boolean {
+        property = property.trim();
+        value = value.trim();
         switch (property.toLowerCase()) {
             case 'aimingtimemodifier':
                 this.aimingTimeModifier = getInt(value);
@@ -59,11 +61,7 @@ export class WeaponPartItem extends ItemScript {
                 this.minRangeModifier = getInt(value);
                 return true;
             case 'mounton':
-                this.mountOn = getString(value)
-                    ?.split(';')
-                    .map((a) => {
-                        return a.trim();
-                    });
+                this.mountOn = new DelimiterArray(';', getString(value));
                 return true;
             case 'parttype':
                 this.partType = getString(value);

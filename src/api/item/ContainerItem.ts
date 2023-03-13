@@ -3,10 +3,10 @@ import {
     getString,
     ScriptInt,
     ScriptString,
-    ScriptStringArray,
 } from '../Script';
 import { ItemScript } from './ItemScript';
-import { ParseBag } from '../../Parser';
+import { ParseBag } from '../util/ParseBag';
+import { DelimiterArray, ScriptDelimiterArray } from '../util/Array';
 
 /**
  * **ContainerItem**
@@ -22,7 +22,7 @@ export class ContainerItem extends ItemScript {
     onlyAcceptCategory: ScriptString;
     openSound: ScriptString;
     putInSound: ScriptString;
-    soundParameter: ScriptStringArray;
+    soundParameter: ScriptDelimiterArray<string>;
     weightReduction: ScriptInt;
 
     constructor(bag: ParseBag) {
@@ -34,6 +34,8 @@ export class ContainerItem extends ItemScript {
     }
 
     onPropertyValue(property: string, value: string): boolean {
+        property = property.trim();
+        value = value.trim();
         switch (property.toLowerCase()) {
             case 'canbeequipped':
                 this.canBeEquipped = getString(value);
@@ -54,7 +56,7 @@ export class ContainerItem extends ItemScript {
                 this.putInSound = getString(value);
                 return true;
             case 'soundparameter':
-                this.soundParameter = getString(value)?.split(' ');
+                this.soundParameter = new DelimiterArray(' ', getString(value));
                 return true;
             case 'weightreduction':
                 this.weightReduction = getInt(value);
@@ -62,4 +64,6 @@ export class ContainerItem extends ItemScript {
         }
         return super.onPropertyValue(property, value);
     }
+
+    
 }

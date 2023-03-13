@@ -7,11 +7,11 @@ import {
     ScriptFloat,
     ScriptInt,
     ScriptString,
-    ScriptStringArray,
 } from '../Script';
 import { ItemScript } from './ItemScript';
-import { ModelWeaponPart, ScriptModelWeaponPartArray } from './ModelWeaponPart';
-import { ParseBag } from '../../Parser';
+import { ModelWeaponPart } from './ModelWeaponPart';
+import { ParseBag } from '../util/ParseBag';
+import { DelimiterArray, ScriptDelimiterArray } from '../util/Array';
 
 /**
  * **WeaponItem**
@@ -39,7 +39,7 @@ export class WeaponItem extends ItemScript {
     cantAttackWithLowestEndurance: ScriptBoolean;
     clickSound: ScriptString;
     clipSize: ScriptInt;
-    categories: ScriptStringArray;
+    categories: ScriptDelimiterArray<string>;
     conditionLowerChanceOneIn: ScriptInt;
     critDmgMultiplier: ScriptFloat;
     criticalChance: ScriptFloat;
@@ -57,7 +57,7 @@ export class WeaponItem extends ItemScript {
     explosionTimer: ScriptInt;
     extraDamage: ScriptFloat;
     fireMode: ScriptString;
-    fireModePossibilities: ScriptStringArray;
+    fireModePossibilities: ScriptDelimiterArray<string>;
     firePower: ScriptInt;
     fireRange: ScriptInt;
     haveChamber: ScriptBoolean;
@@ -85,7 +85,7 @@ export class WeaponItem extends ItemScript {
     minDamage: ScriptFloat;
     minimumSwingTime: ScriptFloat;
     minRange: ScriptFloat;
-    modelWeaponParts: ScriptModelWeaponPartArray;
+    modelWeaponParts: ScriptDelimiterArray<ModelWeaponPart>;
     multipleHitConditionAffected: ScriptBoolean;
     noiseDuration: ScriptInt;
     noiseRange: ScriptInt;
@@ -110,7 +110,7 @@ export class WeaponItem extends ItemScript {
     shellFallSound: ScriptString;
     smokeRange: ScriptInt;
     soundGain: ScriptFloat;
-    soundMap: ScriptStringArray;
+    soundMap: ScriptDelimiterArray<string>;
     soundVolume: ScriptInt;
     splatBloodOnNoDeath: ScriptBoolean;
     splatNumber: ScriptInt;
@@ -141,6 +141,8 @@ export class WeaponItem extends ItemScript {
     }
 
     onPropertyValue(property: string, value: string): boolean {
+        property = property.trim();
+        value = value.trim();
         switch (property.toLowerCase()) {
             case 'aimingmod':
                 this.aimingMod = getFloat(value);
@@ -191,7 +193,7 @@ export class WeaponItem extends ItemScript {
                 this.cantAttackWithLowestEndurance = getBoolean(value);
                 return true;
             case 'categories':
-                this.categories = getString(value)?.split(';');
+                this.categories = new DelimiterArray(';', value);
                 return true;
             case 'clicksound':
                 this.clickSound = getString(value);
@@ -251,7 +253,7 @@ export class WeaponItem extends ItemScript {
                 this.fireMode = getString(value);
                 return true;
             case 'firemodepossibilities':
-                this.fireModePossibilities = getString(value)?.split('/');
+                this.fireModePossibilities = new DelimiterArray('/', getString(value)); // getString(value)?.split('/');
                 return true;
             case 'firepower':
                 this.firePower = getInt(value);
@@ -348,9 +350,9 @@ export class WeaponItem extends ItemScript {
                     attachmentParent,
                 );
                 if (this.modelWeaponParts == null) {
-                    this.modelWeaponParts = [];
+                    this.modelWeaponParts = new DelimiterArray(' ');
                 }
-                this.modelWeaponParts.push(mwp);
+                this.modelWeaponParts.values.push(mwp);
             case 'multiplehitconditionaffected':
                 this.multipleHitConditionAffected = getBoolean(value);
                 return true;
@@ -424,7 +426,7 @@ export class WeaponItem extends ItemScript {
                 this.soundGain = getFloat(value);
                 return true;
             case 'soundmap':
-                this.soundMap = getString(value)?.split(' ');
+                this.soundMap = new DelimiterArray(' ', getString(value)); 
                 return true;
             case 'soundvolume':
                 this.soundVolume = getInt(value);

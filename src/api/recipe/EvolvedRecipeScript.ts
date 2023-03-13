@@ -1,4 +1,4 @@
-import { ParseBag } from '../../Parser';
+import { ParseBag } from '../util/ParseBag';
 import { ItemRecipe } from './ItemRecipe';
 import {
     getBoolean,
@@ -77,5 +77,9 @@ export class EvolvedRecipeScript extends Script {
                 return true;
         }
         return false;
+    }
+
+    get label(): string {
+        return 'evolvedrecipe';
     }
 }

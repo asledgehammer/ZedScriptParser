@@ -1,22 +1,4 @@
 /**
- * *ScriptEvolvedRecipe*
- *
- * TODO: Document. -Jab, 3/5/2023
- *
- * @author Jab
- */
-export type ScriptEvolvedRecipe = EvolvedRecipe | undefined;
-
-/**
- * *ScriptEvolvedRecipeArray*
- *
- * TODO: Document. -Jab, 3/5/2023
- *
- * @author Jab
- */
-export type ScriptEvolvedRecipeArray = EvolvedRecipe[] | undefined;
-
-/**
  * **EvolvedRecipe**
  *
  * TODO: Document. -Jab, 3/5/2023
@@ -30,5 +12,9 @@ export class EvolvedRecipe {
     constructor(name: string, amount: number) {
         this.name = name;
         this.amount = amount;
+    }
+
+    toScript(prefix: string = ''): string {
+        return `${prefix}${this.name}: ${this.amount}`;
     }
 }

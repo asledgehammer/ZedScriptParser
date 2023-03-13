@@ -1,4 +1,4 @@
-import { ParseBag } from '../../Parser';
+import { ParseBag } from '../util/ParseBag';
 import { Script } from '../Script';
 
 /**
@@ -11,5 +11,9 @@ import { Script } from '../Script';
 export class UniqueRecipeScript extends Script {
     constructor(bag: ParseBag) {
         super(bag, ':');
+    }
+
+    get label(): string {
+        return 'uniquerecipe';
     }
 }

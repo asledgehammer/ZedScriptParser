@@ -34,4 +34,10 @@ export class Fixer {
         this.item = item;
         this.amount = amount;
     }
+
+    toScript(prefix: string = ''): string {
+        let s = `${prefix}${this.item}`;
+        if (this.amount !== 1) s += ` = ${this.amount}`;
+        return s;
+    }
 }

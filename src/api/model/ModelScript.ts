@@ -1,5 +1,5 @@
-import { ParseBag } from '../../Parser';
-import { BoneWeight, ScriptBoneWeightArray } from './BoneWeight';
+import { ParseBag } from '../util/ParseBag';
+import { BoneWeight } from './BoneWeight';
 import {
     getBoolean,
     getFloat,
@@ -11,6 +11,7 @@ import {
     ScriptString,
 } from '../Script';
 import { Attachment } from './ModelAttachment';
+import { DelimiterArray, ScriptDelimiterArray } from '../util/Array';
 
 /**
  * **ModelScript**
@@ -22,7 +23,7 @@ import { Attachment } from './ModelAttachment';
 export class ModelScript extends Script {
     animationsMesh: ScriptString;
     attachments: Attachment[] | undefined;
-    boneWeight: ScriptBoneWeightArray;
+    boneWeight: ScriptDelimiterArray<BoneWeight>;
     invertX: ScriptBoolean;
     mesh: ScriptString;
     scale: ScriptFloat;
@@ -51,19 +52,17 @@ export class ModelScript extends Script {
                 this.animationsMesh = getString(value);
                 return true;
             case 'boneweight':
-                if (this.boneWeight == null) {
-                    this.boneWeight = [];
-                }
+                this.boneWeight = new DelimiterArray(' ');
                 const raw = getString(value)?.trim();
                 if (raw == null) return true;
 
                 if (raw.indexOf(' ') !== -1) {
                     const split = raw.split(' ');
-                    this.boneWeight.push(
+                    this.boneWeight.values.push(
                         new BoneWeight(split[0], parseFloat(split[1])),
                     );
                 } else {
-                    this.boneWeight.push(new BoneWeight(raw, 1.0));
+                    this.boneWeight.values.push(new BoneWeight(raw, 1.0));
                 }
                 return true;
             case 'invertx':
@@ -86,5 +85,9 @@ export class ModelScript extends Script {
                 return true;
         }
         return false;
+    }
+
+    get label(): string {
+        return 'model';
     }
 }

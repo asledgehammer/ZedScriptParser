@@ -1,5 +1,5 @@
 import { getString, Script, ScriptString } from '../Script';
-import { ParseBag } from '../../Parser';
+import { ParseBag } from '../util/ParseBag';
 
 /**
  * **VehicleLua**
@@ -43,5 +43,9 @@ export class VehicleLua extends Script {
                 return true;
         }
         return false;
+    }
+
+    get label(): string {
+        return 'lua';
     }
 }

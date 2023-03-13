@@ -5,10 +5,10 @@ import {
     ScriptBoolean,
     ScriptInt,
     ScriptString,
-    ScriptStringArray,
 } from '../Script';
 import { ItemScript } from './ItemScript';
-import { ParseBag } from '../../Parser';
+import { ParseBag } from '../util/ParseBag';
+import { DelimiterArray, ScriptDelimiterArray } from '../util/Array';
 
 /**
  * **LiteratureItem**
@@ -24,7 +24,7 @@ export class LiteratureItem extends ItemScript {
     numLevelsTrained: ScriptInt;
     pageToWrite: ScriptInt;
     skillTrained: ScriptString;
-    teachedRecipes: ScriptStringArray;
+    teachedRecipes: ScriptDelimiterArray<string>;
 
     constructor(bag: ParseBag) {
         super(bag, '=', 'Literature');
@@ -35,6 +35,8 @@ export class LiteratureItem extends ItemScript {
     }
 
     onPropertyValue(property: string, value: string): boolean {
+        property = property.trim();
+        value = value.trim();
         switch (property.toLowerCase()) {
             case 'canbewrite':
                 this.canBeWrite = getBoolean(value);
@@ -55,11 +57,7 @@ export class LiteratureItem extends ItemScript {
                 this.skillTrained = getString(value);
                 return true;
             case 'teachedrecipes':
-                this.teachedRecipes = getString(value)
-                    ?.split(';')
-                    .map((a) => {
-                        return a.trim();
-                    });
+                this.teachedRecipes = new DelimiterArray(';', getString(value));
                 return true;
         }
         return super.onPropertyValue(property, value);

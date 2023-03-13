@@ -1,15 +1,14 @@
-import { ParseBag } from '../../Parser';
+import { ParseBag } from '../util/ParseBag';
 import {
     getBoolean,
     getInt,
     getString,
-    getVector3,
     Script,
     ScriptBoolean,
     ScriptInt,
     ScriptString,
-    ScriptVector3,
 } from '../Script';
+import { getVector3, ScriptVector3 } from '../util/Math';
 
 /**
  * **VehicleAttachment**
@@ -51,5 +50,9 @@ export class VehicleAttachment extends Script {
             }
         }
         return false;
+    }
+
+    get label(): string {
+        return 'attachment';
     }
 }

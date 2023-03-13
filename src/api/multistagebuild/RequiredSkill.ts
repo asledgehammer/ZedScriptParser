@@ -13,4 +13,8 @@ export class RequiredSkill {
         this.skill = skill;
         this.level = level;
     }
+
+    toScript(prefix: string = ''): string {
+        return `${prefix}${this.skill} = ${this.level}`;
+    }
 }

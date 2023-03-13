@@ -1,4 +1,4 @@
-import { ParseBag } from '../../Parser';
+import { ParseBag } from '../util/ParseBag';
 import { Script } from '../Script';
 import { RecipeSource } from './RecipeSource';
 import { RecipeSourceItem } from './RecipeSourceItem';
@@ -14,6 +14,7 @@ import { SkillRequirement } from './SkillRequirement';
 import { RecipeAction } from './RecipeAction';
 import { RecipeResult } from './RecipeResult';
 import { RecipeProp } from './RecipeProp';
+import { DelimiterArray, ScriptDelimiterArray } from '../util/Array';
 
 /**
  * **RecipeScript**
@@ -49,7 +50,7 @@ export class RecipeScript extends Script {
     time: ScriptInt;
     water: ScriptInt;
 
-    skillsRequired: SkillRequirement[] | undefined;
+    skillsRequired: ScriptDelimiterArray<SkillRequirement>;
     sources: RecipeSource[];
 
     constructor(bag: ParseBag) {
@@ -226,19 +227,19 @@ export class RecipeScript extends Script {
                 }
                 return true;
             case 'skillrequired':
-                this.skillsRequired = [];
+                this.skillsRequired = new DelimiterArray(';');
                 if (value.indexOf(';') !== -1) {
                     const split = value.split(';');
                     for (const entry of split) {
                         if (entry === '') continue;
                         const [skill, sLevel] = entry.split('=');
-                        this.skillsRequired.push(
+                        this.skillsRequired.values.push(
                             new SkillRequirement(skill, parseInt(sLevel)),
                         );
                     }
                 } else {
                     const [skill, sLevel] = value.split('=');
-                    this.skillsRequired.push(
+                    this.skillsRequired.values.push(
                         new SkillRequirement(skill, parseInt(sLevel)),
                     );
                 }
@@ -257,5 +258,105 @@ export class RecipeScript extends Script {
                 return true;
         }
         return false;
+    }
+
+    toScript(prefix: string = ''): string {
+        let s = `${prefix}`;
+        if (this.label !== '') s += `${this.label} `;
+        if (this.__name !== undefined) {
+            if (this.__name === '') {
+                throw new Error(
+                    `The name of the object is empty: ${this.label}`,
+                );
+            }
+            s += `${this.__name} `;
+        }
+        s += '{\n\n';
+
+        const maxLenKey = this.getMaxLengthKey();
+
+        const { __operator: operator } = this;
+
+        function processValue(key: string, value: any) {
+            if (Array.isArray(value)) {
+                processArray(key, value);
+            } else if (typeof value === 'object') {
+                if (value.toScript === undefined) {
+                    throw new Error(
+                        `Key '${key}': Object doesn't have 'toScript(): '${value.constructor.name}'`,
+                    );
+                }
+                s += value.toScript(`${prefix}    `) + '\n';
+            } else {
+                s += `${prefix}    ${
+                    key + ' '.repeat(maxLenKey - key.length)
+                } ${operator} ${value.toString()},\n`;
+            }
+        }
+
+        function processArray(key: string | undefined, array: any[]) {
+            if(key !== undefined) {
+                s += `${prefix}    ${
+                    key + ' '.repeat(maxLenKey - key.length)
+                } ${operator} `;
+            }
+            for (let index = 0; index < array.length; index++) {
+                const value = array[index];
+                processValue(`${index}`, value);
+            }
+        }
+
+        function processDictionary(dict: { [name: string]: any }) {
+            const keys = Object.keys(dict);
+            keys.sort((a, b) => a.localeCompare(b));
+            for (const key of keys) {
+                if (key === '__name') continue;
+                if (key === '__properties') continue;
+                if (key === '__operator') continue;
+                if (key === 'ignoreProperties') continue;
+
+                /* RECIPE */
+                if (key === 'sources') continue;
+                if (key === 'result') continue;
+                /****************/
+
+                const value = dict[key];
+                processValue(key, value);
+            }
+        }
+
+        processArray(undefined, this.sources);
+        processValue('result', this.result);
+        s += `\n`;
+
+        processDictionary(this);
+
+        if(this.__properties !== undefined) {
+            s += `${prefix}\n/* Custom Properties */\n\n`;
+            processDictionary(this.__properties);
+        }
+
+        let result = `${s}\n${prefix}}\n`;
+        return result;
+    }
+
+    getMaxLengthKey() {
+        const keys = Object.keys(this);
+        keys.sort((a, b) => a.localeCompare(b));
+
+        let maxLenKey = 0;
+        for (const key of keys) {
+            if (key === '__name') continue;
+            if (key === '__properties') continue;
+            if (key === '__operator') continue;
+            if (key === 'ignoreProperties') continue;
+            if (key === 'sources') continue;
+            if (key.length > maxLenKey) maxLenKey = key.length;
+        }
+        return maxLenKey;
+    }
+
+    get label(): string {
+        return 'recipe';
     }
 }

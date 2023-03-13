@@ -1,6 +1,6 @@
 import { getBoolean, ScriptBoolean } from '../Script';
 import { ItemScript } from './ItemScript';
-import { ParseBag } from '../../Parser';
+import { ParseBag } from '../util/ParseBag';
 
 /**
  * **KeyItem**
@@ -22,6 +22,8 @@ export class KeyItem extends ItemScript {
     }
 
     onPropertyValue(property: string, value: string): boolean {
+        property = property.trim();
+        value = value.trim();
         switch (property.toLowerCase()) {
             case 'digitalpadlock':
                 this.digitalPadlock = getBoolean(value);

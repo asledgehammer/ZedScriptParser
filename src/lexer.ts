@@ -457,9 +457,12 @@ function stepInModule(bag: LexerBag) {
                 break;
 
             /* (Definitions using '=' assignments) */
+            case 'item':
+                stepInDefinition(bag, module, wordLower, '=', false);
+                break;
+
             case 'animation':
             case 'animationsmesh':
-            case 'item':
             case 'mannequin':
             case 'model':
             case 'sound':

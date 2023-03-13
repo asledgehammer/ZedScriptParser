@@ -1,4 +1,4 @@
-import { ParseBag } from 'Parser';
+import { ParseBag } from './util/ParseBag';
 import {
     getBoolean,
     getString,
@@ -52,5 +52,9 @@ export class MannequinScript extends Script {
                 return true;
         }
         return false;
+    }
+
+    get label(): string {
+        return 'mannequin';
     }
 }

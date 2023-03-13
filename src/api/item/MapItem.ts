@@ -1,6 +1,6 @@
 import { getString, ScriptString } from '../Script';
 import { ItemScript } from './ItemScript';
-import { ParseBag } from '../../Parser';
+import { ParseBag } from '../util/ParseBag';
 
 /**
  * **MapItem**
@@ -21,6 +21,8 @@ export class MapItem extends ItemScript {
     }
 
     onPropertyValue(property: string, value: string): boolean {
+        property = property.trim();
+        value = value.trim();
         switch (property.toLowerCase()) {
             case 'map':
                 this.map = getString(value);

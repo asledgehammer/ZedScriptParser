@@ -3,18 +3,14 @@ import {
     getFloat,
     getInt,
     getString,
-    getVector2,
-    getVector3,
     Script,
     ScriptBoolean,
     ScriptFloat,
     ScriptInt,
     ScriptString,
     ScriptStringArray,
-    ScriptVector2,
-    ScriptVector3,
 } from '../Script';
-import { ParseBag } from '../../Parser';
+import { ParseBag } from '../util/ParseBag';
 import { VehicleModel } from './VehicleModel';
 import { VehicleSkin } from './VehicleSkin';
 import { VehicleLightBar } from './VehicleLightBar';
@@ -25,6 +21,12 @@ import { VehicleArea } from './VehicleArea';
 import { VehiclePart } from './VehiclePart';
 import { VehiclePhysics } from './VehiclePhysics';
 import { VehicleAttachment } from './VehicleAttachment';
+import {
+    getVector2,
+    getVector3,
+    ScriptVector2,
+    ScriptVector3,
+} from '../util/Math';
 
 /**
  * **VehicleScript**
@@ -316,5 +318,244 @@ export class VehicleScript extends Script {
                 return true;
         }
         return false;
+    }
+
+    toScript(prefix: string = ''): string {
+        let s = `${prefix}`;
+        if (this.label !== '') s += `${this.label} `;
+        if (this.__name !== undefined) {
+            if (this.__name === '') {
+                throw new Error(
+                    `The name of the object is empty: ${this.label}`,
+                );
+            }
+            s += `${this.__name} `;
+        }
+        s += '{\n\n';
+
+        const maxLenKey = this.getMaxLengthKey();
+
+        const { __operator: operator } = this;
+
+        function processValue(key: string, value: any) {
+            if (Array.isArray(value)) {
+                processArray(key, value);
+            } else if (typeof value === 'object') {
+                if (value.toScript === undefined) {
+                    throw new Error(
+                        `Key '${key}': Object doesn't have 'toScript(): '${value.constructor.name}'`,
+                    );
+                }
+                s += `${prefix}    ${
+                    key + ' '.repeat(maxLenKey - key.length)
+                } ${operator} ${value.toScript()},\n`;
+            } else {
+                s += `${prefix}    ${
+                    key + ' '.repeat(maxLenKey - key.length)
+                } ${operator} ${value.toString()},\n`;
+            }
+        }
+
+        function processArray(key: string, array: any[]) {
+            s += `${prefix}    ${
+                key + ' '.repeat(maxLenKey - key.length)
+            } ${operator} `;
+            for (let index = 0; index < array.length; index++) {
+                const value = array[index];
+                processValue(`${index}`, value);
+            }
+        }
+
+        const { templates } = this;
+
+        function processDictionary(dict: { [name: string]: any }) {
+            const keys = Object.keys(dict);
+            keys.sort((a, b) => a.localeCompare(b));
+            for (const key of keys) {
+                if (key === '__name') continue;
+                if (key === '__properties') continue;
+                if (key === '__operator') continue;
+                if (key === 'ignoreProperties') continue;
+
+                /* Vehicle Objects */
+                if (key === 'areas') continue;
+                if (key === 'attachments') continue;
+                if (key === 'lightBar') continue;
+                if (key === 'model') continue;
+                if (key === 'parts') continue;
+                if (key === 'passengers') continue;
+                if (key === 'physics') continue;
+                if (key === 'skin') continue;
+                if (key === 'sound') continue;
+                if (key === 'wheels') continue;
+
+                /* Vehicle Arrays */
+                if (key === 'templates') {
+                    for (const entry of templates!!) {
+                        s +=
+                            `${prefix}    template${' '.repeat(
+                                maxLenKey - 'template'.length,
+                            )} = ${entry}` + ',\n';
+                    }
+                    continue;
+                }
+
+                const value = dict[key];
+                processValue(key, value);
+            }
+        }
+
+        processDictionary(this);
+
+        let hasNewLined = false;
+
+        /* Areas */
+        if (this.areas !== undefined) {
+            if (!hasNewLined) {
+                s += '\n';
+                hasNewLined = true;
+            }
+            for (const area of this.areas) {
+                s += area.toScript(`${prefix}    `) + '\n';
+            }
+        }
+
+        /* Attachments */
+        if (this.attachments !== undefined) {
+            if (!hasNewLined) {
+                s += '\n';
+                hasNewLined = true;
+            }
+            for (const attachment of this.attachments) {
+                s += attachment.toScript(`${prefix}    `) + '\n';
+            }
+        }
+
+        /* LightBar */
+        if (this.lightBar !== undefined) {
+            if (!hasNewLined) {
+                s += '\n';
+                hasNewLined = true;
+            }
+            s += this.lightBar.toScript(`${prefix}    `) + '\n';
+        }
+
+        /* Model */
+        if (this.model !== undefined) {
+            if (!hasNewLined) {
+                s += '\n';
+                hasNewLined = true;
+            }
+            s += this.model.toScript(`${prefix}    `) + '\n';
+        }
+
+        /* Parts */
+        if (this.parts !== undefined) {
+            if (!hasNewLined) {
+                s += '\n';
+                hasNewLined = true;
+            }
+            for (const part of this.parts) {
+                s += part.toScript(`${prefix}    `) + '\n';
+            }
+        }
+
+        /* Passengers */
+        if (this.passengers !== undefined) {
+            if (!hasNewLined) {
+                s += '\n';
+                hasNewLined = true;
+            }
+            for (const passenger of this.passengers) {
+                s += passenger.toScript(`${prefix}    `) + '\n';
+            }
+        }
+
+        /* Physics */
+        if (this.physics !== undefined) {
+            if (!hasNewLined) {
+                s += '\n';
+                hasNewLined = true;
+            }
+            for (const physic of this.physics) {
+                s += physic.toScript(`${prefix}    `) + '\n';
+            }
+        }
+
+        /* Skin */
+        if (this.skin !== undefined) {
+            if (!hasNewLined) {
+                s += '\n';
+                hasNewLined = true;
+            }
+            s += this.skin.toScript(`${prefix}    `) + '\n';
+        }
+
+        /* Sound */
+        if (this.sound !== undefined) {
+            if (!hasNewLined) {
+                s += '\n';
+                hasNewLined = true;
+            }
+            s += this.sound.toScript(`${prefix}    `) + '\n';
+        }
+
+        /* Wheels */
+        if (this.wheels !== undefined) {
+            if (!hasNewLined) {
+                s += '\n';
+                hasNewLined = true;
+            }
+            for (const wheel of this.wheels) {
+                s += wheel.toScript(`${prefix}    `) + '\n';
+            }
+        }
+
+        /* CUSTOM PROPERTIES */
+        if (this.__properties !== undefined) {
+            s += `\n${prefix}    /* Custom Properties */\n\n`;
+            processDictionary(this.__properties);
+        }
+
+        let result = `${s}\n${prefix}}\n`;
+        return result;
+    }
+
+    getMaxLengthKey() {
+        const keys = [
+            ...Object.keys(this),
+            ...(this.__properties !== undefined
+                ? Object.keys(this.__properties)
+                : []),
+        ];
+        keys.sort((a, b) => a.localeCompare(b));
+
+        let maxLenKey = 0;
+        for (const key of keys) {
+            if (key === '__name') continue;
+            if (key === '__properties') continue;
+            if (key === '__operator') continue;
+            if (key === 'ignoreProperties') continue;
+
+            /* Vehicle Objects */
+            if (key === 'area') continue;
+            if (key === 'attachments') continue;
+            if (key === 'lightbar') continue;
+            if (key === 'model') continue;
+            if (key === 'parts') continue;
+            if (key === 'passengers') continue;
+            if (key === 'physics') continue;
+            if (key === 'skin') continue;
+            if (key === 'sound') continue;
+            if (key === 'wheels') continue;
+
+            if (key.length > maxLenKey) maxLenKey = key.length;
+        }
+
+        return maxLenKey;
+    }
+
+    get label(): string {
+        return 'vehicle';
     }
 }

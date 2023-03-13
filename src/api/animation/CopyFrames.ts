@@ -1,5 +1,5 @@
 import { getInt, getString, ScriptInt, ScriptString } from '../Script';
-import { ParseBag } from '../../Parser';
+import { ParseBag } from '../util/ParseBag';
 import { Script } from '../Script';
 
 /**
@@ -45,5 +45,9 @@ export class CopyFrames extends Script {
                 return true;
         }
         return false;
+    }
+
+    get label(): string {
+        return 'copyframes';
     }
 }

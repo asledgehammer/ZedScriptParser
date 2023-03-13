@@ -22,4 +22,8 @@ export class RecipeSourceItem {
         this.name = name;
         this.amount = amount;
     }
+
+    toScript(prefix: string = ''): string {
+        return `${prefix}${this.name} = ${this.amount}`;
+    }
 }

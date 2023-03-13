@@ -1,15 +1,14 @@
+import { getVector3, ScriptVector3 } from '../util/Math';
 import {
     getBoolean,
     getFloat,
     getString,
-    getVector3,
     Script,
     ScriptBoolean,
     ScriptFloat,
     ScriptString,
-    ScriptVector3,
 } from '../Script';
-import { ParseBag } from '../../Parser';
+import { ParseBag } from '../util/ParseBag';
 
 /**
  * **VehicleAnim**
@@ -53,5 +52,9 @@ export class VehicleAnim extends Script {
                 return true;
         }
         return false;
+    }
+
+    get label(): string {
+        return 'anim';
     }
 }

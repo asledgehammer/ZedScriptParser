@@ -1,4 +1,4 @@
-import { ParseBag } from 'Parser';
+import { ParseBag } from '../util/ParseBag';
 import { getString, Script, ScriptString } from '../Script';
 
 /**
@@ -43,5 +43,9 @@ export class VehicleSound extends Script {
                 return true;
         }
         return false;
+    }
+
+    get label(): string {
+        return 'sound';
     }
 }

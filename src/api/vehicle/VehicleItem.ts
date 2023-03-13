@@ -7,7 +7,7 @@ import {
     ScriptInt,
     ScriptString,
 } from '../Script';
-import { ParseBag } from '../../Parser';
+import { ParseBag } from '../util/ParseBag';
 
 /**
  * **VehicleItem**
@@ -44,5 +44,9 @@ export class VehicleItem extends Script {
                 return true;
         }
         return false;
+    }
+
+    get label(): string {
+        return '';
     }
 }

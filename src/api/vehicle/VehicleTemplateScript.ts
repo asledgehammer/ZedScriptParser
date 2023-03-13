@@ -7,4 +7,8 @@ import { VehicleScript } from './VehicleScript';
  *
  * @author Jab
  */
-export class VehicleTemplateScript extends VehicleScript {}
+export class VehicleTemplateScript extends VehicleScript {
+    get label(): string {
+        return 'template vehicle';
+    }
+}

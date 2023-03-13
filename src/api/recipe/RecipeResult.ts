@@ -13,4 +13,8 @@ export class RecipeResult {
         this.item = item;
         this.amount = amount;
     }
+
+    toScript(prefix: string, maxKeyLength: number = 'result'.length): string {
+        return `${prefix}result${" ".repeat("result".length - maxKeyLength)}: ${this.item} = ${this.amount},`;
+    }
 }

@@ -1,13 +1,13 @@
-import { ParseBag } from '../../Parser';
+import { ParseBag } from '../util/ParseBag';
 import {
     getInt,
     getString,
-    getVector3,
+    
     Script,
     ScriptInt,
     ScriptString,
-    ScriptVector3,
 } from '../Script';
+import { getVector3, ScriptVector3 } from '../util/Math';
 
 /**
  * **ModelAttachment**
@@ -44,5 +44,9 @@ export class Attachment extends Script {
                 return true;
         }
         return false;
+    }
+
+    get label(): string {
+        return 'attachment';
     }
 }

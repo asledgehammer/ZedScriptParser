@@ -1,3 +1,4 @@
+import { DelimiterArray, ScriptDelimiterArray } from '../util/Array';
 import {
     getFloat,
     getString,
@@ -5,7 +6,7 @@ import {
     ScriptFloatArray,
     ScriptString,
 } from '../Script';
-import { ParseBag } from '../../Parser';
+import { ParseBag } from '../util/ParseBag';
 
 /**
  * **VehicleLightBar**
@@ -15,8 +16,8 @@ import { ParseBag } from '../../Parser';
  * @author Jab
  */
 export class VehicleLightBar extends Script {
-    leftCol: ScriptFloatArray;
-    rightCol: ScriptFloatArray;
+    leftCol: ScriptDelimiterArray<number>;
+    rightCol: ScriptDelimiterArray<number>;
     soundSiren: ScriptString;
     texture: ScriptString;
 
@@ -28,17 +29,19 @@ export class VehicleLightBar extends Script {
     onPropertyValue(property: string, value: string): boolean {
         switch (property.toLowerCase().trim()) {
             case 'leftcol':
-                this.leftCol = getString(value)
+                this.leftCol = new DelimiterArray(';');
+                getString(value)
                     .split(';')
-                    .map((o) => {
-                        return getFloat(o.trim());
+                    .forEach((o) => {
+                        this.leftCol!!.values.push(getFloat(o.trim()));
                     });
                 return true;
             case 'rightcol':
-                this.leftCol = getString(value)
+                this.rightCol = new DelimiterArray(';');
+                getString(value)
                     .split(';')
-                    .map((o) => {
-                        return getFloat(o.trim());
+                    .forEach((o) => {
+                        this.rightCol!!.values.push(getFloat(o.trim()));
                     });
                 return true;
             case 'soundsiren':
@@ -49,5 +52,9 @@ export class VehicleLightBar extends Script {
                 return true;
         }
         return false;
+    }
+
+    get label(): string {
+        return 'lightbar';
     }
 }

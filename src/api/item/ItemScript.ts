@@ -1,4 +1,5 @@
-import { ParseBag } from 'Parser';
+import { DelimiterArray, ScriptDelimiterArray } from '../util/Array';
+import { ParseBag } from '../util/ParseBag';
 import {
     getBoolean,
     getFloat,
@@ -9,12 +10,11 @@ import {
     ScriptFloat,
     ScriptInt,
     ScriptString,
-    ScriptStringArray,
 } from '../Script';
 import {
     BloodClothingType,
-    ScriptBloodClothingTypes,
 } from './BloodClothingType';
+import { ItemReplaceType as ItemReplaceType } from './ReplaceType';
 
 /**
  * **ItemScript**
@@ -32,10 +32,10 @@ export abstract class ItemScript extends Script {
     alwaysWelcomeGift: ScriptBoolean;
     ammoType: ScriptString;
     attachmentReplacement: ScriptString;
-    attachmentsProvided: ScriptStringArray;
+    attachmentsProvided: ScriptDelimiterArray<string>; // ScriptStringArray;
     attachmentType: ScriptString;
     bandagePower: ScriptFloat;
-    bloodLocation: ScriptBloodClothingTypes;
+    bloodLocation: ScriptDelimiterArray<BloodClothingType>;//ScriptBloodClothingTypes;
     bodyLocation: ScriptString;
     boredomChange: ScriptInt;
     brakeForce: ScriptInt;
@@ -51,8 +51,8 @@ export abstract class ItemScript extends Script {
     closeKillMove: ScriptString;
     clothingExtraSubmenu: ScriptString;
     clothingItem: ScriptString;
-    clothingItemExtra: ScriptStringArray;
-    clothingItemExtraOption: ScriptStringArray;
+    clothingItemExtra: ScriptDelimiterArray<string>; // ScriptStringArray;
+    clothingItemExtraOption: ScriptDelimiterArray<string>; // ScriptStringArray;
     colorBlue: ScriptInt;
     colorGreen: ScriptInt;
     colorRed: ScriptInt;
@@ -79,7 +79,7 @@ export abstract class ItemScript extends Script {
     foodType: ScriptString;
     gunType: ScriptString;
     icon: ScriptString;
-    iconsForTexture: ScriptStringArray;
+    iconsForTexture: ScriptDelimiterArray<string>; // ScriptStringArray;
     isCookable: ScriptBoolean;
     isWaterSource: ScriptBoolean;
     itemWhenDry: ScriptString;
@@ -109,10 +109,10 @@ export abstract class ItemScript extends Script {
     remoteRange: ScriptInt;
     replaceOnUse: ScriptString;
     replaceOnUseOn: ScriptString;
-    replaceTypes: { [type: string]: string } | undefined;
-    requireInHandOrInventory: ScriptStringArray;
-    replaceInPrimaryHand: ScriptStringArray;
-    replaceInSecondHand: ScriptStringArray;
+    replaceTypes: ScriptDelimiterArray<ItemReplaceType>;
+    requireInHandOrInventory: ScriptDelimiterArray<string>; // ScriptStringArray;
+    replaceInPrimaryHand: ScriptDelimiterArray<string>; // ScriptStringArray;
+    replaceInSecondHand: ScriptDelimiterArray<string>; // ScriptStringArray;
     requiresEquippedBothHands: ScriptBoolean;
     runSpeedModifier: ScriptFloat;
     scaleWorldIcon: ScriptFloat;
@@ -124,7 +124,7 @@ export abstract class ItemScript extends Script {
     suspensionCompression: ScriptFloat;
     suspensionDamping: ScriptFloat;
     swingAnim: ScriptString;
-    tags: ScriptStringArray;
+    tags: ScriptDelimiterArray<string>;
     tooltip: ScriptString;
     torchCone: ScriptBoolean;
     torchDot: ScriptFloat;
@@ -150,6 +150,8 @@ export abstract class ItemScript extends Script {
     }
 
     onPropertyValue(property: string, value: string): boolean {
+        property = property.trim();
+        value = value.trim();
         switch (property.toLowerCase()) {
             case 'activateditem':
                 this.activatedItem = getBoolean(value);
@@ -194,18 +196,10 @@ export abstract class ItemScript extends Script {
                 this.clothingItem = getString(value);
                 return true;
             case 'clothingitemextra':
-                this.clothingItemExtra = getString(value)
-                    .split(';')
-                    .map((o) => {
-                        return o.trim();
-                    });
+                this.clothingItemExtra = new DelimiterArray(';', getString(value));
                 return true;
             case 'clothingitemextraoption':
-                this.clothingItemExtraOption = getString(value)
-                    .split(';')
-                    .map((o) => {
-                        return o.trim();
-                    });
+                this.clothingItemExtraOption = new DelimiterArray(';', getString(value));
                 return true;
             case 'conditionaffectscapacity':
                 this.conditionAffectsCapacity = getBoolean(value);
@@ -286,14 +280,13 @@ export abstract class ItemScript extends Script {
                 this.proteins = getInt(value);
                 return true;
             case 'replacetypes':
+                this.replaceTypes = new DelimiterArray(';');
                 const entries = getString(value).split(';');
-                if (entries == null) return true;
-                if (this.replaceTypes == null) this.replaceTypes = {};
                 for (const entry of entries) {
                     const [key, value] = entry.split(' ').map((a) => {
                         return a.trim();
                     });
-                    this.replaceTypes[key] = value;
+                    this.replaceTypes.values.push(new ItemReplaceType(key, value));
                 }
                 return true;
             case 'runspeedmodifier':
@@ -330,13 +323,13 @@ export abstract class ItemScript extends Script {
                 this.replaceOnUseOn = getString(value);
                 return true;
             case 'requireinhandorinventory':
-                this.requireInHandOrInventory = getString(value).split('/');
+                this.requireInHandOrInventory = new DelimiterArray('/', getString(value));
                 return true;
             case 'replaceinprimaryhand':
-                this.replaceInPrimaryHand = getString(value).split(' ');
+                this.replaceInPrimaryHand =  new DelimiterArray(' ', getString(value));
                 return true;
             case 'replaceinsecondhand':
-                this.replaceInSecondHand = getString(value).split(' ');
+                this.replaceInSecondHand = new DelimiterArray(' ', getString(value));
                 return true;
             case 'trap':
                 this.trap = getBoolean(value);
@@ -357,7 +350,7 @@ export abstract class ItemScript extends Script {
                 this.worldStaticModel = getString(value);
                 return true;
             case 'attachmentsprovided':
-                this.attachmentsProvided = getString(value).split(';');
+                this.attachmentsProvided = new DelimiterArray(';', getString(value));
                 return true;
             case 'attachmentreplacement':
                 this.attachmentReplacement = getString(value);
@@ -429,7 +422,7 @@ export abstract class ItemScript extends Script {
                 this.colorBlue = getInt(value);
                 return true;
             case 'evolvedrecipename':
-                this.evolvedRecipeName = getString(value); // Translator.getItemEvolvedRecipeName()
+                this.evolvedRecipeName = getString(value);
                 return true;
             case 'metalvalue':
                 this.metalValue = getFloat(value);
@@ -447,7 +440,7 @@ export abstract class ItemScript extends Script {
                 this.keepOnDeplete = getBoolean(value);
                 return true;
             case 'brakeforce':
-                this.brakeForce = getInt(value); // Cast to float in PZ.
+                this.brakeForce = getInt(value);
                 return true;
             case 'chancetospawndamaged':
                 this.chanceToSpawnDamaged = getInt(value);
@@ -474,12 +467,10 @@ export abstract class ItemScript extends Script {
                 this.customContextMenu = getString(value); // ContextMenu_${CustomContextMenu}
                 return true;
             case 'iconsfortexture':
-                this.iconsForTexture = getString(value).split(';');
+                this.iconsForTexture = new DelimiterArray(';', getString(value));
                 return true;
             case 'bloodlocation':
-                this.bloodLocation = getString(value).split(
-                    ';',
-                ) as BloodClothingType[];
+                this.bloodLocation = new DelimiterArray(';', getString(value));
                 return true;
             case 'closekillmove':
                 this.closeKillMove = getString(value);
@@ -506,7 +497,7 @@ export abstract class ItemScript extends Script {
                 this.swingAnim = getString(value);
                 return true;
             case 'tags':
-                this.tags = getString(value).split(';');
+                this.tags = new DelimiterArray(';', getString(value));
                 return true;
             case 'type':
                 return true;
@@ -524,5 +515,89 @@ export abstract class ItemScript extends Script {
                 return true;
         }
         return false;
+    }
+
+    toScript(prefix: string = ''): string {
+        let s = `${prefix}`;
+        if (this.label !== '') s += `${this.label} `;
+        if (this.__name !== undefined) {
+            if (this.__name === '') {
+                throw new Error(
+                    `The name of the object is empty: ${this.label}`,
+                );
+            }
+            s += `${this.__name} `;
+        }
+        s += '{\n\n';
+
+        const maxLenKey = this.getMaxLengthKey();
+
+        const { __operator: operator } = this;
+
+        function processValue(key: string, value: any) {
+            if (Array.isArray(value)) {
+                processArray(key, value);
+            } else if (typeof value === 'object') {
+                if (value.toScript === undefined) {
+                    throw new Error(
+                        `Key '${key}': Object doesn't have 'toScript(): '${value.constructor.name}'`,
+                    );
+                }
+                s += `${prefix}    ${
+                    key + ' '.repeat(maxLenKey - key.length)
+                } ${operator} ${value.toScript()},\n`;
+            } else {
+                s += `${prefix}    ${
+                    key + ' '.repeat(maxLenKey - key.length)
+                } ${operator} ${value.toString()},\n`;
+            }
+        }
+
+        function processArray(key: string, array: any[]) {
+            s += `${prefix}    ${
+                key + ' '.repeat(maxLenKey - key.length)
+            } ${operator} `;
+            for (let index = 0; index < array.length; index++) {
+                const value = array[index];
+                processValue(`${index}`, value);
+            }
+        }
+
+        const { modelWeaponParts, replaceTypes} = (this as any);
+
+        function processDictionary(dict: { [name: string]: any }) {
+            const keys = Object.keys(dict);
+            keys.sort((a, b) => a.localeCompare(b));
+            for (const key of keys) {
+                if (key === '__name') continue;
+                if (key === '__properties') continue;
+                if (key === '__operator') continue;
+                if (key === 'ignoreProperties') continue;
+                if (key === 'modelWeaponParts') {
+                    for(const entry of modelWeaponParts!!.values) {
+                        s += `${prefix}    modelWeaponPart${' '.repeat(maxLenKey - 'modelWeaponPart'.length)} = ${entry.toScript('')},\n`
+                    }
+                    continue;
+                }
+                
+
+                const value = dict[key];
+                processValue(key, value);
+            }
+        }
+
+        processDictionary(this);
+
+        if(this.__properties !== undefined) {
+            s += `${prefix}\n/* Custom Properties */\n\n`;
+            processDictionary(this.__properties);
+        }
+
+        let result = `${s}\n${prefix}}\n`;
+        return result;
+    }
+
+    get label(): string {
+        return 'item';
     }
 }

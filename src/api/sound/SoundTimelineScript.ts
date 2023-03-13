@@ -1,5 +1,5 @@
-import { ParseBag } from '../../Parser';
-import { Script } from '../Script';
+import { ParseBag } from '../util/ParseBag';
+import { getInt, Script, ScriptInt } from '../Script';
 
 /**
  * **SoundTimelineScript**
@@ -9,7 +9,24 @@ import { Script } from '../Script';
  * @author Jab
  */
 export class SoundTimelineScript extends Script {
+    idle: ScriptInt;
+
     constructor(bag: ParseBag) {
         super(bag, '=');
+    }
+
+    onPropertyValue(property: string, value: string): boolean {
+        property = property.trim();
+        value = value.trim();
+        switch (property.toLowerCase()) {
+            case 'idle':
+                this.idle = getInt(value);
+                return true;
+        }
+        return false;
+    }
+
+    get label(): string {
+        return 'soundtimeline';
     }
 }

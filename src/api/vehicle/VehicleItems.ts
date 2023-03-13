@@ -1,4 +1,4 @@
-import { ParseBag } from '../../Parser';
+import { ParseBag } from '../util/ParseBag';
 import { Script } from '../Script';
 import { VehicleItem } from './VehicleItem';
 
@@ -21,5 +21,9 @@ export class VehicleItems extends Script {
         if (this.items === undefined) this.items = [];
         this.items.push(new VehicleItem(bag, property));
         return true;
+    }
+
+    get label(): string {
+        return 'items';
     }
 }

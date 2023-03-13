@@ -1,3 +1,4 @@
+import { DelimiterArray, ScriptDelimiterArray } from '../util/Array';
 import {
     getInt,
     getString,
@@ -5,7 +6,7 @@ import {
     ScriptInt,
     ScriptStringArray,
 } from '../Script';
-import { ParseBag } from '../../Parser';
+import { ParseBag } from '../util/ParseBag';
 import { VehicleSkill } from './VehicleSkill';
 
 /**
@@ -16,8 +17,8 @@ import { VehicleSkill } from './VehicleSkill';
  * @author Jab
  */
 export class VehicleUninstall extends Script {
-    recipes: ScriptStringArray;
-    skills: VehicleSkill[] | undefined;
+    recipes: ScriptDelimiterArray<string>;
+    skills: ScriptDelimiterArray<VehicleSkill>;
     time: ScriptInt;
 
     constructor(bag: ParseBag) {
@@ -28,14 +29,10 @@ export class VehicleUninstall extends Script {
     onPropertyValue(property: string, value: string): boolean {
         switch (property.toLowerCase().trim()) {
             case 'recipes':
-                this.recipes = getString(value)
-                    .split(';')
-                    .map((o) => {
-                        return o.trim();
-                    });
+                this.recipes = new DelimiterArray(';', getString(value));
                 return true;
             case 'skills':
-                if (this.skills == null) this.skills = [];
+                this.skills = new DelimiterArray(';');
                 const split = value.split(';');
                 for (const entry of split) {
                     let skill = '';
@@ -47,7 +44,7 @@ export class VehicleUninstall extends Script {
                     } else {
                         skill = entry.trim();
                     }
-                    this.skills.push(new VehicleSkill(skill, level));
+                    this.skills.values.push(new VehicleSkill(skill, level));
                 }
                 return true;
             case 'time':
@@ -55,5 +52,9 @@ export class VehicleUninstall extends Script {
                 return true;
         }
         return false;
+    }
+
+    get label(): string {
+        return 'uninstall';
     }
 }
